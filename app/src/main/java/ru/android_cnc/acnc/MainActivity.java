@@ -1,6 +1,9 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
+import android.content.res.AssetManager;
+import android.net.Uri;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,9 +21,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+public class MainActivity
+        extends
+            ActionBarActivity
+        implements
+            NavigationDrawerFragment.NavigationDrawerCallbacks,
+            GcodeTextFragment.OnFragmentInteractionListener,
+            GraphicalViewFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -31,6 +44,12 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private String fileName;
+    private String gcodeSource;
+
+    public MainActivity() {
+        fileName = "test.cnc";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +64,41 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+            String inputString = bufferedReader.readLine();
+            gcodeSource = inputString;
+            while (inputString != null) {
+//               gcodeParser.parse(inputString);
+                inputString = bufferedReader.readLine();
+                gcodeSource += inputString;
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        switch(position){
+            case 1:
+                transaction.replace(R.id.container, GcodeTextFragment.newInstance("G code source text"));
+                break;
+            case 2:
+                transaction.replace(R.id.container, GraphicalViewFragment.newInstance("2","3"));
+                break;
+            case 3:
+            default:
+                transaction.replace(R.id.container, PlaceholderFragment.newInstance(position + 1));
+        }
+        transaction.commit();
     }
 
     public void onSectionAttached(int number) {
@@ -104,6 +149,11 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**
