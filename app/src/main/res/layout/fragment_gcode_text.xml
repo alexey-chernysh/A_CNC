@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     tools:context="ru.android_cnc.acnc.GcodeTextFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
+        android:layout_height="wrap_content"
+        android:gravity="left|top"
         android:id="@+id/gcode_view_text"
+        android:text="@string/empty_string"
         android:inputType="textUri|textMultiLine"
-    />
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+    </EditText>
 
 </FrameLayout>

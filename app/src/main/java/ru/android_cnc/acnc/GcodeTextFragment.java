@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,54 +27,45 @@ public class GcodeTextFragment extends Fragment {
     private static final String SOURCE_TEXT = "G_code_source_text";
     private static final String TEXT_FRAGMENT = "Text fragment event";
 
-    private String sourceText;
+    private static String sourceText = null;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment GcodeTextFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GcodeTextFragment newInstance(String sourceText) {
+    public static GcodeTextFragment newInstance(String st) {
         Log.i(TEXT_FRAGMENT,"New instance");
         GcodeTextFragment fragment = new GcodeTextFragment();
         Bundle args = new Bundle();
-        args.putString(SOURCE_TEXT, param1);
+        sourceText = st;
+        args.putString(SOURCE_TEXT, st);
         fragment.setArguments(args);
         return fragment;
     }
 
     public GcodeTextFragment() {
-        // Required empty public constructor
-        Log.i(TEXT_FRAGMENT,"Public constructor");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TEXT_FRAGMENT,"On create");
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            sourceText = getArguments().getString(SOURCE_TEXT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.i(TEXT_FRAGMENT,"On create view");
         View result = inflater.inflate(R.layout.fragment_gcode_text, container, false);
         EditText editTextView = (EditText)result.findViewById(R.id.gcode_view_text);
         if(editTextView != null){
-            editTextView.setText(this.sourceText);
+            String editText = null;
+            if (getArguments() != null) {
+                editText = getArguments().getString(SOURCE_TEXT);
+            }
+            if(editText != null)
+                editTextView.setText( editText, TextView.BufferType.EDITABLE);
             editTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    Toast.makeText(getActivity(), "G-code edited!", Toast.LENGTH_SHORT).show();
+                    onButtonPressed(s.toString());
                 }
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -90,16 +79,15 @@ public class GcodeTextFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String s) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onEditTextFragmentInteraction(s);
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(TEXT_FRAGMENT,"On attach");
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -111,7 +99,6 @@ public class GcodeTextFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.i(TEXT_FRAGMENT,"On detach");
         mListener = null;
     }
 
@@ -127,7 +114,7 @@ public class GcodeTextFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onEditTextFragmentInteraction(String newStr);
     }
 
 }

@@ -156,6 +156,11 @@ public class MainActivity
 
     }
 
+    @Override
+    public void onEditTextFragmentInteraction(String newStr) {
+        gcodeSource = newStr;
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
