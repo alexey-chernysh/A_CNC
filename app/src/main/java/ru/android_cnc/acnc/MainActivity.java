@@ -1,30 +1,28 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MainActivity
@@ -35,6 +33,7 @@ public class MainActivity
             GcodeTextFragment.OnFragmentInteractionListener,
             GraphicalViewFragment.OnFragmentInteractionListener {
 
+    private static final String MAIN_ACTIVITY = "A CNC MAIN ACTIVITY";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -88,13 +87,15 @@ public class MainActivity
         // update the main content by replacing fragments
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch(position){
+            case 0:
+                intentFileOpenDialog();
+                break;
             case 1:
                 transaction.replace(R.id.container, GcodeTextFragment.newInstance(gcodeSource));
                 break;
             case 2:
                 transaction.replace(R.id.container, GraphicalViewFragment.newInstance("2","3"));
                 break;
-            case 3:
             default:
                 transaction.replace(R.id.container, PlaceholderFragment.newInstance(position + 1));
         }
@@ -104,7 +105,7 @@ public class MainActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.file_open);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -113,6 +114,39 @@ public class MainActivity
                 mTitle = getString(R.string.title_section3);
                 break;
         }
+    }
+
+    private void intentFileOpenDialog(){
+        Intent intent = new Intent(getBaseContext(), FileDialog.class);
+        intent.putExtra(FileDialog.START_PATH, "/sdcard");
+
+        //can user select directories or not
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+
+        //alternatively you can set file filter
+        intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+
+        startActivityForResult(intent, FileDialog.RequestType.REQUEST_SAVE.ordinal());
+    }
+
+    public synchronized void onActivityResult(final int rc, int resultCode, final Intent data) {
+
+        final FileDialog.RequestType requestCode = FileDialog.RequestType.values()[rc];
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == FileDialog.RequestType.REQUEST_SAVE) {
+                System.out.println("Saving...");
+            } else if (requestCode == FileDialog.RequestType.REQUEST_LOAD) {
+                System.out.println("Loading...");
+            }
+
+            String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.w(MAIN_ACTIVITY, "file not selected");
+        }
+
     }
 
     public void restoreActionBar() {

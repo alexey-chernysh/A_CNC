@@ -20,57 +20,15 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-/**
- * Activity para escolha de arquivos/diretorios.
- *
- * @author android
- *
- */
 public class FileDialog extends ListActivity {
 
-    /**
-     * Chave de um item da lista de paths.
-     */
     private static final String ITEM_KEY = "key";
-
-    /**
-     * Imagem de um item da lista de paths (diretorio ou arquivo).
-     */
     private static final String ITEM_IMAGE = "image";
-
-    /**
-     * Diretorio raiz.
-     */
     private static final String ROOT = "/";
-
-    /**
-     * Parametro de entrada da Activity: path inicial. Padrao: ROOT.
-     */
     public static final String START_PATH = "START_PATH";
-
-    /**
-     * Parametro de entrada da Activity: filtro de formatos de arquivos. Padrao:
-     * null.
-     */
     public static final String FORMAT_FILTER = "FORMAT_FILTER";
-
-    /**
-     * Parametro de saida da Activity: path escolhido. Padrao: null.
-     */
     public static final String RESULT_PATH = "RESULT_PATH";
-
-    /**
-     * Parametro de entrada da Activity: tipo de selecao: pode criar novos paths
-     * ou nao. Padrao: nao permite.
-     *
-     * @see {@link SelectionMode}
-     */
     public static final String SELECTION_MODE = "SELECTION_MODE";
-
-    /**
-     * Parametro de entrada da Activity: se e permitido escolher diretorios.
-     * Padrao: falso.
-     */
     public static final String CAN_SELECT_DIR = "CAN_SELECT_DIR";
 
     private List<String> path = null;
@@ -86,7 +44,7 @@ public class FileDialog extends ListActivity {
     private String parentPath;
     private String currentPath = ROOT;
 
-    private int selectionMode = SelectionMode.MODE_CREATE;
+    private SelectionMode selectionMode = SelectionMode.MODE_CREATE;
 
     private String[] formatFilter = null;
 
@@ -96,8 +54,7 @@ public class FileDialog extends ListActivity {
     private HashMap<String, Integer> lastPositions = new HashMap<String, Integer>();
 
     /**
-     * Called when the activity is first created. Configura todos os parametros
-     * de entrada e das VIEWS..
+     * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,11 +93,9 @@ public class FileDialog extends ListActivity {
             }
         });
 
-        selectionMode = getIntent().getIntExtra(SELECTION_MODE, SelectionMode.MODE_CREATE);
-
-        formatFilter = getIntent().getStringArrayExtra(FORMAT_FILTER);
-
-        canSelectDir = getIntent().getBooleanExtra(CAN_SELECT_DIR, false);
+        selectionMode = SelectionMode.values()[getIntent().getIntExtra(SELECTION_MODE, SelectionMode.MODE_CREATE.ordinal())];
+        formatFilter  = getIntent().getStringArrayExtra(FORMAT_FILTER);
+        canSelectDir  = getIntent().getBooleanExtra(CAN_SELECT_DIR, false);
 
         if (selectionMode == SelectionMode.MODE_OPEN) {
             newButton.setEnabled(false);
@@ -381,5 +336,15 @@ public class FileDialog extends ListActivity {
 
         inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         selectButton.setEnabled(false);
+    }
+
+    public enum SelectionMode {
+        MODE_CREATE,
+        MODE_OPEN
+    }
+
+    public enum RequestType {
+        REQUEST_SAVE,
+        REQUEST_LOAD
     }
 }
