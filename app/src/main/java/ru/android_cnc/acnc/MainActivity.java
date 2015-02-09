@@ -74,7 +74,7 @@ public class MainActivity
             while (inputString != null) {
 //               gcodeParser.parse(inputString);
                 inputString = bufferedReader.readLine();
-                gcodeSource += inputString;
+                gcodeSource += "\n" + inputString;
             }
             inputStream.close();
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class MainActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch(position){
             case 1:
-                transaction.replace(R.id.container, GcodeTextFragment.newInstance("G code source text"));
+                transaction.replace(R.id.container, GcodeTextFragment.newInstance(gcodeSource));
                 break;
             case 2:
                 transaction.replace(R.id.container, GraphicalViewFragment.newInstance("2","3"));

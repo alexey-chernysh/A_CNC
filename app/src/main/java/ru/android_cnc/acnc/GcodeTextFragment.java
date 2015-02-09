@@ -2,7 +2,13 @@ package ru.android_cnc.acnc;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -20,16 +26,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class GcodeTextFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String SOURCE_TEXT = "G_code_source_text";
     private static final String TEXT_FRAGMENT = "Text fragment event";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private String sourceText;
 
     private OnFragmentInteractionListener mListener;
@@ -42,13 +41,11 @@ public class GcodeTextFragment extends Fragment {
      * @return A new instance of fragment GcodeTextFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GcodeTextFragment newInstance(String param1) {
+    public static GcodeTextFragment newInstance(String sourceText) {
         Log.i(TEXT_FRAGMENT,"New instance");
         GcodeTextFragment fragment = new GcodeTextFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        args.putString(SOURCE_TEXT, param1);
+        args.putString(SOURCE_TEXT, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,8 +60,7 @@ public class GcodeTextFragment extends Fragment {
         Log.i(TEXT_FRAGMENT,"On create");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
+            sourceText = getArguments().getString(SOURCE_TEXT);
         }
     }
 
@@ -74,12 +70,21 @@ public class GcodeTextFragment extends Fragment {
         // Inflate the layout for this fragment
         Log.i(TEXT_FRAGMENT,"On create view");
         View result = inflater.inflate(R.layout.fragment_gcode_text, container, false);
-        Log.i(TEXT_FRAGMENT,"On create view - View inflated");
-        TextView nameValue = (TextView)result.findViewById(R.id.gcode_view_text);
-        Log.i(TEXT_FRAGMENT,"On create view - Id requested");
-        if(nameValue != null){
-            nameValue.setText("Мама мыла раму");
-            Log.i(TEXT_FRAGMENT,"On create view - Text changed");
+        EditText editTextView = (EditText)result.findViewById(R.id.gcode_view_text);
+        if(editTextView != null){
+            editTextView.setText(this.sourceText);
+            editTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    Toast.makeText(getActivity(), "G-code edited!", Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
         }
         return result;
     }
