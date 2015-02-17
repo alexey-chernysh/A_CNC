@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
+
 
 public class MainActivity
         extends
@@ -32,6 +34,8 @@ public class MainActivity
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             GcodeTextFragment.OnFragmentInteractionListener,
             GraphicalViewFragment.OnFragmentInteractionListener {
+
+    static ProgramLoader program;
 
     private static final String MAIN_ACTIVITY = "A CNC MAIN ACTIVITY";
     /**
