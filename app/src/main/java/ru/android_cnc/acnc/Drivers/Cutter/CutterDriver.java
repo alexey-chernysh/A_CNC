@@ -18,24 +18,24 @@ package ru.android_cnc.acnc.Drivers.Cutter;
 
 import java.util.ArrayList;
 
-import Drivers.CanonicalCommands.CanonCommand;
-import Drivers.CanonicalCommands.G00_G01;
-import Drivers.CanonicalCommands.G02_G03;
-import Drivers.CanonicalCommands.MotionMode;
-import Drivers.GeneralDriver;
-import Interpreter.InterpreterException;
-import Settings.Settings;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.G00_G01;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.G02_G03;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
+import ru.android_cnc.acnc.Drivers.GeneralDriver;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Settings.Settings;
 
 public class CutterDriver implements GeneralDriver {
 	
-	private ArrayList<CanonCommand> commands_ = null; 
+	private ArrayList<CanonCommand> commands_ = null;
 
 	public CutterDriver(){
 	}
 	
 	
 	@Override
-	public void loadProgram(ArrayList<CanonCommand> sourceCommands) throws InterpreterException{
+	public void loadProgram(ArrayList<CanonCommand> sourceCommands) throws InterpreterException {
 		
 		commands_ = sourceCommands;
 		buildVelocityProfile();

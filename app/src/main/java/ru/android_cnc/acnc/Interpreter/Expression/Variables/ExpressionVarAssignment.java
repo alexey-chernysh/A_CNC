@@ -16,9 +16,9 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
-import Interpreter.Expression.ExpressionGeneral;
-import Interpreter.InterpreterException;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Interpreter.Expression.ExpressionGeneral;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ExpressionVarAssignment {
 
@@ -32,7 +32,7 @@ public class ExpressionVarAssignment {
 		this.varValExp_ = ev;
 	}
 
-	public void evalute() throws InterpreterException{
+	public void evalute() throws InterpreterException {
 		this.lastNum_ = this.varNumExp_.integerEvalute();
 		this.lastValue_ = this.varValExp_.evalute();
 		InterpreterState.vars_.set(this.lastNum_, this.lastValue_);

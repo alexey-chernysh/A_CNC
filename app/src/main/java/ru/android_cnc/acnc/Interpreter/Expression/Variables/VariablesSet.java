@@ -16,9 +16,9 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
-import Interpreter.Expression.Tokens.TokenParameter;
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class VariablesSet {
 	
@@ -242,14 +242,14 @@ public class VariablesSet {
 			else return false;
 	}
 	
-	public Point getHomePointG28() throws InterpreterException {
-		Point homePoint =  new Point(this.getX(G28HomePos_), this.getY(G28HomePos_));
-		return homePoint;
+	public CNCPoint getHomePointG28() throws InterpreterException {
+		CNCPoint homeCNCPoint =  new CNCPoint(this.getX(G28HomePos_), this.getY(G28HomePos_));
+		return homeCNCPoint;
 	}
 	
-	public Point getHomePointG30() throws InterpreterException {
-		Point homePoint =  new Point(this.getX(G30HomePos_), this.getY(G30HomePos_));
-		return homePoint;
+	public CNCPoint getHomePointG30() throws InterpreterException {
+		CNCPoint homeCNCPoint =  new CNCPoint(this.getX(G30HomePos_), this.getY(G30HomePos_));
+		return homeCNCPoint;
 	}
 	
 }

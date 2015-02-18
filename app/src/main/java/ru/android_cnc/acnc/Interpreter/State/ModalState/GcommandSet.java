@@ -16,71 +16,71 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-import Drivers.CanonicalCommands.ArcDirection;
-import Drivers.CanonicalCommands.G00_G01;
-import Drivers.CanonicalCommands.G02_G03;
-import Drivers.CanonicalCommands.G04;
-import Drivers.CanonicalCommands.MotionMode;
-import Drivers.CanonicalCommands.VelocityPlan;
-import Interpreter.Expression.ParamExpresionList;
-import Interpreter.Expression.Tokens.TokenParameter;
-import Interpreter.Expression.Variables.VariablesSet;
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
-import Interpreter.ProgramLoader;
-import Interpreter.State.CutterRadiusCompensation;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.ArcDirection;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.G00_G01;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.G02_G03;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.G04;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.VelocityPlan;
+import ru.android_cnc.acnc.Interpreter.Expression.ParamExpresionList;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
+import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public enum GcommandSet {
 	G0(0.0, GcommandModalGroupSet.G_GROUP1_MOTION){ // Rapid positioning
 		@Override
-		public void evalute(ParamExpresionList words) throws InterpreterException { 
+		public void evalute(ParamExpresionList words) throws InterpreterException {
 			InterpreterState.modalState.set(modalGroup, this);
-			Point startPoint = InterpreterState.getLastPosition();
-			Point endPoint = InterpreterState.modalState.getTargetPoint(startPoint, words);
+			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
-			G00_G01 newG0 = new G00_G01(startPoint, 
-										endPoint, 
+			G00_G01 newG0 = new G00_G01(startCNCPoint,
+                    endCNCPoint,
 										vp, 
-										MotionMode.FREE, 
+										MotionMode.FREE,
 										InterpreterState.zeroOffsetMode);
 			ProgramLoader.command_sequence.add(newG0);
-			InterpreterState.setLastPosition(endPoint);
+			InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
 	G1(1.0, GcommandModalGroupSet.G_GROUP1_MOTION){ // Linear interpolation
 		@Override
 		public void evalute(ParamExpresionList words) throws InterpreterException {
 			InterpreterState.modalState.set(modalGroup, this);
-			Point startPoint = InterpreterState.getLastPosition();
-			Point endPoint = InterpreterState.modalState.getTargetPoint(startPoint, words);
+			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-			G00_G01 newG1 = new G00_G01(startPoint, 
-										endPoint, 
+			G00_G01 newG1 = new G00_G01(startCNCPoint,
+                    endCNCPoint,
 										vp, 
 										MotionMode.WORK, 
 										InterpreterState.offsetMode);
 			ProgramLoader.command_sequence.add(newG1);
-			InterpreterState.setLastPosition(endPoint);
+			InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
 	G2(2.0, GcommandModalGroupSet.G_GROUP1_MOTION){ // Clockwise circular/helical interpolation
 		@Override
 		public void evalute(ParamExpresionList words) throws InterpreterException {
 			InterpreterState.modalState.set(modalGroup, this);
-			Point startPoint = InterpreterState.getLastPosition();
-			Point endPoint = InterpreterState.modalState.getTargetPoint(startPoint, words);
+			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			// TODO R format also needed
-			Point centerPoint = InterpreterState.modalState.getCenterPoint(startPoint, words);
+			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-			G02_G03 newG2 = new G02_G03(startPoint, 
-										endPoint,
-										centerPoint,
+			G02_G03 newG2 = new G02_G03(startCNCPoint,
+                    endCNCPoint,
+                    centerCNCPoint,
 										ArcDirection.CLOCKWISE,
 										vp, 
 										InterpreterState.offsetMode);
 			ProgramLoader.command_sequence.add(newG2);
-			InterpreterState.setLastPosition(endPoint);
+			InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
 	G3(3.0, GcommandModalGroupSet.G_GROUP1_MOTION){ // Counterclockwise circular/Helical interpolation
@@ -88,19 +88,19 @@ public enum GcommandSet {
 		public void evalute(ParamExpresionList words) throws InterpreterException {
 			checkThatScalesAreEquals();
 			InterpreterState.modalState.set(modalGroup, this);
-			Point startPoint = InterpreterState.getLastPosition();
-			Point endPoint = InterpreterState.modalState.getTargetPoint(startPoint, words);
+			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			// TODO R format also needed
-			Point centerPoint = InterpreterState.modalState.getCenterPoint(startPoint, words);
+			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-			G02_G03 newG3 = new G02_G03(startPoint, 
-										endPoint,
-										centerPoint,
+			G02_G03 newG3 = new G02_G03(startCNCPoint,
+                    endCNCPoint,
+                    centerCNCPoint,
 										ArcDirection.COUNTERCLOCKWISE,
 										vp, 
 										InterpreterState.offsetMode);
 			ProgramLoader.command_sequence.add(newG3);
-			InterpreterState.setLastPosition(endPoint);
+			InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
 	G4(4.0, GcommandModalGroupSet.G_GROUP0_G4_DWELL){ // Dwell
@@ -157,25 +157,25 @@ public enum GcommandSet {
 			checkThatPlaneIsXY();
 			double radius = words.get(TokenParameter.I); // circle radius
 			if(radius > 0.0){
-				Point centerPoint = InterpreterState.getLastPosition();
-				Point circleStartPoint = centerPoint.clone();
+				CNCPoint centerCNCPoint = InterpreterState.getLastPosition();
+				CNCPoint circleStartCNCPoint = centerCNCPoint.clone();
 				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-				circleStartPoint.shift(radius, 0.0);
-				G00_G01 G1_in = new G00_G01(centerPoint, 
-											circleStartPoint, 
+				circleStartCNCPoint.shift(radius, 0.0);
+				G00_G01 G1_in = new G00_G01(centerCNCPoint,
+                        circleStartCNCPoint,
 											vp, 
 											MotionMode.WORK, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
-				G02_G03 newG2 = new G02_G03(circleStartPoint, 
-											circleStartPoint,
-											centerPoint,
+				G02_G03 newG2 = new G02_G03(circleStartCNCPoint,
+                        circleStartCNCPoint,
+                        centerCNCPoint,
 											ArcDirection.CLOCKWISE,
 											vp, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
-				G00_G01 G1_out = new G00_G01(circleStartPoint,
-											 centerPoint, 
+				G00_G01 G1_out = new G00_G01(circleStartCNCPoint,
+                        centerCNCPoint,
 											 vp, 
 											 MotionMode.WORK, 
 											 InterpreterState.offsetMode);
@@ -189,25 +189,25 @@ public enum GcommandSet {
 			checkThatPlaneIsXY();
 			double radius = words.get(TokenParameter.I); // circle radius
 			if(radius > 0.0){
-				Point centerPoint = InterpreterState.getLastPosition();
-				Point circleStartPoint = centerPoint.clone();
+				CNCPoint centerCNCPoint = InterpreterState.getLastPosition();
+				CNCPoint circleStartCNCPoint = centerCNCPoint.clone();
 				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-				circleStartPoint.shift(radius, 0.0);
-				G00_G01 G1_in = new G00_G01(centerPoint, 
-											circleStartPoint, 
+				circleStartCNCPoint.shift(radius, 0.0);
+				G00_G01 G1_in = new G00_G01(centerCNCPoint,
+                        circleStartCNCPoint,
 											vp, 
 											MotionMode.WORK, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
-				G02_G03 newG2 = new G02_G03(circleStartPoint, 
-											circleStartPoint,
-											centerPoint,
+				G02_G03 newG2 = new G02_G03(circleStartCNCPoint,
+                        circleStartCNCPoint,
+                        centerCNCPoint,
 											ArcDirection.COUNTERCLOCKWISE,
 											vp, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
-				G00_G01 G1_out = new G00_G01(circleStartPoint,
-											 centerPoint, 
+				G00_G01 G1_out = new G00_G01(circleStartCNCPoint,
+                        centerCNCPoint,
 											 vp, 
 											 MotionMode.WORK, 
 											 InterpreterState.offsetMode);
@@ -262,54 +262,54 @@ public enum GcommandSet {
 	G28(28.0, GcommandModalGroupSet.G_GROUP0_NON_MODAL){ // Return home
 		@Override
 		public void evalute(ParamExpresionList words) throws InterpreterException { 
-			Point currentPoint = InterpreterState.getLastPosition();
-			Point intermediatePoint = words.getPoint();
+			CNCPoint currentCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint intermediateCNCPoint = words.getPoint();
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
-			if(intermediatePoint != null){
-				G00_G01 motion1 = new G00_G01(currentPoint, 
-						  					  intermediatePoint, 
+			if(intermediateCNCPoint != null){
+				G00_G01 motion1 = new G00_G01(currentCNCPoint,
+                        intermediateCNCPoint,
 						  					  vp, 
 						  					  MotionMode.FREE, 
 						  					  null);
 				ProgramLoader.command_sequence.add(motion1);
-				InterpreterState.setLastPosition(intermediatePoint);
-				currentPoint = intermediatePoint;
+				InterpreterState.setLastPosition(intermediateCNCPoint);
+				currentCNCPoint = intermediateCNCPoint;
 			};
-			Point homePoint  = InterpreterState.vars_.getHomePointG28();
-			G00_G01 motion2 = new G00_G01(currentPoint, 
-										  homePoint, 
+			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG28();
+			G00_G01 motion2 = new G00_G01(currentCNCPoint,
+                    homeCNCPoint,
 										  vp, 
 										  MotionMode.FREE, 
 										  null);
 			ProgramLoader.command_sequence.add(motion2);
-			InterpreterState.setLastPosition(homePoint);
+			InterpreterState.setLastPosition(homeCNCPoint);
 		}
 	}, 
 	G28_1(28.1, GcommandModalGroupSet.G_GROUP0_NON_MODAL), // Reference axes
 	G30(30.0, GcommandModalGroupSet.G_GROUP0_NON_MODAL){ // Return home
 		@Override
 		public void evalute(ParamExpresionList words) throws InterpreterException { 
-			Point currentPoint = InterpreterState.getLastPosition();
-			Point intermediatePoint = words.getPoint();
+			CNCPoint currentCNCPoint = InterpreterState.getLastPosition();
+			CNCPoint intermediateCNCPoint = words.getPoint();
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
-			if(intermediatePoint != null){
-				G00_G01 motion1 = new G00_G01(currentPoint, 
-						  					  intermediatePoint, 
+			if(intermediateCNCPoint != null){
+				G00_G01 motion1 = new G00_G01(currentCNCPoint,
+                        intermediateCNCPoint,
 						  					  vp, 
 						  					  MotionMode.FREE, 
 						  					  null);
 				ProgramLoader.command_sequence.add(motion1);
-				InterpreterState.setLastPosition(intermediatePoint);
-				currentPoint = intermediatePoint;
+				InterpreterState.setLastPosition(intermediateCNCPoint);
+				currentCNCPoint = intermediateCNCPoint;
 			};
-			Point homePoint  = InterpreterState.vars_.getHomePointG30();
-			G00_G01 motion2 = new G00_G01(currentPoint, 
-										  homePoint, 
+			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG30();
+			G00_G01 motion2 = new G00_G01(currentCNCPoint,
+                    homeCNCPoint,
 										  vp, 
 										  MotionMode.FREE, 
 										  null);
 			ProgramLoader.command_sequence.add(motion2);
-			InterpreterState.setLastPosition(homePoint);
+			InterpreterState.setLastPosition(homeCNCPoint);
 		}
 	}, 
 	G31(31.0, GcommandModalGroupSet.G_GROUP1_MOTION), // Straight probe

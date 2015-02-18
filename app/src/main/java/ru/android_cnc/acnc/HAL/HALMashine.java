@@ -18,12 +18,12 @@ package ru.android_cnc.acnc.HAL;
 
 import java.util.ArrayList;
 
-import HAL.Command.HALCommand;
-import HAL.ExternalEventController.ExternalEventController;
-import HAL.InvertorController.InvertorController;
-import HAL.MotionController.MotionController;
-import HAL.TorchHeightController.TorchHeightController;
-import Interpreter.Motion.Point;
+import ru.android_cnc.acnc.HAL.Command.HALCommand;
+import ru.android_cnc.acnc.HAL.ExternalEventController.ExternalEventController;
+import ru.android_cnc.acnc.HAL.InvertorController.InvertorController;
+import ru.android_cnc.acnc.HAL.MotionController.MotionController;
+import ru.android_cnc.acnc.HAL.TorchHeightController.TorchHeightController;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class HALMashine implements Runnable {
 
@@ -66,7 +66,7 @@ public class HALMashine implements Runnable {
 		commands_ = commands;
 	}
 	
-	Point positionBeforeJog = null;
+	CNCPoint positionBeforeJog = null;
 	private final double manualTorchHeightChange = 1.0;
 	private JoggingStateX joggingStateX = JoggingStateX.NONE;
 	private JoggingStateY joggingStateY = JoggingStateY.NONE;

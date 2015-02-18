@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public 	class VarArray {
 	
@@ -35,7 +35,7 @@ public 	class VarArray {
 		return this.assigment_counter_[num];
 	};
 	
-	public double get(int num) throws InterpreterException{
+	public double get(int num) throws InterpreterException {
 		if((num>=0)&(num<arraySize_)){ 
 			if(getAssignmentCounter(num) > 0) return this.variables_[num];
 			else throw new InterpreterException("Reference to non initialized variable");

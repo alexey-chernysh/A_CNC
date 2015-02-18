@@ -18,12 +18,12 @@ package ru.android_cnc.acnc.Drivers;
 
 import java.util.ArrayList;
 
-import Drivers.CanonicalCommands.CanonCommand;
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public interface GeneralDriver {
 	
-	void loadProgram(ArrayList<CanonCommand> sourceCommands) throws InterpreterException; 
+	void loadProgram(ArrayList<CanonCommand> sourceCommands) throws InterpreterException;
 	
 	void startProgram(); 
 	

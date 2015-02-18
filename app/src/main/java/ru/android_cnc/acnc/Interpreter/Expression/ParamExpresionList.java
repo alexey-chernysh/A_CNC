@@ -16,9 +16,9 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
-import Interpreter.Expression.Tokens.TokenParameter;
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class ParamExpresionList {
 	
@@ -32,7 +32,7 @@ public class ParamExpresionList {
 		}
 	};
 
-	public void addWord(TokenParameter w, ExpressionGeneral e) throws InterpreterException{ 
+	public void addWord(TokenParameter w, ExpressionGeneral e) throws InterpreterException {
 		int n = w.ordinal();
 		if(expressionList[n] == null) expressionList[n] = e;
 		else throw new InterpreterException("Twice parameter " + w.toString() + ";");
@@ -86,8 +86,8 @@ public class ParamExpresionList {
 		else return 0;
 	}
 	
-	public Point getPoint() throws InterpreterException{
-		if(this.hasXYZ()) return new Point(this.get(TokenParameter.X), this.get(TokenParameter.Y));
+	public CNCPoint getPoint() throws InterpreterException{
+		if(this.hasXYZ()) return new CNCPoint(this.get(TokenParameter.X), this.get(TokenParameter.Y));
 		else return null;
 	}
 

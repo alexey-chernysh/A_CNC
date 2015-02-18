@@ -16,12 +16,12 @@
 
 package ru.android_cnc.acnc.Interpreter.Motion;
 
-public class Point {
+public class CNCPoint {
 	
 	private double x_;
 	private double y_;
 	
-	public Point(double x, double y){ this.x_ = x; this.y_ = y;	}
+	public CNCPoint(double x, double y){ this.x_ = x; this.y_ = y;	}
 
 	public double getX() { return x_; }
 
@@ -33,9 +33,9 @@ public class Point {
 	
 	public void shift(double dX, double dY){ this.x_ += dX; this.y_ += dY; }
 	
-	public Point clone(){ return new Point(this.x_, this.y_); }
+	public CNCPoint clone(){ return new CNCPoint(this.x_, this.y_); }
 
-	public double getDistance(Point p) {
+	public double getDistance(CNCPoint p) {
 		double dx = this.getX() - p.getX();
 		double dy = this.getY() - p.getY();
 		return Math.sqrt(dx*dx + dy*dy);

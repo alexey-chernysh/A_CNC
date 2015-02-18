@@ -18,8 +18,8 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import java.util.ArrayList;
 
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class CanonCommandSequence {
 	
@@ -29,7 +29,7 @@ public class CanonCommandSequence {
 		seq_ = new ArrayList<CanonCommand>();
 	}
 	
-	public void add(CanonCommand command) throws InterpreterException{
+	public void add(CanonCommand command) throws InterpreterException {
 		if(command.getType() == CanonCommand.type.MOTION){
 			if(command instanceof G00_G01){
 				if(((G00_G01) command).isFreeRun())	addFreeMotion((G00_G01) command);
@@ -53,8 +53,8 @@ public class CanonCommandSequence {
 		G00_G01 lastMotion = findLastMotion();
 		if(lastMotion != null){ 
 			// last motion is straight or arc working run, link stright motion may be needed
-			Point lastEnd = lastMotion.getEnd();
-			Point newStart = command.getStart();
+			CNCPoint lastEnd = lastMotion.getEnd();
+			CNCPoint newStart = command.getStart();
 			if(newStart.getDistance(lastEnd) > 0.0){
 				G00_G01 link = new G00_G01(lastEnd, 
 										   newStart, 
@@ -68,14 +68,14 @@ public class CanonCommandSequence {
 	}
 
 	private void addCuttingStraightMotion(G00_G01 command) throws InterpreterException {
-		Point unOffsetedStart = command.getStart().clone();
+		CNCPoint unOffsetedStart = command.getStart().clone();
 		command.applyCutterRadiusCompensation();
 		G00_G01 lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move 
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
-				Point lastEnd = lastMotion.getEnd();
-				Point newStart = command.getStart();
+				CNCPoint lastEnd = lastMotion.getEnd();
+				CNCPoint newStart = command.getStart();
 				if(newStart.getDistance(lastEnd) > 0.0){
 					G00_G01 link = new G00_G01(lastEnd, 
 											   newStart, 
@@ -104,9 +104,9 @@ public class CanonCommandSequence {
 							// arc line before 
 							// TODO current algorithm wrong
 							G02_G03 arc = (G02_G03)lastMotion;
-							Point connectionPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
-							arc.setEnd(connectionPoint);
-							command.setStart(connectionPoint);
+							CNCPoint connectionCNCPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
+							arc.setEnd(connectionCNCPoint);
+							command.setStart(connectionCNCPoint);
 						};
 					} else {
 						if((d_alfa < 0.0)&&(command.getOffsetMode().getRadius()>0.0)){
@@ -146,9 +146,9 @@ public class CanonCommandSequence {
 							} else {
 								// arc line before 
 								G02_G03 arc = (G02_G03)lastMotion;
-								Point connectionPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
-								arc.setEnd(connectionPoint);
-								command.setStart(connectionPoint);
+								CNCPoint connectionCNCPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
+								arc.setEnd(connectionCNCPoint);
+								command.setStart(connectionCNCPoint);
 							};
 						};
 					};
@@ -163,14 +163,14 @@ public class CanonCommandSequence {
 	}
 
 	private void addCuttingArcMotion(G02_G03 command) throws InterpreterException {
-		Point unOffsetedStart = command.getStart().clone();
+		CNCPoint unOffsetedStart = command.getStart().clone();
 		command.applyCutterRadiusCompensation();
 		G00_G01 lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
-				Point lastEnd = lastMotion.getEnd();
-				Point newStart = command.getStart();
+				CNCPoint lastEnd = lastMotion.getEnd();
+				CNCPoint newStart = command.getStart();
 				if(newStart.getDistance(lastEnd) > 0.0){
 					G00_G01 link = new G00_G01(lastEnd, 
 											   newStart, 
@@ -190,15 +190,15 @@ public class CanonCommandSequence {
 					if(d_alfa > 0.0){
 						// line turn left and left offset
 						if(lastMotion instanceof G00_G01){  // Straight line before
-							Point connectionPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
-							lastMotion.setEnd(connectionPoint);
-							command.setStart(connectionPoint);
+							CNCPoint connectionCNCPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
+							lastMotion.setEnd(connectionCNCPoint);
+							command.setStart(connectionCNCPoint);
 						} else {
 							// arc line before 
 							G02_G03 arc = (G02_G03)lastMotion;
-							Point connectionPoint = getConnectionPoint(arc, command);
-							arc.setEnd(connectionPoint);
-							command.setStart(connectionPoint);
+							CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
+							arc.setEnd(connectionCNCPoint);
+							command.setStart(connectionCNCPoint);
 						};
 					} else {
 						if(d_alfa < 0.0){
@@ -229,14 +229,14 @@ public class CanonCommandSequence {
 						if(d_alfa < 0.0){
 							// line turn right and right offset
 							if(lastMotion instanceof G00_G01){  // stright line before
-								Point connectionPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
-								lastMotion.setEnd(connectionPoint);
-								command.setStart(connectionPoint);
+								CNCPoint connectionCNCPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
+								lastMotion.setEnd(connectionCNCPoint);
+								command.setStart(connectionCNCPoint);
 							} else { // arc line before 
 								G02_G03 arc = (G02_G03)lastMotion;
-								Point connectionPoint = getConnectionPoint(arc, command);
-								arc.setEnd(connectionPoint);
-								command.setStart(connectionPoint);
+								CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
+								arc.setEnd(connectionCNCPoint);
+								command.setStart(connectionCNCPoint);
 							};
 						};
 					};
@@ -265,7 +265,7 @@ public class CanonCommandSequence {
 		STARTEND
 	}
 	
-	private Point getConnectionPoint(G00_G01 Line, G02_G03 Arc, ConnectionType type){
+	private CNCPoint getConnectionPoint(G00_G01 Line, G02_G03 Arc, ConnectionType type){
 		// find connection point of line & circle nearest to end of one & start of another
 		double rx = 0.0;
 		double ry = 0.0;
@@ -360,11 +360,11 @@ public class CanonCommandSequence {
 				 ry = arccy;
 			}
 		}
-		return new Point(rx, ry);
+		return new CNCPoint(rx, ry);
 	}
 
-	private Point getConnectionPoint(G02_G03 A1, G02_G03 A2){
-		Point result;
+	private CNCPoint getConnectionPoint(G02_G03 A1, G02_G03 A2){
+		CNCPoint result;
 		
 		double dxsa1 = A1.getStart().getX() - A1.getCenter().getX();
 		double dysa1 = A1.getStart().getY() - A1.getCenter().getY();
@@ -389,7 +389,7 @@ public class CanonCommandSequence {
 		if(Math.abs(overlap) < meps){ // centers offseted, one connection point
 			double xcp = A2.getStart().getX();
 			double ycp = A2.getStart().getY();
-			result = new Point(xcp, ycp); 
+			result = new CNCPoint(xcp, ycp);
 		} else { 
 			if(rc < meps){ // centers are equal
 				double ae1 = Math.atan2(dyea1, dxea1);
@@ -397,7 +397,7 @@ public class CanonCommandSequence {
 				double acp = (ae1 + as2)/2d;
 				double xcp = A1.getCenter().getX() + ra1*Math.cos(acp);
 				double ycp = A1.getCenter().getY() + ra1*Math.sin(acp);
-				result = new Point(xcp, ycp); 
+				result = new CNCPoint(xcp, ycp);
 			} else {	// different centers, two connection point
 				double d1 = (r2a1 - r2a2 + r2c)/(2d*rc);
 				double t = r2a1 - d1*d1;
@@ -415,9 +415,9 @@ public class CanonCommandSequence {
 				double dx2 = A1.getEnd().getX() - xcp2;
 				double dy2 = A1.getEnd().getY() - ycp2;
 				if((dx1*dx1 + dy1*dy1)<(dx2*dx2 + dy2*dy2)){ // choose nearest point
-					result = new Point(xcp1, ycp1); 
+					result = new CNCPoint(xcp1, ycp1);
 				}else{
-					result = new Point(xcp2, ycp2); 
+					result = new CNCPoint(xcp2, ycp2);
 				}
 			}
 		}

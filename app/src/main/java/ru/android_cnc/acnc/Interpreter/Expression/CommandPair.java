@@ -16,13 +16,13 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
-import Interpreter.Expression.Tokens.TokenCommand;
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenCommand;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class CommandPair { // pair of command indrntifier alfa and associated expression
 	
 	private TokenCommand type_;
-	private ExpressionGeneral commandExpression_ = null;
+	private ExpressionGeneral commandExpression_;
 
 	public CommandPair(TokenCommand t, ExpressionGeneral exp){
 		this.type_ = t;
@@ -30,7 +30,7 @@ public class CommandPair { // pair of command indrntifier alfa and associated ex
 	}
 	
 	public double getCurrentValue() throws InterpreterException {
-		return this.commandExpression_.evalute();
+        return this.commandExpression_.evalute();
 	}
 
 	public ExpressionGeneral getValueExpression() {

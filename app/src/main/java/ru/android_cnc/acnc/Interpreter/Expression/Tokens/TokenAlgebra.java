@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public enum TokenAlgebra implements TokenDefaultFields {
 	

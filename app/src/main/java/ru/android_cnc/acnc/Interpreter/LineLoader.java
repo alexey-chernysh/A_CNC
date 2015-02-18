@@ -16,13 +16,13 @@
 
 package ru.android_cnc.acnc.Interpreter;
 
-import Interpreter.Expression.CommandLineLoader;
-import Interpreter.Expression.CommandPair;
-import Interpreter.Expression.ExpressionGeneral;
-import Interpreter.Expression.Variables.ExpressionVarAssignment;
-import Interpreter.State.InterpreterState;
-import Interpreter.State.ModalState.GcommandSet;
-import Interpreter.State.ModalState.McommandSet;
+import ru.android_cnc.acnc.Interpreter.Expression.CommandLineLoader;
+import ru.android_cnc.acnc.Interpreter.Expression.CommandPair;
+import ru.android_cnc.acnc.Interpreter.Expression.ExpressionGeneral;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.ExpressionVarAssignment;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Interpreter.State.ModalState.GcommandSet;
+import ru.android_cnc.acnc.Interpreter.State.ModalState.McommandSet;
 
 public class LineLoader extends CommandLineLoader {
 	

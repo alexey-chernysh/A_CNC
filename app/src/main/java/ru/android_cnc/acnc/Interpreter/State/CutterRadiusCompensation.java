@@ -1,13 +1,13 @@
 package ru.android_cnc.acnc.Interpreter.State;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class CutterRadiusCompensation {
 	
 	private double offset_ = 0.0;
 	private mode mode_ = mode.OFF;
 	
-	public CutterRadiusCompensation(mode m, double r) throws InterpreterException{
+	public CutterRadiusCompensation(mode m, double r) throws InterpreterException {
 		setMode(m);
 		setRadius(r);
 	}

@@ -16,10 +16,10 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
-import Interpreter.Expression.Variables.VariablesSet;
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
-import Interpreter.State.ModalState.ModalState;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.State.ModalState.ModalState;
 
 public class InterpreterState {
 
@@ -27,8 +27,8 @@ public class InterpreterState {
 
 	public static boolean IsBlockDelete = true;
 
-	private static Point homePosition = new Point(0.0,0.0);
-	private static Point lastPosition = new Point(0.0,0.0);
+	private static CNCPoint homePosition = new CNCPoint(0.0,0.0);
+	private static CNCPoint lastPosition = new CNCPoint(0.0,0.0);
 	private static double currentFeedRate_ = 0.0; // max velocity mm in sec
 
 	public static ModalState modalState;
@@ -39,7 +39,7 @@ public class InterpreterState {
 	public static CutterRadiusCompensation offsetMode;
 	public static CutterRadiusCompensation zeroOffsetMode;
 
-	public InterpreterState() throws InterpreterException{
+	public InterpreterState() throws InterpreterException {
 		modalState = new ModalState();
 		toolSet = new ToolSet();
 		spindle = new Spindle();
@@ -72,11 +72,11 @@ public class InterpreterState {
 		InterpreterState.lastPosition.setY(InterpreterState.lastPosition.getY() - Y);
 	}
 
-	public static Point getLastPosition() {
+	public static CNCPoint getLastPosition() {
 		return InterpreterState.lastPosition;
 	}
 
-	public static void setLastPosition(Point newPos) {
+	public static void setLastPosition(CNCPoint newPos) {
 		InterpreterState.lastPosition = newPos;
 	}
 

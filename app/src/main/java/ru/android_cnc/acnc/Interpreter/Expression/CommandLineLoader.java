@@ -16,21 +16,21 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
-import Interpreter.Expression.Tokens.Token;
-import Interpreter.Expression.Tokens.TokenAlfa;
-import Interpreter.Expression.Tokens.TokenAlgebra;
-import Interpreter.Expression.Tokens.TokenCommand;
-import Interpreter.Expression.Tokens.TokenComment;
-import Interpreter.Expression.Tokens.TokenDefaultFields;
-import Interpreter.Expression.Tokens.TokenGroup;
-import Interpreter.Expression.Tokens.TokenList;
-import Interpreter.Expression.Tokens.TokenParameter;
-import Interpreter.Expression.Tokens.TokenSequence;
-import Interpreter.Expression.Tokens.TokenValue;
-import Interpreter.Expression.Variables.ExpressionVarAssignment;
-import Interpreter.Expression.Variables.ExpressionVariable;
-import Interpreter.Expression.Variables.VarAssignmentList;
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.Token;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenAlfa;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenAlgebra;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenCommand;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenComment;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenDefaultFields;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenGroup;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenList;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenSequence;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenValue;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.ExpressionVarAssignment;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.ExpressionVariable;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.VarAssignmentList;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class CommandLineLoader extends TokenSequence {
 

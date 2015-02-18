@@ -16,9 +16,8 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
-import Interpreter.Expression.Tokens.TokenComment.CommentKeyWord;
-import Interpreter.InterpreterException;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class TokenSequence {
 	
@@ -30,11 +29,11 @@ public class TokenSequence {
 		if(frameString.length()>0){
 			if(frameString.charAt(0) == '/') {
 				if ( InterpreterState.IsBlockDelete){
-					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), CommentKeyWord.BLOCK_DELETE_SLASH, 0,frameString.length()-1,frameString);
+					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0,frameString.length()-1,frameString);
 					this.tokenList.addNewToken(comment, 0);
 					return;
 				} else {
-					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), CommentKeyWord.BLOCK_DELETE_SLASH, 0, 0,frameString);
+					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0, 0,frameString);
 					this.tokenList.addNewToken(comment, 0);
 				};
 			};
@@ -115,8 +114,8 @@ public class TokenSequence {
 	void getAllCommentSemicolon(String sourceString) {
 		int len = sourceString.length(); 
 		int commentStart = -1;
-		CommentKeyWord newKey = CommentKeyWord.PARENTHESIS;
-		for(CommentKeyWord k: TokenComment.commentAtFirstPos){
+		TokenComment.CommentKeyWord newKey = TokenComment.CommentKeyWord.PARENTHESIS;
+		for(TokenComment.CommentKeyWord k: TokenComment.commentAtFirstPos){
 			int i = sourceString.indexOf(k.key);
 			if(i>commentStart){
 				commentStart = i;
@@ -149,7 +148,7 @@ public class TokenSequence {
 							break;
 						}
 					if(commentEnd > commentStart){
-						TokenComment newComment = new TokenComment(sourceString, CommentKeyWord.PARENTHESIS, commentStart, commentEnd,sourceString);
+						TokenComment newComment = new TokenComment(sourceString, TokenComment.CommentKeyWord.PARENTHESIS, commentStart, commentEnd,sourceString);
 						curTokenNum = this.tokenList.addNewToken(newComment, curTokenNum);
 					} else throw new InterpreterException("Unexpexted end of line! Symbol ) omitted",commentEnd);
 				};

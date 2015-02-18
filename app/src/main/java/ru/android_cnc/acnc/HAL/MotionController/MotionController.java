@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.HAL.MotionController;
 
-import Interpreter.Motion.Point;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class MotionController implements Runnable {
 	
@@ -59,7 +59,7 @@ public class MotionController implements Runnable {
 		this.currentState = newState;
 	}
 
-	public Point getCurrentPosition() {
+	public CNCPoint getCurrentPosition() {
 		// TODO Auto-generated method stub
 		return null;
 	}

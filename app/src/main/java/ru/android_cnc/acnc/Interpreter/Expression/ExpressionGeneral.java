@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class ExpressionGeneral { // general expression used in NGC274 code
 	

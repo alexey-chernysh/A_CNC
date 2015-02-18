@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import Drivers.CanonicalCommands.CanonCommandSequence;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ProgramLoader {
 

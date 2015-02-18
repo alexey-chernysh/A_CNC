@@ -16,11 +16,11 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-import Interpreter.Expression.ParamExpresionList;
-import Interpreter.Expression.Tokens.TokenParameter;
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Interpreter.Expression.ParamExpresionList;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ModalState {
 	
@@ -37,7 +37,7 @@ public class ModalState {
 			m_state_[i] = McommandSet.MDUMMY;
 	};
 		
-	public void initToDefaultState() throws InterpreterException{
+	public void initToDefaultState() throws InterpreterException {
 		
 		set(GcommandModalGroupSet.G_GROUP1_MOTION, GcommandSet.G1);
 		set(GcommandModalGroupSet.G_GROUP2_PLANE, GcommandSet.G17);
@@ -113,8 +113,8 @@ public class ModalState {
 		return (this.getGModalState(GcommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GcommandSet.G91_1);
 	}
 
-	public Point getTargetPoint(Point refPoint, ParamExpresionList words) throws InterpreterException {
-		Point resultPoint = refPoint.clone();
+	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpresionList words) throws InterpreterException {
+		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Polar coorfimates mode not realized yet!");
 		} else {
@@ -123,22 +123,22 @@ public class ModalState {
 				double x_param = 0;
 				x_param = words.get(TokenParameter.X);
 				x_param = InterpreterState.modalState.toMM(x_param);
-				if(!InterpreterState.modalState.isAbsolute()) x_param += refPoint.getX();
-				resultPoint.setX(x_param);
+				if(!InterpreterState.modalState.isAbsolute()) x_param += refCNCPoint.getX();
+				resultCNCPoint.setX(x_param);
 			};
 			if(words.has(TokenParameter.Y)){
 				double y_param = 0;
 				y_param = words.get(TokenParameter.Y);
 				y_param = InterpreterState.modalState.toMM(y_param);
-				if(!InterpreterState.modalState.isAbsolute()) y_param += refPoint.getY();
-				resultPoint.setY(y_param);
+				if(!InterpreterState.modalState.isAbsolute()) y_param += refCNCPoint.getY();
+				resultCNCPoint.setY(y_param);
 			};
 		}
-		return resultPoint;
+		return resultCNCPoint;
 	}
 
-	public Point getCenterPoint(Point refPoint, ParamExpresionList words) throws InterpreterException {
-		Point resultPoint = refPoint.clone();
+	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpresionList words) throws InterpreterException {
+		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Arc motion incompatible with polar coorfimates mode!");
 		} else {
@@ -147,18 +147,18 @@ public class ModalState {
 				double i_param = 0;
 				i_param = words.get(TokenParameter.I);
 				i_param = InterpreterState.modalState.toMM(i_param);
-				if(InterpreterState.modalState.isArcCenterRelative()) i_param += refPoint.getX();
-				resultPoint.setX(i_param);
+				if(InterpreterState.modalState.isArcCenterRelative()) i_param += refCNCPoint.getX();
+				resultCNCPoint.setX(i_param);
 			};
 			if(words.has(TokenParameter.J)){
 				double j_param = 0;
 				j_param = words.get(TokenParameter.J);
 				j_param = InterpreterState.modalState.toMM(j_param);
-				if(InterpreterState.modalState.isArcCenterRelative()) j_param += refPoint.getY();
-				resultPoint.setY(j_param);
+				if(InterpreterState.modalState.isArcCenterRelative()) j_param += refCNCPoint.getY();
+				resultCNCPoint.setY(j_param);
 			};
 		}
-		return resultPoint;
+		return resultCNCPoint;
 	}
 
 }

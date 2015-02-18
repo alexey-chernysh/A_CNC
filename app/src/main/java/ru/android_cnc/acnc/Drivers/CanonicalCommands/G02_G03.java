@@ -16,26 +16,26 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
-import Interpreter.State.CutterRadiusCompensation;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 public class G02_G03 extends G00_G01 {
 	
 	// arc specific fields
-	protected Point center_;
+	protected CNCPoint center_;
 	private ArcDirection arcDirection_;
 	public static final double arcTol = 0.000001;
 
-	public G02_G03(Point startPoint,
-				   Point endPoint, 
-				   Point centerPoint, 
+	public G02_G03(CNCPoint startCNCPoint,
+				   CNCPoint endCNCPoint,
+				   CNCPoint centerCNCPoint,
 				   ArcDirection arcDirection,
 				   VelocityPlan vp,
 				   CutterRadiusCompensation offsetMode) throws InterpreterException {
-		super(startPoint, endPoint, vp, MotionMode.WORK, offsetMode);
+		super(startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
 
-		this.center_ = centerPoint;
+		this.center_ = centerCNCPoint;
 		this.arcDirection_ = arcDirection;
 
 	}
@@ -44,7 +44,7 @@ public class G02_G03 extends G00_G01 {
 		return arcDirection_;
 	}
 
-	public Point getCenter() {
+	public CNCPoint getCenter() {
 		return center_;
 	}
 
@@ -101,8 +101,8 @@ public class G02_G03 extends G00_G01 {
 	}
 
 	public G02_G03 newSubArc(double lengthStart, double lengthEnd) throws InterpreterException {
-		Point newStart = start_;
-		Point newEnd = end_;
+		CNCPoint newStart = start_;
+		CNCPoint newEnd = end_;
 		double l = this.length();
 		double r = this.radius();
 		
@@ -113,7 +113,7 @@ public class G02_G03 extends G00_G01 {
 			else a -= d_a;
 			double x = center_.getX() + r * Math.sin(a);
 			double y = center_.getY() + r * Math.cos(a);
-			newStart = new Point(x,y);
+			newStart = new CNCPoint(x,y);
 		}		
 		
 		if(lengthEnd < l){  // change end point
@@ -123,7 +123,7 @@ public class G02_G03 extends G00_G01 {
 			else a += d_a;
 			double x = center_.getX() + r * Math.sin(a);
 			double y = center_.getY() + r * Math.cos(a);
-			newEnd = new Point(x,y);
+			newEnd = new CNCPoint(x,y);
 		}
 		return new G02_G03(newStart, 
 						   newEnd,

@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
-import Interpreter.State.Overrides.OverrideSwitch;
+import ru.android_cnc.acnc.Interpreter.State.Overrides.OverrideSwitch;
 
 public class Spindle extends OverrideSwitch {
 

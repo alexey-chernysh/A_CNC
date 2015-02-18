@@ -16,7 +16,7 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class CanonCommand {
 	

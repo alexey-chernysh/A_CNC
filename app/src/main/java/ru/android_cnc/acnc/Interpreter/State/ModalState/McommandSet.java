@@ -16,11 +16,11 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-import Drivers.CanonicalCommands.TorchOff;
-import Drivers.CanonicalCommands.TorchOn;
-import Interpreter.InterpreterException;
-import Interpreter.ProgramLoader;
-import Interpreter.State.InterpreterState;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.TorchOff;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.TorchOn;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public enum McommandSet {
 	M0(0, McommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Program stop
@@ -35,8 +35,8 @@ public enum McommandSet {
 	}, 
 	M8(8, McommandModalGroupSet.M_GROUP8_COOLANT){ // Flood coolant on
 		@Override
-		public void evalute() throws InterpreterException{
-			InterpreterState.modalState.set(modalGroup, this);	
+		public void evalute() throws InterpreterException {
+			InterpreterState.modalState.set(modalGroup, this);
 			TorchOn torchOn = new TorchOn();
 			ProgramLoader.command_sequence.add(torchOn);
 		};

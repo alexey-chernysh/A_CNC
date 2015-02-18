@@ -16,25 +16,25 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import Interpreter.InterpreterException;
-import Interpreter.Motion.Point;
-import Interpreter.State.CutterRadiusCompensation;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 public class G00_G01 extends CanonCommand {
 	
 	// straight line & arc common fields
-	protected Point start_;
-	protected Point end_;
+	protected CNCPoint start_;
+	protected CNCPoint end_;
 	
 	private MotionMode mode_;
 	private VelocityPlan velocityPlan_;
-	private CutterRadiusCompensation offsetMode_; 
+	private CutterRadiusCompensation offsetMode_;
 	
-	public G00_G01(Point s,
-				   Point e,
+	public G00_G01(CNCPoint s,
+				   CNCPoint e,
 				   VelocityPlan vp,
 				   MotionMode m,
-				   CutterRadiusCompensation crc) throws InterpreterException{ 
+				   CutterRadiusCompensation crc) throws InterpreterException {
 		// all motions are absolute to current home point
 		// init fields
 		super(CanonCommand.type.MOTION);
@@ -55,18 +55,18 @@ public class G00_G01 extends CanonCommand {
 			else alfa -= Math.PI/2;
 			double dx = kerf_offset*Math.sin(alfa); 
 			double dy = kerf_offset*Math.cos(alfa);
-			start_ = new Point(start_.getX()+dx, start_.getY()+dy);
-			end_ = new Point(end_.getX()+dx, end_.getY()+dy);
+			start_ = new CNCPoint(start_.getX()+dx, start_.getY()+dy);
+			end_ = new CNCPoint(end_.getX()+dx, end_.getY()+dy);
 		}
 	}
 
-	public Point getStart() { return start_; }
+	public CNCPoint getStart() { return start_; }
 
-	public void setStart(Point p) {	this.start_ = p; }
+	public void setStart(CNCPoint p) {	this.start_ = p; }
 
-	public Point getEnd() {	return end_; }
+	public CNCPoint getEnd() {	return end_; }
 
-	public void setEnd(Point p) { this.end_ = p; }
+	public void setEnd(CNCPoint p) { this.end_ = p; }
 
 	public MotionMode getMode() { return mode_; }
 
@@ -103,7 +103,7 @@ public class G00_G01 extends CanonCommand {
 			double alfa = getEndTangentAngle();
 			double dx = dl * Math.sin(alfa);			
 			double dy = dl * Math.cos(alfa);
-			Point newStart = new Point(this.getStart().getX()+dx,
+			CNCPoint newStart = new CNCPoint(this.getStart().getX()+dx,
 									   this.getStart().getY()+dy);
 			this.setStart(newStart);
 		}
@@ -116,7 +116,7 @@ public class G00_G01 extends CanonCommand {
 			double alfa = getEndTangentAngle();
 			double dx = dl * Math.sin(alfa);			
 			double dy = dl * Math.cos(alfa);
-			Point newEnd = new Point(this.getEnd().getX()-dx,
+			CNCPoint newEnd = new CNCPoint(this.getEnd().getX()-dx,
 									 this.getEnd().getY()-dy);
 			this.setEnd(newEnd);
 		}
@@ -124,8 +124,8 @@ public class G00_G01 extends CanonCommand {
 
 	public G00_G01 newSubLine(double lengthStart, double lengthEnd) throws InterpreterException {
 		
-		Point newStart = start_;
-		Point newEnd = end_;
+		CNCPoint newStart = start_;
+		CNCPoint newEnd = end_;
 		double l = this.length();
 		
 		if(lengthStart > 0.0){ // change start point
@@ -134,7 +134,7 @@ public class G00_G01 extends CanonCommand {
 			double a = getStartTangentAngle();
 			x += lengthStart*Math.sin(a);
 			y += lengthStart*Math.cos(a);
-			newStart = new Point(x,y);
+			newStart = new CNCPoint(x,y);
 		}		
 		
 		if(lengthEnd < l){  // change end point
@@ -143,7 +143,7 @@ public class G00_G01 extends CanonCommand {
 			double a = getEndTangentAngle();
 			x += (l-lengthEnd)*Math.sin(a);
 			y += (l-lengthEnd)*Math.cos(a);
-			newEnd = new Point(x,y);
+			newEnd = new CNCPoint(x,y);
 		}
 		return new G00_G01(newStart, newEnd, this.velocityPlan_, this.mode_, this.offsetMode_);
 	}

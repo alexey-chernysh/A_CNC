@@ -16,8 +16,8 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
-import Interpreter.InterpreterException;
-import Interpreter.State.Overrides.OverrideSwitch;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.State.Overrides.OverrideSwitch;
 
 public class FeedRate extends OverrideSwitch {
 

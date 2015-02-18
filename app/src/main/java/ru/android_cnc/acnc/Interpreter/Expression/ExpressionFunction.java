@@ -16,8 +16,8 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
-import Interpreter.Expression.Tokens.TokenAlgebra;
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenAlgebra;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class ExpressionFunction extends ExpressionGeneral {
 

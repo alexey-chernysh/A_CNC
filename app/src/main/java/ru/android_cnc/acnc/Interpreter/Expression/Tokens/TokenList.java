@@ -19,7 +19,7 @@ package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class TokenList extends LinkedList<Token> {
 	
