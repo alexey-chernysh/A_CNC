@@ -1,3 +1,7 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 public class VelocityPlan {

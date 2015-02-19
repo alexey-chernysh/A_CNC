@@ -1,3 +1,7 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Interpreter.State;
 
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
