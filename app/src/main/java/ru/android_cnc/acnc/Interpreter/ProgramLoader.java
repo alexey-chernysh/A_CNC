@@ -4,6 +4,8 @@
 
 package ru.android_cnc.acnc.Interpreter;
 
+import android.content.res.AssetManager;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,28 +19,27 @@ import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ProgramLoader {
 
-	public String fileName_;
+//	public String fileName_;
 	private static ArrayList<LineLoader> lineArray;
 	private static ModuleArray moduleArray;
 	public static InterpreterState interpreterState;
 	public static CanonCommandSequence command_sequence;
 	
-	public ProgramLoader(String fn) throws InterpreterException{
+	public ProgramLoader(InputStream inputStream) throws InterpreterException{
 		
-		fileName_ = fn;
+//		fileName_ = fn;
 		lineArray = new ArrayList<LineLoader>();
 		moduleArray = new ModuleArray();
 		interpreterState = new InterpreterState();
 		command_sequence = new CanonCommandSequence();
-		
-		try{
-			InputStream f = new FileInputStream(fileName_);
 
-			BufferedReader inputStream = new BufferedReader(new InputStreamReader(f));
+		try{
+//			InputStream inputStream = new FileInputStream(fileName_);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 			String line;
 			ProgramModule lastModule = null;
 			boolean programEndReached = false;
-			while (((line = inputStream.readLine()) != null)&&(!programEndReached)) {
+			while (((line = bufferedReader.readLine()) != null)&&(!programEndReached)) {
 				LineLoader currentBlock = new LineLoader(line);
 				lineArray.add(currentBlock); 
 				final int lineOrdinalNum = lineArray.size() - 1;
@@ -60,13 +61,13 @@ public class ProgramLoader {
 				}
 				System.out.println(line);
 			}
+            bufferedReader.close();
 			inputStream.close();
-			f.close();
 			if(!programEndReached) throw new InterpreterException("M2 needed in the end of program!");
 			this.evalute();
 		}
-		catch (FileNotFoundException e){
-		}
+//		catch (FileNotFoundException e){
+//		}
 		catch (IOException e){
 		}
 	}

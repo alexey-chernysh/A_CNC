@@ -43,7 +43,7 @@ public class CanonCommandSequence {
 			// last motion is straight or arc working run, link stright motion may be needed
 			CNCPoint lastEnd = lastMotion.getEnd();
 			CNCPoint newStart = command.getStart();
-			if(newStart.getDistance(lastEnd) > 0.0){
+			if(CNCPoint.distance(newStart,lastEnd) > 0.0){
 				G00_G01 link = new G00_G01(lastEnd, 
 										   newStart, 
 										   command.getVelocityPlan(), 
@@ -64,7 +64,7 @@ public class CanonCommandSequence {
 				// free run line should be connected to start of new motion
 				CNCPoint lastEnd = lastMotion.getEnd();
 				CNCPoint newStart = command.getStart();
-				if(newStart.getDistance(lastEnd) > 0.0){
+				if(CNCPoint.distance(newStart,lastEnd) > 0.0){
 					G00_G01 link = new G00_G01(lastEnd, 
 											   newStart, 
 											   lastMotion.getVelocityPlan(), 
@@ -159,7 +159,7 @@ public class CanonCommandSequence {
 				// free run line should be connected to start of new motion
 				CNCPoint lastEnd = lastMotion.getEnd();
 				CNCPoint newStart = command.getStart();
-				if(newStart.getDistance(lastEnd) > 0.0){
+				if(CNCPoint.distance(newStart, lastEnd) > 0.0){
 					G00_G01 link = new G00_G01(lastEnd, 
 											   newStart, 
 											   lastMotion.getVelocityPlan(), 

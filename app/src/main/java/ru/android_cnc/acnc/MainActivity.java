@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,7 +50,7 @@ public class MainActivity
      */
     private CharSequence mTitle;
     private String fileName;
-    private String gcodeSource;
+    private SpannableString gcodeSource;
 
     public MainActivity() {
         fileName = "test.cnc";
@@ -71,18 +73,19 @@ public class MainActivity
         AssetManager assetManager = getAssets();
         try {
             InputStream inputStream = assetManager.open(fileName);
-            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
-            String inputString = bufferedReader.readLine();
-            gcodeSource = inputString;
-            while (inputString != null) {
-//               gcodeParser.parse(inputString);
-                inputString = bufferedReader.readLine();
-                gcodeSource += "\n" + inputString;
-            }
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            String tmp = new String(buffer);
+            gcodeSource = new SpannableString(tmp);
             inputStream.close();
-        } catch (IOException e) {
+        }
+		catch (FileNotFoundException e){
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+        catch (IOException eio){
+            eio.printStackTrace();
         }
     }
 
@@ -128,7 +131,7 @@ public class MainActivity
         intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
 
         //alternatively you can set file filter
-        intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
+        intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "cnc" });
 
         startActivityForResult(intent, FileDialog.RequestType.REQUEST_SAVE.ordinal());
     }
@@ -196,7 +199,7 @@ public class MainActivity
 
     @Override
     public void onEditTextFragmentInteraction(String newStr) {
-        gcodeSource = newStr;
+        gcodeSource = new SpannableString(newStr);
     }
 
     /**

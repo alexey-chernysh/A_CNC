@@ -3,6 +3,7 @@ package ru.android_cnc.acnc;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,17 +28,14 @@ public class GcodeTextFragment extends Fragment {
     private static final String SOURCE_TEXT = "G_code_source_text";
     private static final String TEXT_FRAGMENT = "Text fragment event";
 
-    private static String sourceText = null;
+    private static SpannableString sourceText = null;
 
     private OnFragmentInteractionListener mListener;
 
-    public static GcodeTextFragment newInstance(String st) {
+    public static GcodeTextFragment newInstance(SpannableString st) {
         Log.i(TEXT_FRAGMENT,"New instance");
         GcodeTextFragment fragment = new GcodeTextFragment();
-        Bundle args = new Bundle();
         sourceText = st;
-        args.putString(SOURCE_TEXT, st);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -56,12 +54,8 @@ public class GcodeTextFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragment_gcode_text, container, false);
         EditText editTextView = (EditText)result.findViewById(R.id.gcode_view_text);
         if(editTextView != null){
-            String editText = null;
-            if (getArguments() != null) {
-                editText = getArguments().getString(SOURCE_TEXT);
-            }
-            if(editText != null)
-                editTextView.setText( editText, TextView.BufferType.EDITABLE);
+            if(sourceText != null)
+                editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
             editTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
