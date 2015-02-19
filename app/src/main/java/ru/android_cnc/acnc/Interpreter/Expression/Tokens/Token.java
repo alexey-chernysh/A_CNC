@@ -8,10 +8,12 @@ public class Token {
 
 	private int start_ = -1;
 	private int end_ = -1;
-	private boolean parsed_ = false;
 	private String source_;
-	
-	
+    protected final String TOKEN_NAME = "Unlexed token";
+
+    private boolean unlexed_ = true;
+    private boolean parsed_ = false;
+
 	public 	Token(String s, int columnStart, int columnEnd){
 		source_ = s;
 		start_ = columnStart;
@@ -32,15 +34,9 @@ public class Token {
 
 	@Override
 	public String toString(){
-		String result = "";
-		int i;
-		if(source_.length()>0){
-			for( i = 0; i < start_; i++ )
-				result += "_";
-			for( i = start_; i <= end_; i++ )
-				result += source_.charAt(i);
-		};
-		return result;
+		return " " + TOKEN_NAME + " = " + getSubString()
+                + " at positions from " + this.start_
+                + " to " + this.end_;
 	}
 
 	public	String getSubString(){
@@ -62,4 +58,14 @@ public class Token {
 		this.parsed_ = true;
 		return this;
 	}
+
+    public boolean isUnlexed_() {
+        return unlexed_;
+    }
+
+    public Token setLexed_() {
+        this.unlexed_ = false;
+        return this;
+    }
+
 }
