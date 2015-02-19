@@ -188,7 +188,7 @@ public class TokenSequence {
 					curTokenNum = this.tokenList.addNewToken(newValue, curTokenNum);
 				}
 				catch(NumberFormatException e){
-					this.tokenList.printAllTokens();
+//					this.tokenList.printAllTokens();
 					throw new InterpreterException("Illegal value or symbol", startPos);
 				}
 			};

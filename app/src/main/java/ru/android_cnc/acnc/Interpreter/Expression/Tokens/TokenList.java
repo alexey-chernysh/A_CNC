@@ -98,11 +98,12 @@ public class TokenList extends LinkedList<Token> {
 	String getSourceLineUpperCase(){
 		return this.sourceLineUpperCase_;
 	};
-	
+/*
 	public 
 	void printAllTokens(){
 		Iterator<Token> itr =  this.iterator(); 
 		while(itr.hasNext())
 			itr.next().printLine();
 	}
+*/
 }

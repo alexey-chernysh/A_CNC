@@ -29,7 +29,7 @@ public class CommandLineLoader extends TokenSequence {
 
 	public CommandLineLoader(String frameString) throws InterpreterException {
 		super(frameString);
-		this.tokenList.printAllTokens();
+//		this.tokenList.printAllTokens();
 
 		// split tokens in hardware's command sequence
 		int index = this.tokenList.getNextIndex();
@@ -181,7 +181,7 @@ public class CommandLineLoader extends TokenSequence {
 								throw new InterpreterException("Unsupported var operation", t.getStart());
 						}
 				default:
-						this.tokenList.printAllTokens();
+//						this.tokenList.printAllTokens();
 						throw new InterpreterException("Illegal expression syntax", t.getStart());
 				}
 			}

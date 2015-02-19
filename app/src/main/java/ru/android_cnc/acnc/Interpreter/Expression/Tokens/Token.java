@@ -18,26 +18,18 @@ public class Token {
 		end_ = columnEnd;
 	}
 
-	public 	int getStart(){ return start_;	}
-	
-	public 	Token setStart(int s){
-		start_ = s; 
-		return this;
-	}
+	public 	int getStart(){
+        assert(start_ >= 0);
+        return start_;
+    }
 
-	public 	int getEnd(){ return end_;	}
-	
-	public 	Token setEnd(int e){
-		end_ = e; 
-		return this;
-	}
-	
-	public	int getLength(){ return end_ - start_ + 1; }
-	
-	public	void printLine(){
-		System.out.println(this.toString());
-	}
-	
+	public 	int getEnd(){
+        assert(end_ >= 0);
+        return end_;
+    }
+
+	public	int getLength(){ return (end_ - start_ + 1); }
+
 	@Override
 	public String toString(){
 		String result = "";
@@ -52,7 +44,7 @@ public class Token {
 	}
 
 	public	String getSubString(){
-		return source_.substring(this.start_, this.end_+1);
+		return source_.substring(this.getStart(), this.getEnd()+1);
 	}
 	
 	public boolean isSignificant(){
