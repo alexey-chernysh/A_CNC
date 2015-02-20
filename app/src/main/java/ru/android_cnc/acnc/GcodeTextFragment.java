@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +27,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class GcodeTextFragment extends Fragment {
-    private static final String SOURCE_TEXT = "G_code_source_text";
+    private static final String SOURCE_TEXT = "G_code_source_spannable";
     private static final String TEXT_FRAGMENT = "Text fragment event";
 
     private static SpannableString sourceText = null;
@@ -36,6 +38,9 @@ public class GcodeTextFragment extends Fragment {
         Log.i(TEXT_FRAGMENT,"New instance");
         GcodeTextFragment fragment = new GcodeTextFragment();
         sourceText = st;
+        Bundle args = new Bundle();
+        args.putSerializable(SOURCE_TEXT, (Serializable) sourceText);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -45,6 +50,9 @@ public class GcodeTextFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            sourceText = (SpannableString)getArguments().getSerializable(SOURCE_TEXT);
+        }
     }
 
     @Override
