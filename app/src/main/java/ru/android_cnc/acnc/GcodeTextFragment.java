@@ -3,43 +3,38 @@ package ru.android_cnc.acnc;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GcodeTextFragment.OnFragmentInteractionListener} interface
+ * {@link GcodeTextFragment.OnGcodeEditFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link GcodeTextFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class GcodeTextFragment extends Fragment {
-    private static final String SOURCE_TEXT = "G_code_source_spannable";
+    private static final String SOURCE_TEXT = "G_code_source";
     private static final String TEXT_FRAGMENT = "Text fragment event";
 
-    private static SpannableString sourceText = null;
+    private static String sourceText = null;
 
-    private OnFragmentInteractionListener mListener;
+    private OnGcodeEditFragmentInteractionListener mListener;
 
-    public static GcodeTextFragment newInstance(SpannableString st) {
+    public static GcodeTextFragment newInstance(String st) {
         Log.i(TEXT_FRAGMENT,"New instance");
         GcodeTextFragment fragment = new GcodeTextFragment();
         sourceText = st;
         Bundle args = new Bundle();
-        args.putSerializable(SOURCE_TEXT, (Serializable) sourceText);
+        args.putString(SOURCE_TEXT, sourceText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,12 +42,26 @@ public class GcodeTextFragment extends Fragment {
     public GcodeTextFragment() {
     }
 
+    private void setViewText(View vw){
+        if(vw != null){
+            EditText editTextView = (EditText)vw.findViewById(R.id.gcode_view_text);
+            if(editTextView != null){
+                if (getArguments() != null) {
+                    sourceText = getArguments().getString(SOURCE_TEXT);
+                    editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
+                } else {
+                    if(sourceText != null){
+                        editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            sourceText = (SpannableString)getArguments().getSerializable(SOURCE_TEXT);
-        }
+        setViewText(this.getView());
     }
 
     @Override
@@ -62,8 +71,6 @@ public class GcodeTextFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragment_gcode_text, container, false);
         EditText editTextView = (EditText)result.findViewById(R.id.gcode_view_text);
         if(editTextView != null){
-            if(sourceText != null)
-                editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
             editTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -77,13 +84,15 @@ public class GcodeTextFragment extends Fragment {
                 }
             });
         }
+        setViewText(editTextView);
         return result;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String s) {
         if (mListener != null) {
-            mListener.onEditTextFragmentInteraction(s);
+            getArguments().putString(SOURCE_TEXT, s);
+            mListener.onGcodeEditFragmentInteraction(s);
         }
     }
 
@@ -91,7 +100,7 @@ public class GcodeTextFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnGcodeEditFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -114,9 +123,9 @@ public class GcodeTextFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnGcodeEditFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onEditTextFragmentInteraction(String newStr);
+        public void onGcodeEditFragmentInteraction(String newStr);
     }
 
 }

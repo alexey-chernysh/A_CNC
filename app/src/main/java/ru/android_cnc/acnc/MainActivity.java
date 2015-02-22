@@ -18,23 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 
 public class MainActivity
+
         extends
             ActionBarActivity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
-            GcodeTextFragment.OnFragmentInteractionListener,
+            GcodeTextFragment.OnGcodeEditFragmentInteractionListener,
             GraphicalViewFragment.OnFragmentInteractionListener {
 
     static ProgramLoader program;
@@ -50,7 +47,7 @@ public class MainActivity
      */
     private CharSequence mTitle;
     private String fileName;
-    private SpannableString gcodeSource;
+    private String gcodeSource;
 
     public MainActivity() {
         fileName = "test.cnc";
@@ -76,8 +73,7 @@ public class MainActivity
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
-            String tmp = new String(buffer);
-            gcodeSource = new SpannableString(tmp);
+            gcodeSource = new String(buffer);
             inputStream.close();
         }
 		catch (FileNotFoundException e){
@@ -198,8 +194,8 @@ public class MainActivity
     }
 
     @Override
-    public void onEditTextFragmentInteraction(String newStr) {
-        gcodeSource = new SpannableString(newStr);
+    public void onGcodeEditFragmentInteraction(String newStr) {
+        gcodeSource = newStr;
     }
 
     /**
