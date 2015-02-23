@@ -1,9 +1,16 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,12 +55,15 @@ public class GcodeTextFragment extends Fragment {
             if(editTextView != null){
                 if (getArguments() != null) {
                     sourceText = getArguments().getString(SOURCE_TEXT);
-                    editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
-                } else {
-                    if(sourceText != null){
-                        editTextView.setText( sourceText, TextView.BufferType.EDITABLE);
-                    }
-                }
+                };
+                if(sourceText != null){
+                    Spannable wordToSpan = new SpannableString(sourceText);
+                    wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 15, 30, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    wordToSpan.setSpan(new ForegroundColorSpan(Color.RED), 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    wordToSpan.setSpan(new UnderlineSpan(), 35, 45, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 18, 27, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    editTextView.setText( wordToSpan, TextView.BufferType.EDITABLE);
+                };
             }
         }
     }
