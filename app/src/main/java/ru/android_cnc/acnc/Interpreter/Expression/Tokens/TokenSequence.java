@@ -4,6 +4,10 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
+import android.text.Spannable;
+
+import java.util.Iterator;
+
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
@@ -36,6 +40,10 @@ public class TokenSequence {
 		};
 		return;
 	}
+
+    public void setAllSpan(Spannable s, int pos){
+        tokenList.setAllSpan(s, pos);
+    }
 	
 	private
 	void getAllAlfaTokens(String sourceString) {

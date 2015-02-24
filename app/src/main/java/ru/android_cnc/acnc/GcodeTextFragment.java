@@ -18,6 +18,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 
 /**
@@ -57,11 +61,19 @@ public class GcodeTextFragment extends Fragment {
                     sourceText = getArguments().getString(SOURCE_TEXT);
                 };
                 if(sourceText != null){
+                    /*
                     Spannable wordToSpan = new SpannableString(sourceText);
                     wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 15, 30, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     wordToSpan.setSpan(new ForegroundColorSpan(Color.RED), 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     wordToSpan.setSpan(new UnderlineSpan(), 35, 45, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 18, 27, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    */
+                    Spannable wordToSpan = new SpannableString(sourceText);
+                    try{
+                        wordToSpan = ProgramLoader.load(sourceText);
+                    }catch (InterpreterException ie){
+                        Toast.makeText(getActivity(), ie.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                     editTextView.setText( wordToSpan, TextView.BufferType.EDITABLE);
                 };
             }

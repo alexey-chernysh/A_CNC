@@ -4,20 +4,26 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
-public class Token { 
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.style.ForegroundColorSpan;
+
+public class Token {
 
 	private int start_ = -1;
 	private int end_ = -1;
 	private String source_;
     protected final String TOKEN_NAME = "Unlexed token";
+    protected final int spanColor;
 
     private boolean unlexed_ = true;
     private boolean parsed_ = false;
 
-	public 	Token(String s, int columnStart, int columnEnd){
+	public 	Token(String s, int columnStart, int columnEnd, int sColor){
 		source_ = s;
 		start_ = columnStart;
 		end_ = columnEnd;
+        spanColor = sColor;
 	}
 
 	public 	int getStart(){
@@ -67,5 +73,12 @@ public class Token {
         this.unlexed_ = false;
         return this;
     }
+
+    public void setColorSpan(Spannable s, int pos){
+        s.setSpan(new ForegroundColorSpan(this.spanColor),
+                pos + this.getStart(),
+                pos + this.getEnd() + 1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    };
 
 }

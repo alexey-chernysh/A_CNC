@@ -4,6 +4,8 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
+import android.text.Spannable;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -98,12 +100,20 @@ public class TokenList extends LinkedList<Token> {
 	String getSourceLineUpperCase(){
 		return this.sourceLineUpperCase_;
 	};
-/*
-	public 
-	void printAllTokens(){
-		Iterator<Token> itr =  this.iterator(); 
+
+    @Override
+	public String toString(){
+		Iterator<Token> itr =  this.iterator();
+        String result = "";
 		while(itr.hasNext())
-			itr.next().printLine();
+            result += itr.next().toString();
+        return result;
 	}
-*/
+
+    public void setAllSpan(Spannable s, int pos){
+        Iterator<Token> itr =  this.iterator();
+        while(itr.hasNext())
+            itr.next().setColorSpan(s, pos);
+    }
+
 }

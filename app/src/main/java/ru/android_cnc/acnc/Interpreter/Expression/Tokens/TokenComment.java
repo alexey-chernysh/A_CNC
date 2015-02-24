@@ -4,6 +4,8 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
+import android.graphics.Color;
+
 import java.util.EnumSet;
 
 public class TokenComment extends Token {
@@ -12,7 +14,7 @@ public class TokenComment extends Token {
 	private String message_ = null;
 	
 	public 	TokenComment(String str, CommentKeyWord k, int s, int e, String source){ 
-		super(str, s, e);
+		super(str, s, e, Color.LTGRAY);
 		this.key_ = k;
 		String tmp = this.getCommentText(source);
 		String msgString = "MSG";
