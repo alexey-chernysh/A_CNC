@@ -14,7 +14,7 @@ public class TokenComment extends Token {
 	private String message_ = null;
 	
 	public 	TokenComment(String str, CommentKeyWord k, int s, int e, String source){ 
-		super(str, s, e, Color.LTGRAY);
+		super(str, s, e, Color.DKGRAY, false);
 		this.key_ = k;
 		String tmp = this.getCommentText(source);
 		String msgString = "MSG";

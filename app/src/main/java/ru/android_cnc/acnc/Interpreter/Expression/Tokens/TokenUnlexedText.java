@@ -9,7 +9,7 @@ import android.graphics.Color;
 public class TokenUnlexedText extends Token {
 	
 	public	TokenUnlexedText(String str, int s, int e){
-        super(str, s, e, Color.RED);
+        super(str, s, e, Color.RED, false);
     }
 	
 }

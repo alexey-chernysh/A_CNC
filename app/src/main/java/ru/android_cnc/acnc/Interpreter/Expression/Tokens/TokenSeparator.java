@@ -9,7 +9,7 @@ import android.graphics.Color;
 public class TokenSeparator extends Token {
 	
 	public	TokenSeparator(String str, int s, int e){
-        super(str, s, e, Color.BLACK);
+        super(str, s, e, Color.BLACK, false);
     }
 	
 }

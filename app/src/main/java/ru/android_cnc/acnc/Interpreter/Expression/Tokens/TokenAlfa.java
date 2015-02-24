@@ -11,7 +11,7 @@ public class TokenAlfa extends Token {
 	private TokenDefaultFields type_;
 	
 	public	TokenAlfa(String st, TokenDefaultFields t, int s, int e){
-		super(st, s, e, Color.BLUE);
+		super(st, s, e, Color.BLUE, true);
 		this.type_ = t;
 	}
 	

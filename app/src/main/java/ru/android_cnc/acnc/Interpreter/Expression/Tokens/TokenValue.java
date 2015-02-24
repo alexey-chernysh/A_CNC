@@ -11,7 +11,7 @@ public class TokenValue extends Token {
 	private double value_ = 0;
 	
 	public 	TokenValue(String str, double v, int s, int e){
-		super(str, s, e, Color.GREEN);
+		super(str, s, e, Color.BLACK, false);
 		value_ = v;
 	}
 	

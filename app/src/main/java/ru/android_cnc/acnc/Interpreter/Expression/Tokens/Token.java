@@ -4,26 +4,28 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 
 public class Token {
 
 	private int start_ = -1;
 	private int end_ = -1;
 	private String source_;
-    protected final String TOKEN_NAME = "Unlexed token";
-    protected final int spanColor;
+    protected final int iColor_;
+    protected final boolean bBold;
 
     private boolean unlexed_ = true;
     private boolean parsed_ = false;
 
-	public 	Token(String s, int columnStart, int columnEnd, int sColor){
+	public 	Token(String s, int columnStart, int columnEnd, int sColor, boolean b){
 		source_ = s;
 		start_ = columnStart;
 		end_ = columnEnd;
-        spanColor = sColor;
+        iColor_ = sColor;
+        bBold = b;
 	}
 
 	public 	int getStart(){
@@ -40,7 +42,7 @@ public class Token {
 
 	@Override
 	public String toString(){
-		return " " + TOKEN_NAME + " = " + getSubString()
+		return " " + this.getClass().toString() + " = " + getSubString()
                 + " at positions from " + this.start_
                 + " to " + this.end_;
 	}
@@ -75,10 +77,16 @@ public class Token {
     }
 
     public void setColorSpan(Spannable s, int pos){
-        s.setSpan(new ForegroundColorSpan(this.spanColor),
+        s.setSpan(new ForegroundColorSpan(this.iColor_),
                 pos + this.getStart(),
                 pos + this.getEnd() + 1,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if(bBold)
+            s.setSpan(new StyleSpan(Typeface.BOLD),
+                    pos + this.getStart(),
+                    pos + this.getEnd() + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
     };
 
 }

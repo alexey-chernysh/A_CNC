@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1f1dbc"
-    tools:context="ru.android_cnc.acnc.GraphicalViewFragment">
+    tools:context="ru.android_cnc.acnc.GcodeGraphViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

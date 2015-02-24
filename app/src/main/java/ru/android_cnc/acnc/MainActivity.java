@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +31,8 @@ public class MainActivity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             GcodeTextFragment.OnGcodeEditFragmentInteractionListener,
-            GraphicalViewFragment.OnFragmentInteractionListener {
+            GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener,
+            GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener{
 
     static ProgramLoader program;
 
@@ -91,13 +91,14 @@ public class MainActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch(position){
             case 0:
-                intentFileOpenDialog();
-                break;
-            case 1:
+//                intentFileOpenDialog();
                 transaction.replace(R.id.container, GcodeTextFragment.newInstance(gcodeSource));
                 break;
+            case 1:
+                transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
+                break;
             case 2:
-                transaction.replace(R.id.container, GraphicalViewFragment.newInstance("2","3"));
+                transaction.replace(R.id.container, GcodeGraphEditFragment.newInstance("2", "3"));
                 break;
             default:
                 transaction.replace(R.id.container, PlaceholderFragment.newInstance(position + 1));
@@ -108,13 +109,13 @@ public class MainActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.file_open);
+                mTitle = getString(R.string.edit_text);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.view_graph);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.edit_graph);
                 break;
         }
     }
@@ -189,13 +190,17 @@ public class MainActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onGcodeEditFragmentInteraction(String newStr) {
+        gcodeSource = newStr;
+    }
+
+    @Override
+    public void onGcodeGraphViewFragmentInteraction(Uri uri) {
 
     }
 
     @Override
-    public void onGcodeEditFragmentInteraction(String newStr) {
-        gcodeSource = newStr;
+    public void onGcodeGraphEditFragmentInteraction(Uri uri) {
     }
 
     /**
