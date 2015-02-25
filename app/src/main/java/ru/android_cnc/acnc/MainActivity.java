@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
 import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 
@@ -88,21 +90,37 @@ public class MainActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction;
         switch(position){
             case 0:
 //                intentFileOpenDialog();
+                transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, GcodeTextFragment.newInstance(this,gcodeSource));
+                transaction.commit();
                 break;
             case 1:
-                transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
+                switch2CNCView();
                 break;
             case 2:
+                transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, GcodeGraphEditFragment.newInstance("2", "3"));
+                transaction.commit();
                 break;
             default:
+                transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, PlaceholderFragment.newInstance(position + 1));
+                transaction.commit();
         }
+    }
+
+    private void switch2CNCView(){
+        try{
+            ProgramLoader.load(gcodeSource);
+        }catch(InterpreterException ie){
+            Toast.makeText(this, ie.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
         transaction.commit();
     }
 

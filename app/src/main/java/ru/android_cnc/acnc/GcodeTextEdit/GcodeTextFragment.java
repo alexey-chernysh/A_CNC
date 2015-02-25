@@ -55,7 +55,6 @@ public class GcodeTextFragment extends Fragment {
             if(editTextView != null){
                 if (getArguments() != null) {
                     String argumentTag = getString(R.string.SOURCE_TEXT);
-                    Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
                     sourceText = getArguments().getString(argumentTag);
                 };
                 if(sourceText != null){
