@@ -1,10 +1,6 @@
 package ru.android_cnc.acnc.GraphView;
 
 import android.app.Activity;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -74,6 +70,7 @@ public class GcodeGraphViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View _view = inflater.inflate(R.layout.fragment_gcode_graph_view, container, false);
         gcodeGraphView = (GcodeGraphView) _view.findViewById(R.id.gcode_graph_view);
+        gcodeGraphView.setParams((float)100.0, (float)300.0);
         return _view;
     }
 

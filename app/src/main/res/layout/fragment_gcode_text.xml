@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:configChanges="orientation|screenSize"
-    tools:context="ru.android_cnc.acnc.GcodeTextFragment">
+    tools:context="ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment">
 
     <EditText
         android:layout_width="match_parent"

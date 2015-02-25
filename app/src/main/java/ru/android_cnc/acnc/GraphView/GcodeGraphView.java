@@ -28,11 +28,16 @@ public class GcodeGraphView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
+    public void setParams(float p1, float p2){
+        startX = startY = p1;
+        stopX  = stopY  = p2;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawLine(startX, startY, stopX, stopY, paint);
     }
-
+/*
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -55,4 +60,5 @@ public class GcodeGraphView extends View {
         invalidate();
         return true;
     }
+*/
 }

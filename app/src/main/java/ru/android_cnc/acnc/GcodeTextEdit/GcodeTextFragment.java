@@ -1,16 +1,11 @@
-package ru.android_cnc.acnc;
+package ru.android_cnc.acnc.GcodeTextEdit;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +17,7 @@ import android.widget.Toast;
 
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
+import ru.android_cnc.acnc.R;
 
 
 /**
