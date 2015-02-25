@@ -1,4 +1,4 @@
-package ru.android_cnc.acnc;
+package ru.android_cnc.acnc.GraphEdit;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,16 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ru.android_cnc.acnc.GraphView.GcodeGraphView;
+import ru.android_cnc.acnc.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ru.android_cnc.acnc.GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener} interface
+ * {@link GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link GcodeGraphEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class GcodeGraphEditFragment extends Fragment {
+
+    GcodeGraphEdit gcodeGraphEdit;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +70,9 @@ public class GcodeGraphEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gcode_graph_edit, container, false);
+        View _view = inflater.inflate(R.layout.fragment_gcode_graph_edit, container, false);
+        gcodeGraphEdit = (GcodeGraphEdit) _view.findViewById(R.id.gcode_graph_edit);
+        return _view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

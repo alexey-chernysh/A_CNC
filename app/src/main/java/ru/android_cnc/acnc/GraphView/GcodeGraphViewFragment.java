@@ -1,6 +1,10 @@
 package ru.android_cnc.acnc.GraphView;
 
 import android.app.Activity;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.android_cnc.acnc.R;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +23,8 @@ import ru.android_cnc.acnc.R;
  * create an instance of this fragment.
  */
 public class GcodeGraphViewFragment extends Fragment {
+
+    GcodeGraphView gcodeGraphView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,7 +72,9 @@ public class GcodeGraphViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gcode_graph_view, container, false);
+        View _view = inflater.inflate(R.layout.fragment_gcode_graph_view, container, false);
+        gcodeGraphView = (GcodeGraphView) _view.findViewById(R.id.gcode_graph_view);
+        return _view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

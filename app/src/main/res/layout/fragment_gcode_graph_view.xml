@@ -4,4 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment">
+    <ru.android_cnc.acnc.GraphView.GcodeGraphView
+        android:id="@+id/gcode_graph_view"
+        android:background="#ccc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
 </FrameLayout>

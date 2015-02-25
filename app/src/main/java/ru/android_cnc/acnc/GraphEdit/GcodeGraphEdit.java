@@ -1,4 +1,4 @@
-package ru.android_cnc.acnc.GraphView;
+package ru.android_cnc.acnc.GraphEdit;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,14 +11,14 @@ import android.view.View;
 /**
  * Created by Sales on 25.02.2015.
  */
-public class GcodeGraphView extends View {
+public class GcodeGraphEdit extends View {
     Paint paint = new Paint();
     float startX;
     float startY;
     float stopX;
     float stopY;
 
-    public GcodeGraphView(Context context, AttributeSet attrs) {
+    public GcodeGraphEdit(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         paint.setAntiAlias(true);

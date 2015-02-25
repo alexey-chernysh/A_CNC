@@ -3,5 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.android_cnc.acnc.GcodeGraphEditFragment">
+    tools:context="ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment">
+    <ru.android_cnc.acnc.GraphEdit.GcodeGraphEdit
+        android:id="@+id/gcode_graph_edit"
+        android:background="#ccc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </FrameLayout>

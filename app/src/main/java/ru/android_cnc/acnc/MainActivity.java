@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
 import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
