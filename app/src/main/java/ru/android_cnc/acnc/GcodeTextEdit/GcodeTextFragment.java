@@ -1,6 +1,7 @@
 package ru.android_cnc.acnc.GcodeTextEdit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
@@ -29,19 +30,18 @@ import ru.android_cnc.acnc.R;
  * create an instance of this fragment.
  */
 public class GcodeTextFragment extends Fragment {
-    private static final String SOURCE_TEXT = "G_code_source";
+
     private static final String TEXT_FRAGMENT = "Text fragment event";
-
     private static String sourceText = null;
-
     private OnGcodeEditFragmentInteractionListener mListener;
 
-    public static GcodeTextFragment newInstance(String st) {
-        Log.i(TEXT_FRAGMENT,"New instance");
+    public static GcodeTextFragment newInstance(Context context, String st) {
         GcodeTextFragment fragment = new GcodeTextFragment();
         sourceText = st;
         Bundle args = new Bundle();
-        args.putString(SOURCE_TEXT, sourceText);
+        String argumentTag = context.getString(R.string.SOURCE_TEXT);
+        Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
+        args.putString(argumentTag, sourceText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,16 +54,11 @@ public class GcodeTextFragment extends Fragment {
             EditText editTextView = (EditText)vw.findViewById(R.id.gcode_view_text);
             if(editTextView != null){
                 if (getArguments() != null) {
-                    sourceText = getArguments().getString(SOURCE_TEXT);
+                    String argumentTag = getString(R.string.SOURCE_TEXT);
+                    Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
+                    sourceText = getArguments().getString(argumentTag);
                 };
                 if(sourceText != null){
-                    /*
-                    Spannable wordToSpan = new SpannableString(sourceText);
-                    wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 15, 30, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    wordToSpan.setSpan(new ForegroundColorSpan(Color.RED), 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    wordToSpan.setSpan(new UnderlineSpan(), 35, 45, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    wordToSpan.setSpan(new StyleSpan(Typeface.BOLD), 18, 27, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    */
                     Spannable wordToSpan = new SpannableString(sourceText);
                     try{
                         wordToSpan = ProgramLoader.load(sourceText);
@@ -109,7 +104,9 @@ public class GcodeTextFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String s) {
         if (mListener != null) {
-            getArguments().putString(SOURCE_TEXT, s);
+            String argumentTag = getString(R.string.SOURCE_TEXT);
+            Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
+            getArguments().putString(argumentTag, s);
             mListener.onGcodeEditFragmentInteraction(s);
         }
     }

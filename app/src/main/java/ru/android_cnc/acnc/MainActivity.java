@@ -28,16 +28,13 @@ import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 
 public class MainActivity
-
         extends
             ActionBarActivity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             GcodeTextFragment.OnGcodeEditFragmentInteractionListener,
             GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener,
-            GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener{
-
-    static ProgramLoader program;
+            GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener {
 
     private static final String MAIN_ACTIVITY = "A CNC MAIN ACTIVITY";
     /**
@@ -53,7 +50,7 @@ public class MainActivity
     private String gcodeSource;
 
     public MainActivity() {
-        fileName = "test.cnc";
+        fileName = "plast.cnc";
     }
 
     @Override
@@ -95,7 +92,7 @@ public class MainActivity
         switch(position){
             case 0:
 //                intentFileOpenDialog();
-                transaction.replace(R.id.container, GcodeTextFragment.newInstance(gcodeSource));
+                transaction.replace(R.id.container, GcodeTextFragment.newInstance(this,gcodeSource));
                 break;
             case 1:
                 transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
