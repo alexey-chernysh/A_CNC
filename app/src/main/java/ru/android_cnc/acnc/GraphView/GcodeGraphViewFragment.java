@@ -1,4 +1,4 @@
-package ru.android_cnc.acnc;
+package ru.android_cnc.acnc.GraphView;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,16 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ru.android_cnc.acnc.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ru.android_cnc.acnc.GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener} interface
+ * {@link GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link GcodeGraphViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class GcodeGraphViewFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
