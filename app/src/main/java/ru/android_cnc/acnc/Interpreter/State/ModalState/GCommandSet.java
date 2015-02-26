@@ -28,7 +28,7 @@ public enum GCommandSet {
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			CCommandStraightLine newG0 = new CCommandStraightLine(startCNCPoint,
-                    endCNCPoint,
+                                        endCNCPoint,
 										vp, 
 										MotionMode.FREE,
 										InterpreterState.zeroOffsetMode);
@@ -44,7 +44,7 @@ public enum GCommandSet {
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 			CCommandStraightLine newG1 = new CCommandStraightLine(startCNCPoint,
-                    endCNCPoint,
+                                        endCNCPoint,
 										vp, 
 										MotionMode.WORK, 
 										InterpreterState.offsetMode);
@@ -62,8 +62,8 @@ public enum GCommandSet {
 			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 			CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
-                    endCNCPoint,
-                    centerCNCPoint,
+                                        endCNCPoint,
+                                        centerCNCPoint,
 										ArcDirection.CLOCKWISE,
 										vp, 
 										InterpreterState.offsetMode);
@@ -82,8 +82,8 @@ public enum GCommandSet {
 			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 			CCommandArcLine newG3 = new CCommandArcLine(startCNCPoint,
-                    endCNCPoint,
-                    centerCNCPoint,
+                                        endCNCPoint,
+                                        centerCNCPoint,
 										ArcDirection.COUNTERCLOCKWISE,
 										vp, 
 										InterpreterState.offsetMode);
@@ -150,20 +150,20 @@ public enum GCommandSet {
 				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 				circleStartCNCPoint.shift(radius, 0.0);
 				CCommandStraightLine G1_in = new CCommandStraightLine(centerCNCPoint,
-                        circleStartCNCPoint,
+                                            circleStartCNCPoint,
 											vp, 
 											MotionMode.WORK, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
 				CCommandArcLine newG2 = new CCommandArcLine(circleStartCNCPoint,
-                        circleStartCNCPoint,
-                        centerCNCPoint,
+                                            circleStartCNCPoint,
+                                            centerCNCPoint,
 											ArcDirection.CLOCKWISE,
 											vp, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
 				CCommandStraightLine G1_out = new CCommandStraightLine(circleStartCNCPoint,
-                        centerCNCPoint,
+                                             centerCNCPoint,
 											 vp, 
 											 MotionMode.WORK, 
 											 InterpreterState.offsetMode);
@@ -182,20 +182,20 @@ public enum GCommandSet {
 				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 				circleStartCNCPoint.shift(radius, 0.0);
 				CCommandStraightLine G1_in = new CCommandStraightLine(centerCNCPoint,
-                        circleStartCNCPoint,
+                                            circleStartCNCPoint,
 											vp, 
 											MotionMode.WORK, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
 				CCommandArcLine newG2 = new CCommandArcLine(circleStartCNCPoint,
-                        circleStartCNCPoint,
-                        centerCNCPoint,
+                                            circleStartCNCPoint,
+                                            centerCNCPoint,
 											ArcDirection.COUNTERCLOCKWISE,
 											vp, 
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
 				CCommandStraightLine G1_out = new CCommandStraightLine(circleStartCNCPoint,
-                        centerCNCPoint,
+                                             centerCNCPoint,
 											 vp, 
 											 MotionMode.WORK, 
 											 InterpreterState.offsetMode);
@@ -255,7 +255,7 @@ public enum GCommandSet {
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			if(intermediateCNCPoint != null){
 				CCommandStraightLine motion1 = new CCommandStraightLine(currentCNCPoint,
-                        intermediateCNCPoint,
+                                              intermediateCNCPoint,
 						  					  vp, 
 						  					  MotionMode.FREE, 
 						  					  null);
@@ -265,7 +265,7 @@ public enum GCommandSet {
 			};
 			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG28();
 			CCommandStraightLine motion2 = new CCommandStraightLine(currentCNCPoint,
-                    homeCNCPoint,
+                                          homeCNCPoint,
 										  vp, 
 										  MotionMode.FREE, 
 										  null);
@@ -282,7 +282,7 @@ public enum GCommandSet {
 			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			if(intermediateCNCPoint != null){
 				CCommandStraightLine motion1 = new CCommandStraightLine(currentCNCPoint,
-                        intermediateCNCPoint,
+                                              intermediateCNCPoint,
 						  					  vp, 
 						  					  MotionMode.FREE, 
 						  					  null);
@@ -292,7 +292,7 @@ public enum GCommandSet {
 			};
 			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG30();
 			CCommandStraightLine motion2 = new CCommandStraightLine(currentCNCPoint,
-                    homeCNCPoint,
+                                          homeCNCPoint,
 										  vp, 
 										  MotionMode.FREE, 
 										  null);

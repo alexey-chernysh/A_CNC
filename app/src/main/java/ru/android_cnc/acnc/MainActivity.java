@@ -1,6 +1,7 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
@@ -261,5 +263,4 @@ public class MainActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
 }

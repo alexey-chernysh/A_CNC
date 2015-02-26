@@ -20,23 +20,23 @@ public enum MCommandSet {
 	M5(5, MCommandModalGroupSet.M_GROUP7_SPINDLE_TURNING){}, // Stop spindle rotation
 	M6(6, MCommandModalGroupSet.M_GROUP6_TOOL_CHANGE){}, // Tool change (by two macros)
 	M7(7, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Mist coolant on
-	}, 
+        @Override
+        public void evalute() throws InterpreterException {
+            InterpreterState.modalState.set(modalGroup, this);
+            CCommandTorchOn torchOn = new CCommandTorchOn();
+            ProgramLoader.command_sequence.add(torchOn);
+        };
+	},
 	M8(8, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Flood coolant on
-		@Override
-		public void evalute() throws InterpreterException {
-			InterpreterState.modalState.set(modalGroup, this);
-			CCommandTorchOn torchOn = new CCommandTorchOn();
-			ProgramLoader.command_sequence.add(torchOn);
-		};
-	}, 
-	M9(9, MCommandModalGroupSet.M_GROUP8_COOLANT){ // All coolant off
-		@Override
-		public void evalute() throws InterpreterException{
-			InterpreterState.modalState.set(modalGroup, this);
+        @Override
+        public void evalute() throws InterpreterException{
+            InterpreterState.modalState.set(modalGroup, this);
             CCommandTorchOff torchOff = new CCommandTorchOff();
-			ProgramLoader.command_sequence.add(torchOff);
-		};
-	}, 
+            ProgramLoader.command_sequence.add(torchOff);
+        };
+	},
+	M9(9, MCommandModalGroupSet.M_GROUP8_COOLANT){ // All coolant off
+	},
 	M30(30, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Program end and Rewind
 	M47(47, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Repeat program from first line
 	M48(48, MCommandModalGroupSet.M_GROUP9_OVERRIDES){ // Enable speed and feed override

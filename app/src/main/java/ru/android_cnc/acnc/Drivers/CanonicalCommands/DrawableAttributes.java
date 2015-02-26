@@ -46,13 +46,13 @@ public class DrawableAttributes {
         paintAfterFree.setStrokeJoin(Paint.Join.ROUND);
     }
 
-    public static Paint getPaintBefore(CutterRadiusCompensation CRC){
-        if(CRC.getMode() == CutterRadiusCompensation.mode.OFF) return paintBeforeFree;
+    public static Paint getPaintBefore(CutterRadiusCompensation crc){
+        if(crc.getMode() == CutterRadiusCompensation.mode.OFF) return paintBeforeFree;
         else return paintBeforeWork;
     }
 
-    public static Paint getPaintAfter(CutterRadiusCompensation CRC){
-        if(CRC.getMode() == CutterRadiusCompensation.mode.OFF) return paintAfterFree;
+    public static Paint getPaintAfter(CutterRadiusCompensation crc){
+        if(crc.getMode() == CutterRadiusCompensation.mode.OFF) return paintAfterFree;
         return paintAfterWork;
     }
 

@@ -4,9 +4,12 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 public class CCommandDwell extends CanonCommand {
 
@@ -23,11 +26,24 @@ public class CCommandDwell extends CanonCommand {
 
     @Override
     public void draw(Context context, Canvas canvas) {
-        Toast toast = new Toast(context);
-        toast.setText("Delay");
-        toast.setDuration((int)delay_);
-        toast.show();
+        final ProgressDialog progress = new ProgressDialog(context);
+        progress.setMessage("Downloading Music :) ");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.show();
 
-        // nothing to draw
+        final int totalProgressTime = 100;
+        int jumpTime = 0;
+        while(jumpTime < totalProgressTime){
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+                jumpTime += 1;
+                progress.setProgress(jumpTime);
+            }
+            catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+        }
+        progress.hide();
     }
 }

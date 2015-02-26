@@ -1,5 +1,11 @@
 package ru.android_cnc.acnc;
 
+import android.app.ProgressDialog;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -11,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,8 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -104,8 +115,7 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.edit_text),
                         getString(R.string.view_graph),
-                        getString(R.string.edit_graph),
-                }));
+                        getString(R.string.edit_graph)}));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
