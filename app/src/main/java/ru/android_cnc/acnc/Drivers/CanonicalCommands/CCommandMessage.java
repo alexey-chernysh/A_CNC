@@ -2,10 +2,12 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.widget.Toast;
 
-/**
- * Created by Sales on 26.02.2015.
+/*
+ * @author Alexey Chernysh
  */
+
 public class CCommandMessage extends CanonCommand {
     private final String msg_;
     public CCommandMessage(String m) {
@@ -15,6 +17,6 @@ public class CCommandMessage extends CanonCommand {
 
     @Override
     public void draw(Context context, Canvas canvas) {
-
+        Toast.makeText(context, msg_, Toast.LENGTH_LONG).show();
     }
 }
