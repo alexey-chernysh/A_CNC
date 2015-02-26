@@ -17,42 +17,42 @@ public class ModalState {
 		
 	public ModalState(){
 		int i;
-		g_state_ = new GCommandSet[GcommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal()];
-		for(i=0; i<GcommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal(); i++)
+		g_state_ = new GCommandSet[GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal()];
+		for(i=0; i< GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal(); i++)
 			g_state_[i] = GCommandSet.GDUMMY;
-		m_state_ = new MCommandSet[McommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal()];
-		for(i=0; i<McommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal(); i++)
+		m_state_ = new MCommandSet[MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal()];
+		for(i=0; i< MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal(); i++)
 			m_state_[i] = MCommandSet.MDUMMY;
 	};
 		
 	public void initToDefaultState() throws InterpreterException {
 		
-		set(GcommandModalGroupSet.G_GROUP1_MOTION, GCommandSet.G1);
-		set(GcommandModalGroupSet.G_GROUP2_PLANE, GCommandSet.G17);
-		set(GcommandModalGroupSet.G_GROUP3_DISTANCE_MODE, GCommandSet.G90);
-		set(GcommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE, GCommandSet.G91_1);
-		set(GcommandModalGroupSet.G_GROUP5_FEED_RATE_MODE, GCommandSet.G94);
-		set(GcommandModalGroupSet.G_GROUP6_UNITS, GCommandSet.G21);
-		set(GcommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION, GCommandSet.G40);
-		set(GcommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET, GCommandSet.G49);
-		set(GcommandModalGroupSet.G_GROUP9_CANNED_CYCLES, GCommandSet.G80);
-		set(GcommandModalGroupSet.G_GROUP10_CANNED_CYCLES_RETURN_MODE, GCommandSet.G98);
-		set(GcommandModalGroupSet.G_GROUP12_OFFSET_SELECTION, GCommandSet.G54);
-		set(GcommandModalGroupSet.G_GROUP13_PATH_CONTROL_MODE, GCommandSet.G61);
-		set(GcommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION, GCommandSet.G69);
-		set(GcommandModalGroupSet.G_GROUP17_POLAR_COORDINATES, GCommandSet.G16);
-		set(GcommandModalGroupSet.G_GROUP18_SCALING, GCommandSet.G50);
+		set(GCommandModalGroupSet.G_GROUP1_MOTION, GCommandSet.G1);
+		set(GCommandModalGroupSet.G_GROUP2_PLANE, GCommandSet.G17);
+		set(GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE, GCommandSet.G90);
+		set(GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE, GCommandSet.G91_1);
+		set(GCommandModalGroupSet.G_GROUP5_FEED_RATE_MODE, GCommandSet.G94);
+		set(GCommandModalGroupSet.G_GROUP6_UNITS, GCommandSet.G21);
+		set(GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION, GCommandSet.G40);
+		set(GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET, GCommandSet.G49);
+		set(GCommandModalGroupSet.G_GROUP9_CANNED_CYCLES, GCommandSet.G80);
+		set(GCommandModalGroupSet.G_GROUP10_CANNED_CYCLES_RETURN_MODE, GCommandSet.G98);
+		set(GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION, GCommandSet.G54);
+		set(GCommandModalGroupSet.G_GROUP13_PATH_CONTROL_MODE, GCommandSet.G61);
+		set(GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION, GCommandSet.G69);
+		set(GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES, GCommandSet.G16);
+		set(GCommandModalGroupSet.G_GROUP18_SCALING, GCommandSet.G50);
 		
-		set(McommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL, MCommandSet.M98);
-		set(McommandModalGroupSet.M_GROUP6_TOOL_CHANGE, MCommandSet.M6);
-		set(McommandModalGroupSet.M_GROUP7_SPINDLE_TURNING, MCommandSet.M5);
-		set(McommandModalGroupSet.M_GROUP8_COOLANT, MCommandSet.M9);
-		set(McommandModalGroupSet.M_GROUP9_OVERRIDES, MCommandSet.M48);
+		set(MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL, MCommandSet.M98);
+		set(MCommandModalGroupSet.M_GROUP6_TOOL_CHANGE, MCommandSet.M6);
+		set(MCommandModalGroupSet.M_GROUP7_SPINDLE_TURNING, MCommandSet.M5);
+		set(MCommandModalGroupSet.M_GROUP8_COOLANT, MCommandSet.M9);
+		set(MCommandModalGroupSet.M_GROUP9_OVERRIDES, MCommandSet.M48);
 		
 	};
 	
-	public void set(GcommandModalGroupSet group, GCommandSet command) throws InterpreterException{
-		if(group != GcommandModalGroupSet.G_GROUP0_NON_MODAL){
+	public void set(GCommandModalGroupSet group, GCommandSet command) throws InterpreterException{
+		if(group != GCommandModalGroupSet.G_GROUP0_NON_MODAL){
 			if(command.modalGroup == group){
 				g_state_[group.ordinal()] = command;
 			} else throw new InterpreterException("Changing modal state with command from another modal group");
@@ -61,12 +61,12 @@ public class ModalState {
 		
 	}
 	
-	public GCommandSet getGModalState(GcommandModalGroupSet group){
+	public GCommandSet getGModalState(GCommandModalGroupSet group){
 		return g_state_[group.ordinal()];
 	}
 	
-	public void set(McommandModalGroupSet group, MCommandSet command) throws InterpreterException{
-		if(group != McommandModalGroupSet.M_GROUP0_NON_MODAL){
+	public void set(MCommandModalGroupSet group, MCommandSet command) throws InterpreterException{
+		if(group != MCommandModalGroupSet.M_GROUP0_NON_MODAL){
 			if(command.modalGroup == group){
 				m_state_[group.ordinal()] = command;
 			} else throw new InterpreterException("Changing modal state with command from another modal group");
@@ -74,12 +74,12 @@ public class ModalState {
 		
 	}
 	
-	public MCommandSet getMModalState(McommandModalGroupSet group){
+	public MCommandSet getMModalState(MCommandModalGroupSet group){
 		return m_state_[group.ordinal()];
 	}
 	
 	public double toMM(double x){
-		switch(this.getGModalState(GcommandModalGroupSet.G_GROUP6_UNITS)){
+		switch(this.getGModalState(GCommandModalGroupSet.G_GROUP6_UNITS)){
 		case G20:
 			return 25.4*x;
 		case G21:
@@ -89,16 +89,16 @@ public class ModalState {
 	}
 
 	public boolean isPolar() {
-		return (this.getGModalState(GcommandModalGroupSet.G_GROUP17_POLAR_COORDINATES) == GCommandSet.G15);
+		return (this.getGModalState(GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES) == GCommandSet.G15);
 	};
 
 	public boolean isAbsolute(){
 		// TODO G53 command needed
-		return (this.getGModalState(GcommandModalGroupSet.G_GROUP3_DISTANCE_MODE) == GCommandSet.G90);
+		return (this.getGModalState(GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE) == GCommandSet.G90);
 	}
 
 	private boolean isArcCenterRelative() {
-		return (this.getGModalState(GcommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GCommandSet.G91_1);
+		return (this.getGModalState(GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GCommandSet.G91_1);
 	}
 
 	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
