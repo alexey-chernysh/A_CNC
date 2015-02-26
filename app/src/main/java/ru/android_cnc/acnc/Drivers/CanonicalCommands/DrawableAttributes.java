@@ -3,35 +3,63 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
+
 /**
  * Created by Sales on 26.02.2015.
  */
+
 public class DrawableAttributes {
 
-    private Paint paintBefore;
-    private Paint paintAfter;
+    private static Paint paintBeforeWork;
+    private static Paint paintBeforeFree;
+    private static Paint paintAfterWork;
+    private static Paint paintAfterFree;
 
-    public DrawableAttributes(){
-        paintBefore = new Paint();
-        paintBefore.setColor(Color.BLUE);
-        paintBefore.setAntiAlias(true);
-        paintBefore.setStrokeWidth(6f);
-        paintBefore.setStyle(Paint.Style.STROKE);
-        paintBefore.setStrokeJoin(Paint.Join.ROUND);
+    static {
+        paintBeforeWork = new Paint();
+        paintBeforeWork.setColor(Color.BLUE);
+        paintBeforeWork.setAntiAlias(true);
+        paintBeforeWork.setStrokeWidth(6f);
+        paintBeforeWork.setStyle(Paint.Style.STROKE);
+        paintBeforeWork.setStrokeJoin(Paint.Join.ROUND);
 
-        paintAfter  = new Paint();
-        paintAfter.setColor(Color.YELLOW);
-        paintBefore.setAntiAlias(true);
-        paintBefore.setStrokeWidth(6f);
-        paintBefore.setStyle(Paint.Style.STROKE);
-        paintBefore.setStrokeJoin(Paint.Join.ROUND);
+        paintAfterWork  = new Paint();
+        paintAfterWork.setColor(Color.YELLOW);
+        paintAfterWork.setAntiAlias(true);
+        paintAfterWork.setStrokeWidth(6f);
+        paintAfterWork.setStyle(Paint.Style.STROKE);
+        paintAfterWork.setStrokeJoin(Paint.Join.ROUND);
+
+        paintBeforeFree = new Paint();
+        paintBeforeFree.setColor(Color.LTGRAY);
+        paintBeforeFree.setAntiAlias(true);
+        paintBeforeFree.setStrokeWidth(1);
+        paintBeforeFree.setStyle(Paint.Style.STROKE);
+        paintBeforeFree.setStrokeJoin(Paint.Join.ROUND);
+
+        paintAfterFree  = new Paint();
+        paintAfterFree.setColor(Color.DKGRAY);
+        paintAfterFree.setAntiAlias(true);
+        paintAfterFree.setStrokeWidth(1);
+        paintAfterFree.setStyle(Paint.Style.STROKE);
+        paintAfterFree.setStrokeJoin(Paint.Join.ROUND);
     }
 
-    public Paint getPaintBefore(){ return paintBefore; }
+    public static Paint getPaintBefore(CutterRadiusCompensation CRC){
+        if(CRC.getMode() == CutterRadiusCompensation.mode.OFF) return paintBeforeFree;
+        else return paintBeforeWork;
+    }
 
-    public Paint getPaintAfter(){ return paintAfter; }
+    public static Paint getPaintAfter(CutterRadiusCompensation CRC){
+        if(CRC.getMode() == CutterRadiusCompensation.mode.OFF) return paintAfterFree;
+        return paintAfterWork;
+    }
 
-    public void setScale(){}
+    public static void setScale(double scale){}
 
-    public void setLineWidth(){}
+    private static void setLineWidth(int width){
+        paintBeforeWork.setStrokeWidth(width);
+        paintAfterWork.setStrokeWidth(width);
+    }
 }
