@@ -31,7 +31,7 @@ public class CommandPair { // pair of command indrntifier alfa and associated ex
 	
 	@Override
 	public String toString(){
-		return this.getType().toString() + this.commandExpression_.toString();
+		return this. getType().toString() + this.commandExpression_.toString();
 	}
 	
 }

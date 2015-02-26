@@ -18,7 +18,7 @@ public class CommandPairList extends ArrayList<CommandPair> {
             String result = "Commands:";
             for(int i=0; i<this.size(); i++){
                 CommandPair currentPair = this.get(i);
-                result += " " + currentPair.toString() + ";";
+                result += currentPair.toString() + " ";
             };
             return result;
         } else {

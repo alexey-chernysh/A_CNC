@@ -194,7 +194,7 @@ public class CommandLineLoader extends TokenSequence {
 		String result = this.commandSet_.toString()
 					  + this.wordList_.toString() 
 					  + this.varAssignmentSet_.toString();
-		if(messageString_ != null) result += "MESSAGE:" + messageString_;
+		if(messageString_ != null) result += " MESSAGE:" + messageString_;
 		return result;
 	}
 
