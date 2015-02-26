@@ -115,7 +115,8 @@ public class MainActivity
 
     private void switch2CNCView(){
         try{
-            ProgramLoader.load(gcodeSource);
+            ProgramLoader programLoader = new ProgramLoader();
+            programLoader.load(gcodeSource);
         }catch(InterpreterException ie){
             Toast.makeText(this, ie.getMessage(), Toast.LENGTH_LONG).show();
         }

@@ -31,4 +31,16 @@ public class ExpressionGeneral { // general expression used in NGC274 code
 		this.constant = constant;
 	}
 
+    @Override
+    public String toString(){
+        Double tmp = 0.0;
+        try{
+            tmp = this.evalute();
+        }
+        catch (InterpreterException ie){
+
+        }
+        return tmp.toString();
+    }
+
 }

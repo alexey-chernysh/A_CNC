@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-import ru.android_cnc.acnc.Interpreter.Expression.ParamExpresionList;
+import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
@@ -101,7 +101,7 @@ public class ModalState {
 		return (this.getGModalState(GcommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GcommandSet.G91_1);
 	}
 
-	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpresionList words) throws InterpreterException {
+	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
 		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Polar coorfimates mode not realized yet!");
@@ -125,7 +125,7 @@ public class ModalState {
 		return resultCNCPoint;
 	}
 
-	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpresionList words) throws InterpreterException {
+	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
 		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Arc motion incompatible with polar coorfimates mode!");

@@ -8,13 +8,12 @@ import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
-public class ParamExpresionList {
+public class ParamExpressionList {
 	
 	private static final int size_ = TokenParameter.Z.ordinal() + 1;
 	private ExpressionGeneral[] expressionList = new ExpressionGeneral[size_];
 	
-	public
-	ParamExpresionList(){
+	public ParamExpressionList(){
 		for(int i=0; i<size_; i++) {
 			expressionList[i] = null;
 		}
@@ -38,7 +37,7 @@ public class ParamExpresionList {
 	public String toString(){
 		String result = "";
 		
-		for(int i=0; i<ParamExpresionList.size_; i++){
+		for(int i=0; i< ParamExpressionList.size_; i++){
 			ExpressionGeneral currentExp = this.expressionList[i];
 			if(currentExp != null){
 				try {

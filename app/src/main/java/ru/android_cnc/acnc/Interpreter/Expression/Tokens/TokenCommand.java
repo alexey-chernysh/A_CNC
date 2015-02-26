@@ -33,7 +33,12 @@ public enum TokenCommand implements TokenDefaultFields {
 		return alfa_;
 	}
 
-	@Override
+    @Override
+    public String toString(){
+        return this.alfa_;
+    }
+
+    @Override
 	public TokenGroup getGroup() {
 		return group_;
 	}

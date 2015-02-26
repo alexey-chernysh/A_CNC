@@ -22,8 +22,8 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public class CommandLineLoader extends TokenSequence {
 
-	protected ParamExpresionList wordList_ = new ParamExpresionList();
 	protected CommandPairList commandSet_ = new CommandPairList();
+    protected ParamExpressionList wordList_ = new ParamExpressionList();
 	protected VarAssignmentList varAssignmentSet_ = new VarAssignmentList();
 	private String messageString_ = null;
 
@@ -191,7 +191,7 @@ public class CommandLineLoader extends TokenSequence {
 	@Override
 	public String toString(){
 
-		String result = this.commandSet_.toString() 
+		String result = this.commandSet_.toString()
 					  + this.wordList_.toString() 
 					  + this.varAssignmentSet_.toString();
 		if(messageString_ != null) result += "MESSAGE:" + messageString_;
