@@ -1,13 +1,13 @@
-G92 X0 Y0
-G91
-G00 X120.0 Y90.0
-G41
-M07
-G03 X5.0 Y5.0 J5.0
-G03 I-25.0
-G03 X-5.0 Y5.0 I-5.0
-M08
-G40
+G92 X0 Y0 (MSG Set current position to null)
+G91 (MSG Relative coordinate mode)
+G00 X120.0 Y90.0 (MSG Move to perforation point)
+G41 (Set cutter compensation offset right)
+M07 (Start cutting with perforation)
+G03 X5.0 Y5.0 J5.0 ; cut on input arc
+G03 I-25.0 ; cut hole
+G03 X-5.0 Y5.0 I-5.0 ; cut output arc
+M08 ; turn torch off
+G40 ; compensation off
 G00 X-95.0 Y-85.0
 G41
 M07
