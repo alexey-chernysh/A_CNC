@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-public enum McommandModalGroupSet {
+public enum MCommandModalGroupSet {
 	M_GROUP4_PROGRAM_CONTROL,  // M0, M1, M2, M30 stopping
 	M_GROUP6_TOOL_CHANGE,  // M6 tool change
 	M_GROUP7_SPINDLE_TURNING,  // M3, M4, M5 spindle turning

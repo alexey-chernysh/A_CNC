@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-public enum GcommandModalGroupSet {
+public enum GCommandModalGroupSet {
 	G_GROUP1_MOTION,  // G00, G01, G02, G03
 	G_GROUP2_PLANE,  // G17, G18, G19 plane selection
 	G_GROUP3_DISTANCE_MODE,  // G90, G91 distance mode
