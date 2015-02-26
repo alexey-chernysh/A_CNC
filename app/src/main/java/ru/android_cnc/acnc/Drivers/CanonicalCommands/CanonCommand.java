@@ -6,13 +6,14 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public abstract class CanonCommand {
 	
 	private type type_ = type.UNDEFINED;
-	
+
 	public CanonCommand(type t){
 		setType(t);
 	}

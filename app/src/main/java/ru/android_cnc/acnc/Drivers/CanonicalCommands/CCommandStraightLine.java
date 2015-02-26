@@ -11,7 +11,7 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
-public class G00_G01 extends CanonCommand {
+public class CCommandStraightLine extends CanonCommand {
 	
 	// straight line & arc common fields
 	protected CNCPoint start_;
@@ -21,11 +21,11 @@ public class G00_G01 extends CanonCommand {
 	private VelocityPlan velocityPlan_;
 	private CutterRadiusCompensation offsetMode_;
 	
-	public G00_G01(CNCPoint s,
-				   CNCPoint e,
-				   VelocityPlan vp,
-				   MotionMode m,
-				   CutterRadiusCompensation crc) throws InterpreterException {
+	public CCommandStraightLine(CNCPoint s,
+                                CNCPoint e,
+                                VelocityPlan vp,
+                                MotionMode m,
+                                CutterRadiusCompensation crc) throws InterpreterException {
 		// all motions are absolute to current home point
 		// init fields
 		super(CanonCommand.type.MOTION);
@@ -113,7 +113,7 @@ public class G00_G01 extends CanonCommand {
 		}
 	}
 
-	public G00_G01 newSubLine(double lengthStart, double lengthEnd) throws InterpreterException {
+	public CCommandStraightLine newSubLine(double lengthStart, double lengthEnd) throws InterpreterException {
 		
 		CNCPoint newStart = start_;
 		CNCPoint newEnd = end_;
@@ -136,7 +136,7 @@ public class G00_G01 extends CanonCommand {
 			y += (l-lengthEnd)*Math.cos(a);
 			newEnd = new CNCPoint(x,y);
 		}
-		return new G00_G01(newStart, newEnd, this.velocityPlan_, this.mode_, this.offsetMode_);
+		return new CCommandStraightLine(newStart, newEnd, this.velocityPlan_, this.mode_, this.offsetMode_);
 	}
 
 	public void setVelocityProfile(double startVel, double endVel) {

@@ -7,17 +7,12 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.content.Context;
 import android.graphics.Canvas;
 
-public class G04 extends CanonCommand {
-
-	private double delay_; // milliseconds
+public class CCommandTorchOn extends CanonCommand {
 	
-	public G04(double d){
-		super(CanonCommand.type.WAIT_STATE_CHANGE);
-		this.delay_ = d;
-	}
+	// cutter ON = initial positioning + ignition + perforation
 
-	public double getDelay() {
-		return delay_;
+	public CCommandTorchOn() {
+		super(CanonCommand.type.WAIT_STATE_CHANGE);
 	}
 
     @Override

@@ -11,19 +11,19 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
-public class G02_G03 extends G00_G01 {
+public class CCommandArcLine extends CCommandStraightLine {
 	
 	// arc specific fields
 	protected CNCPoint center_;
 	private ArcDirection arcDirection_;
 	public static final double arcTol = 0.000001;
 
-	public G02_G03(CNCPoint startCNCPoint,
-				   CNCPoint endCNCPoint,
-				   CNCPoint centerCNCPoint,
-				   ArcDirection arcDirection,
-				   VelocityPlan vp,
-				   CutterRadiusCompensation offsetMode) throws InterpreterException {
+	public CCommandArcLine(CNCPoint startCNCPoint,
+                           CNCPoint endCNCPoint,
+                           CNCPoint centerCNCPoint,
+                           ArcDirection arcDirection,
+                           VelocityPlan vp,
+                           CutterRadiusCompensation offsetMode) throws InterpreterException {
 		super(startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
 
 		this.center_ = centerCNCPoint;
@@ -91,7 +91,7 @@ public class G02_G03 extends G00_G01 {
 		return 2.0 * Math.PI * this.radius() / Math.abs(this.angle());
 	}
 
-	public G02_G03 newSubArc(double lengthStart, double lengthEnd) throws InterpreterException {
+	public CCommandArcLine newSubArc(double lengthStart, double lengthEnd) throws InterpreterException {
 		CNCPoint newStart = start_;
 		CNCPoint newEnd = end_;
 		double l = this.length();
@@ -116,7 +116,7 @@ public class G02_G03 extends G00_G01 {
 			double y = center_.getY() + r * Math.cos(a);
 			newEnd = new CNCPoint(x,y);
 		}
-		return new G02_G03(newStart, 
+		return new CCommandArcLine(newStart,
 						   newEnd,
 						   this.getCenter(),
 						   this.getArcDirection(),

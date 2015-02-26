@@ -7,11 +7,17 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.content.Context;
 import android.graphics.Canvas;
 
-public class TorchOff extends CanonCommand {
-	// cutter OFF = turn torch off + lift torch up for free motion
+public class CCommandDwell extends CanonCommand {
 
-	public TorchOff() {
+	private double delay_; // milliseconds
+	
+	public CCommandDwell(double d){
 		super(CanonCommand.type.WAIT_STATE_CHANGE);
+		this.delay_ = d;
+	}
+
+	public double getDelay() {
+		return delay_;
 	}
 
     @Override

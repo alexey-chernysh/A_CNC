@@ -7,11 +7,10 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.content.Context;
 import android.graphics.Canvas;
 
-public class TorchOn extends CanonCommand {
-	
-	// cutter ON = initial positioning + ignition + perforation
+public class CCommandTorchOff extends CanonCommand {
+	// cutter OFF = turn torch off + lift torch up for free motion
 
-	public TorchOn() { 
+	public CCommandTorchOff() {
 		super(CanonCommand.type.WAIT_STATE_CHANGE);
 	}
 
