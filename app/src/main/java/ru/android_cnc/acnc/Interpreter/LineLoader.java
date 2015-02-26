@@ -5,6 +5,7 @@
 package ru.android_cnc.acnc.Interpreter;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import ru.android_cnc.acnc.Interpreter.Expression.CommandLineLoader;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandPair;
@@ -405,9 +406,9 @@ public class LineLoader extends CommandLineLoader {
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence
 		// 1 display message
-		if(this.message_ != null) 
-			System.out.println(this.message_);
-		
+		if(this.message_ != null)
+			Log.i("GCODE MESSAGE: ",this.message_);
+
 		// 2 set feed rate mode 
 		this.G93_G94_G95.evalute(this.wordList_);
 		

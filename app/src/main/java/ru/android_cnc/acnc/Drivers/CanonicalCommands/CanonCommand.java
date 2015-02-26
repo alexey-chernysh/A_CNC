@@ -4,20 +4,21 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
-public class CanonCommand {
+public abstract class CanonCommand {
 	
 	private type type_ = type.UNDEFINED;
 	
 	public CanonCommand(type t){
 		setType(t);
 	}
-	
-	public void draw(){
-		
-	}
-	
+
+    abstract public void draw(Context context, Canvas canvas);
+
 	public type getType() throws InterpreterException {
 		if(type_ != type.UNDEFINED)	return type_;
 		else throw new InterpreterException("Request to not initialized field");
@@ -30,7 +31,8 @@ public class CanonCommand {
 	public enum type{
 		UNDEFINED,
 		MOTION,
-		WAIT_STATE_CHANGE
+		WAIT_STATE_CHANGE,
+        MESSAGE
 	}
 
 }

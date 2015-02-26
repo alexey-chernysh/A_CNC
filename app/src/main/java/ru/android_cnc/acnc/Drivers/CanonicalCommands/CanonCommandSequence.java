@@ -4,6 +4,9 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
@@ -412,4 +415,10 @@ public class CanonCommandSequence {
 		return result;
 	}
 
+    public void draw(Context context, Canvas canvas){
+        int seq_length = seq_.size();
+        for(int i=0;i<seq_length;i++){
+            seq_.get(i).draw();
+        }
+    }
 }

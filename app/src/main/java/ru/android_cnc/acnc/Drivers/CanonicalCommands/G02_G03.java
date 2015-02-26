@@ -4,6 +4,9 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -121,4 +124,8 @@ public class G02_G03 extends G00_G01 {
 						   this.getOffsetMode());
 	}
 
+    @Override
+    public void draw(Context context, Canvas canvas) {
+
+    }
 }

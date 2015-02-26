@@ -4,6 +4,9 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
 public class G04 extends CanonCommand {
 
 	private double delay_; // milliseconds
@@ -17,4 +20,8 @@ public class G04 extends CanonCommand {
 		return delay_;
 	}
 
+    @Override
+    public void draw(Context context, Canvas canvas) {
+
+    }
 }
