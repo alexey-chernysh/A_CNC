@@ -418,7 +418,7 @@ public class CanonCommandSequence {
     public void draw(Context context, Canvas canvas){
         int seq_length = seq_.size();
         for(int i=0;i<seq_length;i++){
-            seq_.get(i).draw();
+            seq_.get(i).draw(context, canvas);
         }
     }
 }

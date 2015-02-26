@@ -6,6 +6,7 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.widget.Toast;
 
 public class CCommandDwell extends CanonCommand {
 
@@ -22,6 +23,11 @@ public class CCommandDwell extends CanonCommand {
 
     @Override
     public void draw(Context context, Canvas canvas) {
+        Toast toast = new Toast(context);
+        toast.setText("Delay");
+        toast.setDuration((int)delay_);
+        toast.show();
 
+        // nothing to draw
     }
 }
