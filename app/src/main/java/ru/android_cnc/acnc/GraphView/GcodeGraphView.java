@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
+
 /**
  * Created by Sales on 25.02.2015.
  */
@@ -36,6 +38,7 @@ public class GcodeGraphView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawLine(startX, startY, stopX, stopY, paint);
+        ProgramLoader.command_sequence.draw(getContext(),canvas);
     }
 /*
     @Override

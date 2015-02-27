@@ -63,6 +63,7 @@ public class ProgramLoader {
     }
 
 	public void evalute() {
+        command_sequence = new CanonCommandSequence();
 		try {
 			ProgramLoader.moduleArray.getMain().evalute();
 		} catch (InterpreterException e) {

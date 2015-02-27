@@ -404,14 +404,15 @@ public class LineLoader extends CommandLineLoader {
         Log.d(LOG_TAG, this.toString());
 	}
 	
-	public void evalute(CanonCommandSequence commandSequence) throws InterpreterException{
+	public void evalute() throws InterpreterException{
 		// evalution sequence strictly in order described by "Mach3 G and M code reference"
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence
 		// 1 display message
-		if(this.message_ != null)
-            commandSequence.add(new CCommandMessage(this.message_));
-			Log.i("GCODE MESSAGE: ",this.message_);
+		if(this.message_ != null){
+            ProgramLoader.command_sequence.add(new CCommandMessage(this.message_));
+            Log.i("GCODE MESSAGE: ",this.message_);
+        }
 
 		// 2 set feed rate mode
         // TODO check needed
@@ -426,7 +427,7 @@ public class LineLoader extends CommandLineLoader {
 		if(this.spindelSpeed_ != null){
             InterpreterState.spindle.setSpeed(this.spindelSpeed_.evalute());
             double newSpindelSpeed = InterpreterState.spindle.getSpeed();
-            commandSequence.add(new CCommandSpindelSpeed(newSpindelSpeed));
+            ProgramLoader.command_sequence.add(new CCommandSpindelSpeed(newSpindelSpeed));
         }
 
 		// 5 select tool (T)

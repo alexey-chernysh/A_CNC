@@ -119,6 +119,7 @@ public class MainActivity
         try{
             ProgramLoader programLoader = new ProgramLoader();
             programLoader.load(gcodeSource);
+            programLoader.evalute();
         }catch(InterpreterException ie){
             Toast.makeText(this, ie.getMessage(), Toast.LENGTH_LONG).show();
         }
