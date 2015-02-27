@@ -7,6 +7,9 @@ package ru.android_cnc.acnc.Interpreter;
 import android.util.Log;
 import android.widget.Toast;
 
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandMessage;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandSpindelSpeed;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandLineLoader;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandPair;
 import ru.android_cnc.acnc.Interpreter.Expression.ExpressionGeneral;
@@ -401,25 +404,31 @@ public class LineLoader extends CommandLineLoader {
         Log.d(LOG_TAG, this.toString());
 	}
 	
-	public void evalute() throws InterpreterException{
+	public void evalute(CanonCommandSequence commandSequence) throws InterpreterException{
 		// evalution sequence strictly in order described by "Mach3 G and M code reference"
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence
 		// 1 display message
 		if(this.message_ != null)
+            commandSequence.add(new CCommandMessage(this.message_));
 			Log.i("GCODE MESSAGE: ",this.message_);
 
-		// 2 set feed rate mode 
+		// 2 set feed rate mode
+        // TODO check needed
 		this.G93_G94_G95.evalute(this.wordList_);
 		
 		// 3 set feed rate (F)
-		if(this.feedRate_ != null) 
-			InterpreterState.feedRate.set(this.feedRate_.evalute());
-		
+		if(this.feedRate_ != null){
+            InterpreterState.feedRate.setFeedRate(this.feedRate_.evalute());
+        }
+
 		// 4 set spindel speed (S)
-		if(this.spindelSpeed_ != null)
-			InterpreterState.spindle.set(this.spindelSpeed_.evalute());
-		
+		if(this.spindelSpeed_ != null){
+            InterpreterState.spindle.setSpeed(this.spindelSpeed_.evalute());
+            double newSpindelSpeed = InterpreterState.spindle.getSpeed();
+            commandSequence.add(new CCommandSpindelSpeed(newSpindelSpeed));
+        }
+
 		// 5 select tool (T)
 		if(this.tool_ != null)
 			InterpreterState.toolSet.setCurrentTool((int)this.tool_.evalute());
@@ -438,7 +447,7 @@ public class LineLoader extends CommandLineLoader {
 		
 		// 10 dwell
 		this.G4.evalute(this.wordList_);
-		
+
 		// 11 set active plane
 		this.G17_G18_G19.evalute(this.wordList_);
 		

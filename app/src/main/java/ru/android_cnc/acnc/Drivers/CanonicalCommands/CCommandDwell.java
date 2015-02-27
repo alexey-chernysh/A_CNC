@@ -7,9 +7,10 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
+
+import ru.android_cnc.acnc.HAL.HALMashine;
 
 public class CCommandDwell extends CanonCommand {
 
@@ -25,9 +26,45 @@ public class CCommandDwell extends CanonCommand {
 	}
 
     @Override
+    public void execute() {
+        switch(HALMashine.getMode()){
+            case VIEW:
+                try {
+                    int d = (int)(delay_ * HALMashine.getViewTimeScale());
+                    TimeUnit.MILLISECONDS.sleep(d);
+                    //TODO GUI link needed
+                }
+                catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
+                break;
+            case DEMO:
+                try {
+                    int d = (int)(delay_ * HALMashine.getDemoTimeScale());
+                    TimeUnit.MILLISECONDS.sleep(d);
+                    //TODO GUI link needed
+                }
+                catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
+                break;
+            case WORK:
+                try {
+                    TimeUnit.MILLISECONDS.sleep((int)delay_);
+                    //TODO GUI link needed
+                }
+                catch (InterruptedException ie){
+                        ie.printStackTrace();
+                }
+                break;
+            default:
+        }
+    }
+
+    @Override
     public void draw(Context context, Canvas canvas) {
         final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Downloading Music :) ");
+        progress.setMessage("Dwell: ");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         progress.show();

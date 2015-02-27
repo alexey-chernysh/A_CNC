@@ -39,12 +39,12 @@ public class Spindle extends OverrideSwitch {
 			this.default_ = this.max_;
 	}
 
-	public double get() {
+	public double getSpeed() {
 		if(this.OverrideEnabled()&&this.isOverride()) return this.default_;
 		else return current_;
 	}
 
-	public void set(double newCurrentSpindleRate) {
+	public void setSpeed(double newCurrentSpindleRate) {
 		if( newCurrentSpindleRate <= this.max_ ){
 			this.current_ = newCurrentSpindleRate;
 		} else {

@@ -145,6 +145,11 @@ public class CCommandStraightLine extends CanonCommand {
 	}
 
     @Override
+    public void execute() {
+
+    }
+
+    @Override
     public void draw(Context context, Canvas canvas){
 
     };

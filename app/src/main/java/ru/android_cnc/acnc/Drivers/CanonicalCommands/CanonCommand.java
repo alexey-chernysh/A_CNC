@@ -18,6 +18,7 @@ public abstract class CanonCommand {
 		setType(t);
 	}
 
+    abstract public void execute();
     abstract public void draw(Context context, Canvas canvas);
 
 	public type getType() throws InterpreterException {

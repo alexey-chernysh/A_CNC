@@ -21,15 +21,16 @@ public class CanonCommandSequence {
 	}
 	
 	public void add(CanonCommand command) throws InterpreterException {
-		if(command.getType() == CanonCommand.type.MOTION){
-			if(command instanceof CCommandStraightLine){
-				if(((CCommandStraightLine) command).isFreeRun())	addFreeMotion((CCommandStraightLine) command);
-				else addCuttingStraightMotion((CCommandStraightLine) command);
-			} else {
-				if(command instanceof CCommandArcLine) addCuttingArcMotion((CCommandArcLine)command);
-				else throw new InterpreterException("Unsupported command");
-			}
-		} else seq_.add(command);
+        if(command != null)
+            if(command.getType() == CanonCommand.type.MOTION){
+                if(command instanceof CCommandStraightLine){
+                    if(((CCommandStraightLine) command).isFreeRun())	addFreeMotion((CCommandStraightLine) command);
+                    else addCuttingStraightMotion((CCommandStraightLine) command);
+                } else {
+                    if(command instanceof CCommandArcLine) addCuttingArcMotion((CCommandArcLine)command);
+                    else throw new InterpreterException("Unsupported command");
+                }
+            } else seq_.add(command);
 	}
 	
 	public int size(){

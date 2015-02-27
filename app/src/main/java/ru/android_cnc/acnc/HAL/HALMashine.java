@@ -18,8 +18,38 @@ public class HALMashine implements Runnable {
 	private ProgramState programState = ProgramState.PAUSED;
 	private CutterState cutterState = CutterState.UNDEFINED;
 	public static ArrayList<HALCommand> commands_ = new ArrayList<HALCommand>();
-	
-	public static MotionController MC;
+    CNCPoint positionBeforeJog = null;
+    private final double manualTorchHeightChange = 1.0;
+    private JoggingStateX joggingStateX = JoggingStateX.NONE;
+    private JoggingStateY joggingStateY = JoggingStateY.NONE;
+
+    private static double viewTimeScale_;
+    public static double getViewTimeScale() {
+        return viewTimeScale_;
+    }
+    public static void setViewTimeScale(double s) {
+        HALMashine.viewTimeScale_ = s;
+    }
+
+    private static double demoTimeScale_;
+    public static double getDemoTimeScale() {
+        return demoTimeScale_;
+    }
+    public static void setDemoTimeScale(double s) {
+        HALMashine.demoTimeScale_ = s;
+    }
+
+    private static Mode mode_;
+
+    public static Mode getMode() {
+        return mode_;
+    }
+
+    public static void setMode(Mode m) {
+        HALMashine.mode_ = m;
+    }
+
+    public static MotionController MC;
 	Thread threadMC;
 
 	public static InvertorController IC;
@@ -32,8 +62,12 @@ public class HALMashine implements Runnable {
 	Thread threadEEC;
 	
 	public HALMashine(){
-		 MC = new MotionController();
-		 threadMC = new Thread(MC);
+        mode_ = Mode.VIEW;
+        viewTimeScale_ = 0.2;
+        demoTimeScale_ = viewTimeScale_;
+
+        MC = new MotionController();
+        threadMC = new Thread(MC);
 		 threadMC.start();
 		 
 		 IC = new InvertorController();
@@ -54,11 +88,6 @@ public class HALMashine implements Runnable {
 		commands_ = commands;
 	}
 	
-	CNCPoint positionBeforeJog = null;
-	private final double manualTorchHeightChange = 1.0;
-	private JoggingStateX joggingStateX = JoggingStateX.NONE;
-	private JoggingStateY joggingStateY = JoggingStateY.NONE;
-
 	@Override
 	public void run() {
         if(EEC.torchUpPressed()) THC.torchUp(manualTorchHeightChange);
@@ -183,7 +212,7 @@ public class HALMashine implements Runnable {
     	RUNNING,
     	STOPPING,
     	JOG
-    }	
+    }
 
 	public enum CutterState{
 		UNDEFINED,
@@ -204,4 +233,9 @@ public class HALMashine implements Runnable {
 		BACKWARD
 	}
 
+    public enum Mode{
+        VIEW,
+        DEMO,
+        WORK
+    }
 }

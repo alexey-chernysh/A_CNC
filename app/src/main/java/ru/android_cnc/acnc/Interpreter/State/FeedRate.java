@@ -39,12 +39,12 @@ public class FeedRate extends OverrideSwitch {
 			this.default_ = this.max_;
 	}
 
-	public double get() {
+	public double getFeedRate() {
 		if(this.OverrideEnabled()&&this.isOverride()) return this.default_;
 		else return current_;
 	}
 
-	public void set(double newCurrentFeedRate) throws InterpreterException {
+	public void setFeedRate(double newCurrentFeedRate) throws InterpreterException {
 		double fr = InterpreterState.modalState.toMM(newCurrentFeedRate);
 		if( fr <= this.max_ ){
 			this.current_ = fr;

@@ -16,6 +16,11 @@ public class CCommandMessage extends CanonCommand {
     }
 
     @Override
+    public void execute() {
+
+    }
+
+    @Override
     public void draw(Context context, Canvas canvas) {
         Toast.makeText(context, msg_, Toast.LENGTH_LONG).show();
     }
