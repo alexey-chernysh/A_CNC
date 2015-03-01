@@ -37,8 +37,8 @@ public class GcodeGraphView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawLine(startX, startY, stopX, stopY, paint);
         ProgramLoader.command_sequence.draw(getContext(),canvas);
+//        canvas.drawLine(startX, startY, stopX, stopY, paint);
     }
 /*
     @Override

@@ -151,7 +151,11 @@ public class CCommandStraightLine extends CanonCommand {
 
     @Override
     public void draw(Context context, Canvas canvas){
-
+        canvas.drawLine((float)this.getStart().getX(),
+                        (float)this.getStart().getY(),
+                        (float)this.getEnd().getX(),
+                        (float)this.getEnd().getY(),
+                        DrawableAttributes.getPaintBefore(this.getOffsetMode()));
     };
 
 }
