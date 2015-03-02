@@ -4,9 +4,10 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 
+import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -150,11 +151,13 @@ public class CCommandStraightLine extends CanonCommand {
     }
 
     @Override
-    public void draw(Context context, Canvas canvas){
-        canvas.drawLine((float)this.getStart().getX(),
-                        (float)this.getStart().getY(),
-                        (float)this.getEnd().getX(),
-                        (float)this.getEnd().getY(),
+    public void draw(CNCViewContext context, Canvas canvas){
+        Point p_start = context.toScreen(this.getStart());
+        Point p_end = context.toScreen(this.getEnd());
+        canvas.drawLine(p_start.x,
+                        p_start.y,
+                        p_end.x,
+                        p_end.y,
                         DrawableAttributes.getPaintBefore(this.getOffsetMode()));
     };
 

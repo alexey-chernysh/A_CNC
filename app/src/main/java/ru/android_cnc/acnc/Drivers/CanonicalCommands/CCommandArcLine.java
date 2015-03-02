@@ -4,9 +4,9 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
 
+import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -130,7 +130,7 @@ public class CCommandArcLine extends CCommandStraightLine {
     }
 
     @Override
-    public void draw(Context context, Canvas canvas) {
+    public void draw(CNCViewContext context, Canvas canvas) {
 
     }
 }

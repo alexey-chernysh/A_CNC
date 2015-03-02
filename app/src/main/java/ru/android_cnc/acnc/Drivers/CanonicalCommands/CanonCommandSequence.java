@@ -4,17 +4,23 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.ArrayList;
 
+import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 
 public class CanonCommandSequence {
 	
 	private ArrayList<CanonCommand> seq_;
+
+    private double leftBorder = Double.MAX_VALUE;
+    private double rightBorder = -leftBorder;
+    private double bottomBorder = leftBorder;
+    private double topBorder = rightBorder;
 	
 	public CanonCommandSequence(){
 		seq_ = new ArrayList<CanonCommand>();
@@ -24,16 +30,35 @@ public class CanonCommandSequence {
         if(command != null)
             if(command.getType() == CanonCommand.type.MOTION){
                 if(command instanceof CCommandStraightLine){
-                    if(((CCommandStraightLine) command).isFreeRun())	addFreeMotion((CCommandStraightLine) command);
+                    if(((CCommandStraightLine) command).isFreeRun())
+                        addFreeMotion((CCommandStraightLine) command);
                     else addCuttingStraightMotion((CCommandStraightLine) command);
+                    checkBorders(((CCommandStraightLine) command).getStart());
+                    checkBorders(((CCommandStraightLine) command).getEnd());
                 } else {
-                    if(command instanceof CCommandArcLine) addCuttingArcMotion((CCommandArcLine)command);
+                    if(command instanceof CCommandArcLine){
+                        addCuttingArcMotion((CCommandArcLine) command);
+                        checkBorders(((CCommandArcLine) command).getStart());
+                        checkBorders(((CCommandArcLine) command).getEnd());
+                        checkBorders(((CCommandArcLine) command).getCenter());
+                        // TODO more accurate method needed
+                    }
                     else throw new InterpreterException("Unsupported command");
                 }
             } else seq_.add(command);
 	}
-	
-	public int size(){
+
+    private void checkBorders(CNCPoint p) {
+        double x = p.getX();
+        double y = p.getY();
+        if(x < leftBorder)  leftBorder   = x;
+        if(x > rightBorder) rightBorder  = x;
+        if(y < bottomBorder)bottomBorder = y;
+        if(y > topBorder)   topBorder    = y;
+        Log.i("Boounds ", " left =" + leftBorder + ", right = " + rightBorder + ", bottom =" + bottomBorder + ", top = " + topBorder );
+    }
+
+    public int size(){
 		return seq_.size();
 	}
 	
@@ -416,10 +441,27 @@ public class CanonCommandSequence {
 		return result;
 	}
 
-    public void draw(Context context, Canvas canvas){
+    public void draw(CNCViewContext context, Canvas canvas){
         int seq_length = seq_.size();
         for(int i=0;i<seq_length;i++){
             seq_.get(i).draw(context, canvas);
         }
     }
+
+    public double getLeftBorder() {
+        return leftBorder;
+    }
+
+    public double getRightBorder() {
+        return rightBorder;
+    }
+
+    public double getBottomBorder() {
+        return bottomBorder;
+    }
+
+    public double getTopBorder() {
+        return topBorder;
+    }
+
 }

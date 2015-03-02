@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 
 public abstract class CanonCommand {
@@ -19,7 +20,7 @@ public abstract class CanonCommand {
 	}
 
     abstract public void execute();
-    abstract public void draw(Context context, Canvas canvas);
+    abstract public void draw(CNCViewContext context, Canvas canvas);
 
 	public type getType() throws InterpreterException {
 		if(type_ != type.UNDEFINED)	return type_;

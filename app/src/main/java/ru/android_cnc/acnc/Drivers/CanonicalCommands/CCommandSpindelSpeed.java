@@ -1,7 +1,8 @@
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
+
+import ru.android_cnc.acnc.GraphView.CNCViewContext;
 
 /**
  * Created by Sales on 27.02.2015.
@@ -21,7 +22,7 @@ public class CCommandSpindelSpeed extends CanonCommand {
     }
 
     @Override
-    public void draw(Context context, Canvas canvas) {
+    public void draw(CNCViewContext context, Canvas canvas) {
         // TODO change spindel speed on dosplay needed
     }
 }

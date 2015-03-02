@@ -22,28 +22,28 @@ public class DrawableAttributes {
         paintBeforeWork.setAntiAlias(true);
         paintBeforeWork.setStrokeWidth(6f);
         paintBeforeWork.setStyle(Paint.Style.STROKE);
-        paintBeforeWork.setStrokeJoin(Paint.Join.ROUND);
+        paintBeforeWork.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterWork  = new Paint();
         paintAfterWork.setColor(Color.YELLOW);
         paintAfterWork.setAntiAlias(true);
         paintAfterWork.setStrokeWidth(6f);
         paintAfterWork.setStyle(Paint.Style.STROKE);
-        paintAfterWork.setStrokeJoin(Paint.Join.ROUND);
+        paintAfterWork.setStrokeCap(Paint.Cap.ROUND);
 
         paintBeforeFree = new Paint();
         paintBeforeFree.setColor(Color.LTGRAY);
         paintBeforeFree.setAntiAlias(true);
         paintBeforeFree.setStrokeWidth(1);
         paintBeforeFree.setStyle(Paint.Style.STROKE);
-        paintBeforeFree.setStrokeJoin(Paint.Join.ROUND);
+        paintBeforeFree.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterFree  = new Paint();
         paintAfterFree.setColor(Color.DKGRAY);
         paintAfterFree.setAntiAlias(true);
         paintAfterFree.setStrokeWidth(1);
         paintAfterFree.setStyle(Paint.Style.STROKE);
-        paintAfterFree.setStrokeJoin(Paint.Join.ROUND);
+        paintAfterFree.setStrokeCap(Paint.Cap.ROUND);
     }
 
     public static Paint getPaintBefore(CutterRadiusCompensation crc){
