@@ -19,7 +19,10 @@ public class VariablesSet {
 	private VarArray va = new VarArray();
 	public static final int maxToolNumber = 254;
 	
-	public VariablesSet(){
+	public VariablesSet() throws InterpreterException {
+        setCurrentScaleX(1.0);
+        setCurrentScaleY(1.0);
+        setCurrentScaleZ(1.0);
 	}
 	
 	public double get(int num) throws InterpreterException{
@@ -132,10 +135,13 @@ public class VariablesSet {
 	public double getCurrentScaleZ() throws InterpreterException{
 		return this.getZ(ScalePos_);
 	}
-	
+    public void setCurrentScaleX(double s) throws InterpreterException { this.setX(ScalePos_,s);}
+    public void setCurrentScaleY(double s) throws InterpreterException { this.setY(ScalePos_, s);}
+    public void setCurrentScaleZ(double s) throws InterpreterException { this.setZ(ScalePos_, s);}
+
 	public boolean scalesAreEquals() throws InterpreterException{
 		double sx = getCurrentScaleX();
-		double sy = getCurrentScaleX();
+		double sy = getCurrentScaleY();
 		double sz = getCurrentScaleZ();
 		return ((sx==sy)&&(sy==sz)&&(sx==sz));
 	}

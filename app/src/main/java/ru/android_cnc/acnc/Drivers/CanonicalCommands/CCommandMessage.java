@@ -23,6 +23,6 @@ public class CCommandMessage extends CanonCommand {
 
     @Override
     public void draw(CNCViewContext context, Canvas canvas) {
-        Toast.makeText(context.getViewContext(), msg_, Toast.LENGTH_LONG).show();
+//        Toast.makeText(context.getViewContext(), msg_, Toast.LENGTH_LONG).show();
     }
 }

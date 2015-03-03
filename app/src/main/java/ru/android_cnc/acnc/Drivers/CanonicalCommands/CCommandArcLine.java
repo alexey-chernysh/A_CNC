@@ -5,6 +5,7 @@
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
+import android.graphics.RectF;
 
 import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
@@ -131,6 +132,28 @@ public class CCommandArcLine extends CCommandStraightLine {
 
     @Override
     public void draw(CNCViewContext context, Canvas canvas) {
+        double cx = center_.getX();
+        double cy = center_.getY();
+        double sx = start_.getX();
+        double sy = start_.getY();
+        double ex = end_.getX();
+        double ey = end_.getY();
+        double dxs = sx - cx;
+        double dys = sy - cy;
+        double R1 = Math.sqrt(dxs*dxs + dys*dys);
+        RectF rect = new RectF((float)(cx-R1), (float)(cy-R1), (float)(cx+R1), (float)(cy+R1));
+        double A = Math.toDegrees(Math.atan2(dys, dxs));
+        double B = Math.toDegrees(Math.atan2(ey - cy, ex - cx));
+        if(getArcDirection() != ArcDirection.COUNTERCLOCKWISE) { // exchange points
+            double T = A; A = B; B = T;
+        }
+        while(B<=A) B += 360.d;
+        B -= A;
+        canvas.drawArc(rect,
+                       (float)A,
+                       (float)B,
+                        false,
+                        DrawableAttributes.getPaintBefore(this.getOffsetMode()));// clockwise, from 3 hour
 
     }
 }

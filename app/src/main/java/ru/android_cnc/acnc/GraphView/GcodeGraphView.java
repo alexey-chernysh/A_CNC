@@ -2,16 +2,12 @@ package ru.android_cnc.acnc.GraphView;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 /**
@@ -25,7 +21,6 @@ public class GcodeGraphView extends View {
     private float offset_y;
 
     private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
 
     public GcodeGraphView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,8 +38,7 @@ public class GcodeGraphView extends View {
     protected void onDraw(Canvas canvas) {
         viewContext.refresh();
         canvas.save();
-        // TODO
-        canvas.scale(mScaleFactor*scale, -mScaleFactor*scale);
+        canvas.scale(scale, -scale);
         canvas.translate(offset_x, offset_y);
         ProgramLoader.command_sequence.draw(viewContext, canvas);
         canvas.restore();
@@ -108,14 +102,13 @@ public class GcodeGraphView extends View {
         return true;
     }
 
-    private class ScaleListener
-            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
+            scale *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            scale = Math.max(0.1f, Math.min(scale, 10.0f));
 
             invalidate();
             return true;

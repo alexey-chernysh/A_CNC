@@ -63,6 +63,7 @@ public class CCommandDwell extends CanonCommand {
 
     @Override
     public void draw(CNCViewContext context, Canvas canvas) {
+/*
         final ProgressDialog progress = new ProgressDialog(context.getViewContext());
         progress.setMessage("Dwell: ");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -82,5 +83,6 @@ public class CCommandDwell extends CanonCommand {
             }
         }
         progress.hide();
+*/
     }
 }

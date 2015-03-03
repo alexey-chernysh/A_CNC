@@ -20,26 +20,26 @@ public class DrawableAttributes {
         paintBeforeWork = new Paint();
         paintBeforeWork.setColor(Color.BLUE);
         paintBeforeWork.setAntiAlias(true);
-        paintBeforeWork.setStrokeWidth(6f);
+        paintBeforeWork.setStrokeWidth(2f);
         paintBeforeWork.setStyle(Paint.Style.STROKE);
         paintBeforeWork.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterWork  = new Paint();
         paintAfterWork.setColor(Color.YELLOW);
         paintAfterWork.setAntiAlias(true);
-        paintAfterWork.setStrokeWidth(6f);
+        paintAfterWork.setStrokeWidth(2f);
         paintAfterWork.setStyle(Paint.Style.STROKE);
         paintAfterWork.setStrokeCap(Paint.Cap.ROUND);
 
         paintBeforeFree = new Paint();
-        paintBeforeFree.setColor(Color.LTGRAY);
+        paintBeforeFree.setColor(Color.DKGRAY);
         paintBeforeFree.setAntiAlias(true);
         paintBeforeFree.setStrokeWidth(1);
         paintBeforeFree.setStyle(Paint.Style.STROKE);
         paintBeforeFree.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterFree  = new Paint();
-        paintAfterFree.setColor(Color.DKGRAY);
+        paintAfterFree.setColor(Color.LTGRAY);
         paintAfterFree.setAntiAlias(true);
         paintAfterFree.setStrokeWidth(1);
         paintAfterFree.setStyle(Paint.Style.STROKE);

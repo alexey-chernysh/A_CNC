@@ -11,9 +11,17 @@ import ru.android_cnc.acnc.Interpreter.State.ModalState.ModalState;
 
 public class InterpreterState {
 
-	public static VariablesSet vars_ = new VariablesSet();
+    public static VariablesSet vars_;
 
-	public static boolean IsBlockDelete = true;
+    static {
+        try {
+            vars_ = new VariablesSet();
+        } catch (InterpreterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean IsBlockDelete = true;
 
 	private static CNCPoint homePosition = new CNCPoint(0.0,0.0);
 	private static CNCPoint lastPosition = new CNCPoint(0.0,0.0);
