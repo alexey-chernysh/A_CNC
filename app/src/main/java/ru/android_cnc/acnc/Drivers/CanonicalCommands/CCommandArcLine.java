@@ -5,9 +5,11 @@
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.RectF;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
+import ru.android_cnc.acnc.Draw.DrawableAttributes;
+import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -30,9 +32,27 @@ public class CCommandArcLine extends CCommandStraightLine {
 		this.center_ = centerCNCPoint;
 		this.arcDirection_ = arcDirection;
 
+        checkLimits();
 	}
 
-	public ArcDirection getArcDirection() {
+    private void checkLimits() throws InterpreterException {
+        // start & end points checked in Straight Line constructor
+        // so we need check points on arc only
+        double alfaStart = this.getStartRadialAngle();
+        double alfaEnd = this.getEndRadialAngle();
+        double delta = Math.PI/2.0;
+        for(int i=0; i<4; i++){
+            double beta = delta*i;
+            if((beta>alfaStart)&&(beta<alfaEnd)){
+                double R = this.radius();
+                limits = DrawableObjectLimits.combine(this.limits,
+                                                      new CNCPoint(this.getCenter().getX() + R*Math.cos(beta),
+                                                                   this.getCenter().getY() + R*Math.sin(beta)));
+            }
+        }
+    }
+
+    public ArcDirection getArcDirection() {
 		return arcDirection_;
 	}
 
@@ -131,7 +151,7 @@ public class CCommandArcLine extends CCommandStraightLine {
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas) {
+    public void draw(Canvas canvas) {
         double cx = center_.getX();
         double cy = center_.getY();
         double sx = start_.getX();
@@ -142,18 +162,21 @@ public class CCommandArcLine extends CCommandStraightLine {
         double dys = sy - cy;
         double R1 = Math.sqrt(dxs*dxs + dys*dys);
         RectF rect = new RectF((float)(cx-R1), (float)(cy-R1), (float)(cx+R1), (float)(cy+R1));
-        double A = Math.toDegrees(Math.atan2(dys, dxs));
-        double B = Math.toDegrees(Math.atan2(ey - cy, ex - cx));
+        float A = (float)Math.toDegrees(Math.atan2(dys, dxs));
+        float B = (float)Math.toDegrees(Math.atan2(ey - cy, ex - cx));
         if(getArcDirection() != ArcDirection.COUNTERCLOCKWISE) { // exchange points
-            double T = A; A = B; B = T;
+            float T = A; A = B; B = T;
         }
-        while(B<=A) B += 360.d;
+        while(B<=A) B += 360.f;
         B -= A;
-        canvas.drawArc(rect,
-                       (float)A,
-                       (float)B,
-                        false,
-                        DrawableAttributes.getPaintBefore(this.getOffsetMode()));// clockwise, from 3 hour
-
+        Paint currentPaint = DrawableAttributes.getPaintBefore(this.getOffsetMode());
+        boolean atr = R1<=this.getOffsetRadius();
+        if(Math.abs(B-A)<360.f)
+            canvas.drawArc(rect, A, B, atr, currentPaint);
+        else {
+            float C = (B + A)/2.0f;
+            canvas.drawArc(rect, A, C, atr, currentPaint);
+            canvas.drawArc(rect, C, B, atr, currentPaint);
+        }
     }
 }

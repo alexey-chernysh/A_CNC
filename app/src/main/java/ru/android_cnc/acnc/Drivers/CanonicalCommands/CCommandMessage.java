@@ -1,9 +1,6 @@
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
-import android.widget.Toast;
-
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
 
 /*
  * @author Alexey Chernysh
@@ -22,7 +19,7 @@ public class CCommandMessage extends CanonCommand {
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas) {
+    public void draw(Canvas canvas) {
 //        Toast.makeText(context.getViewContext(), msg_, Toast.LENGTH_LONG).show();
     }
 }

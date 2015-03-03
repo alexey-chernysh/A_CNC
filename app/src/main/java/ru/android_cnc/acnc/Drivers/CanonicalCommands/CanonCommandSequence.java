@@ -9,21 +9,23 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
+import ru.android_cnc.acnc.Draw.DrawableAttributes;
+import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class CanonCommandSequence {
 	
 	private ArrayList<CanonCommand> seq_;
+    private DrawableObjectLimits limits;
 
-    private double leftBorder = Double.MAX_VALUE;
-    private double rightBorder = -leftBorder;
-    private double bottomBorder = leftBorder;
-    private double topBorder = rightBorder;
-	
 	public CanonCommandSequence(){
 		seq_ = new ArrayList<CanonCommand>();
+        limits = new DrawableObjectLimits(Float.MAX_VALUE,
+                                         -Float.MAX_VALUE,
+                                          Float.MAX_VALUE,
+                                         -Float.MAX_VALUE);
 	}
 	
 	public void add(CanonCommand command) throws InterpreterException {
@@ -33,29 +35,31 @@ public class CanonCommandSequence {
                     if(((CCommandStraightLine) command).isFreeRun())
                         addFreeMotion((CCommandStraightLine) command);
                     else addCuttingStraightMotion((CCommandStraightLine) command);
-                    checkBorders(((CCommandStraightLine) command).getStart());
-                    checkBorders(((CCommandStraightLine) command).getEnd());
                 } else {
                     if(command instanceof CCommandArcLine){
                         addCuttingArcMotion((CCommandArcLine) command);
-                        checkBorders(((CCommandArcLine) command).getStart());
-                        checkBorders(((CCommandArcLine) command).getEnd());
-                        checkBorders(((CCommandArcLine) command).getCenter());
-                        // TODO more accurate method needed
                     }
                     else throw new InterpreterException("Unsupported command");
                 }
             } else seq_.add(command);
+        checkLimits();
+        logIt();
 	}
 
-    private void checkBorders(CNCPoint p) {
-        double x = p.getX();
-        double y = p.getY();
-        if(x < leftBorder)  leftBorder   = x;
-        if(x > rightBorder) rightBorder  = x;
-        if(y < bottomBorder)bottomBorder = y;
-        if(y > topBorder)   topBorder    = y;
-        Log.i("Boounds ", " left =" + leftBorder + ", right = " + rightBorder + ", bottom =" + bottomBorder + ", top = " + topBorder );
+    private void checkLimits() throws InterpreterException {
+        int seq_length = seq_.size();
+        for(int i=0;i<seq_length;i++){
+            CanonCommand command = seq_.get(i);
+            limits = DrawableObjectLimits.combine(limits, command.limits);
+        }
+    }
+
+    private void logIt(){
+        int seq_length = seq_.size();
+        for(int i=0;i<seq_length;i++){
+            CanonCommand command = seq_.get(i);
+            Log.i("Command ", " n = " + i + " " + command.toString());
+        }
     }
 
     public int size(){
@@ -276,8 +280,12 @@ public class CanonCommandSequence {
 		}
 		return null;
 	}
-	
-	private enum ConnectionType {
+
+    public DrawableObjectLimits getLimits() {
+        return limits;
+    }
+
+    private enum ConnectionType {
 		ENDSTART,
 		STARTEND
 	}
@@ -441,27 +449,11 @@ public class CanonCommandSequence {
 		return result;
 	}
 
-    public void draw(CNCViewContext context, Canvas canvas){
+    public void draw(Canvas canvas){
+        DrawableAttributes.setWidth((float)InterpreterState.offsetMode.getRadius());
         int seq_length = seq_.size();
         for(int i=0;i<seq_length;i++){
-            seq_.get(i).draw(context, canvas);
+            seq_.get(i).draw(canvas);
         }
     }
-
-    public double getLeftBorder() {
-        return leftBorder;
-    }
-
-    public double getRightBorder() {
-        return rightBorder;
-    }
-
-    public double getBottomBorder() {
-        return bottomBorder;
-    }
-
-    public double getTopBorder() {
-        return topBorder;
-    }
-
 }

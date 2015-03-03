@@ -58,16 +58,35 @@ public enum GCommandSet {
 			InterpreterState.modalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
-			// TODO R format also needed
-			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-			CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
-                                        endCNCPoint,
-                                        centerCNCPoint,
-										ArcDirection.CLOCKWISE,
-										vp, 
-										InterpreterState.offsetMode);
-			ProgramLoader.command_sequence.add(newG2);
+			double R = InterpreterState.modalState.getR(words);
+            CNCPoint centerCNCPoint;
+            if(R == 0){ // I,J style arc coordinates
+                centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
+            } else { // R style clockwise arc coordinates
+                boolean less_or_equal_to_pi = R>0;
+                R = Math.abs(R);
+                double dx = Math.abs(startCNCPoint.getX() - endCNCPoint.getX());
+                double dy = Math.abs(startCNCPoint.getY() - endCNCPoint.getY());
+                if((dx == 0)&&(dy == 00)) throw new InterpreterException("At least one coordinate fo R-style arc needed");
+                else {
+                    double catet1 = Math.sqrt(dx*dx+dy*dy)/2.0;
+                    double catet2 = Math.sqrt(R*R - catet1*catet1);
+                    double alfa = Math.atan2(catet2,catet1);
+                    double beta = Math.atan2(dy,dx);
+                    if(less_or_equal_to_pi) alfa -= beta;
+                    else alfa += beta;
+                    centerCNCPoint = new CNCPoint(startCNCPoint.getX() + R*Math.cos(alfa),
+                                                  startCNCPoint.getY() + R*Math.sin(alfa));
+                }
+            };
+            VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
+            CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
+                                                        endCNCPoint,
+                                                        centerCNCPoint,
+                                                        ArcDirection.CLOCKWISE,
+                                                        vp,
+                                                        InterpreterState.offsetMode);
+            ProgramLoader.command_sequence.add(newG2);
 			InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
@@ -78,17 +97,36 @@ public enum GCommandSet {
 			InterpreterState.modalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
-			// TODO R format also needed
-			CNCPoint centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
-			CCommandArcLine newG3 = new CCommandArcLine(startCNCPoint,
-                                        endCNCPoint,
-                                        centerCNCPoint,
-										ArcDirection.COUNTERCLOCKWISE,
-										vp, 
-										InterpreterState.offsetMode);
-			ProgramLoader.command_sequence.add(newG3);
-			InterpreterState.setLastPosition(endCNCPoint);
+            double R = InterpreterState.modalState.getR(words);
+            CNCPoint centerCNCPoint;
+            if(R == 0){ // I,J style arc coordinates
+                centerCNCPoint = InterpreterState.modalState.getCenterPoint(startCNCPoint, words);
+            } else { // R style clockwise arc coordinates
+                boolean less_or_equal_to_pi = R>0;
+                R = Math.abs(R);
+                double dx = Math.abs(startCNCPoint.getX() - endCNCPoint.getX());
+                double dy = Math.abs(startCNCPoint.getY() - endCNCPoint.getY());
+                if((dx == 0)&&(dy == 00)) throw new InterpreterException("At least one coordinate fo R-style arc needed");
+                else {
+                    double catet1 = Math.sqrt(dx*dx+dy*dy)/2.0;
+                    double catet2 = Math.sqrt(R*R - catet1*catet1);
+                    double alfa = Math.atan2(catet2,catet1);
+                    double beta = Math.atan2(dy,dx);
+                    if(less_or_equal_to_pi) alfa += beta;
+                    else alfa -= beta;
+                    centerCNCPoint = new CNCPoint(startCNCPoint.getX() + R*Math.cos(alfa),
+                            startCNCPoint.getY() + R*Math.sin(alfa));
+                }
+            };
+            VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
+            CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
+                    endCNCPoint,
+                    centerCNCPoint,
+                    ArcDirection.COUNTERCLOCKWISE,
+                    vp,
+                    InterpreterState.offsetMode);
+            ProgramLoader.command_sequence.add(newG2);
+            InterpreterState.setLastPosition(endCNCPoint);
 		}
 	}, 
 	G4(4.0, GCommandModalGroupSet.G_GROUP0_G4_DWELL){ // Dwell

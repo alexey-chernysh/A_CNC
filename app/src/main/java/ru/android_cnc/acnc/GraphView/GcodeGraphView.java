@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 /**
@@ -15,7 +16,6 @@ import ru.android_cnc.acnc.Interpreter.ProgramLoader;
  */
 public class GcodeGraphView extends View {
 
-    private CNCViewContext viewContext;
     private float scale;
     private float offset_x;
     private float offset_y;
@@ -25,7 +25,6 @@ public class GcodeGraphView extends View {
     public GcodeGraphView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        viewContext = new CNCViewContext(this, context);
         scale = 1.0f;
         offset_x = 0.0f;
         offset_y = 0.0f;
@@ -36,11 +35,10 @@ public class GcodeGraphView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        viewContext.refresh();
         canvas.save();
         canvas.scale(scale, -scale);
         canvas.translate(offset_x, offset_y);
-        ProgramLoader.command_sequence.draw(viewContext, canvas);
+        ProgramLoader.command_sequence.draw(canvas);
         canvas.restore();
     }
 
@@ -49,10 +47,11 @@ public class GcodeGraphView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         final float padding = 0.1f;
-        float left   = (float)ProgramLoader.command_sequence.getLeftBorder();
-        float right  = (float)ProgramLoader.command_sequence.getRightBorder();
-        float top    = (float)ProgramLoader.command_sequence.getTopBorder();
-        float bottom = (float)ProgramLoader.command_sequence.getBottomBorder();
+        DrawableObjectLimits limits = ProgramLoader.command_sequence.getLimits();
+        float left   = limits.getLeft();
+        float right  = limits.getRight();
+        float top    = limits.getTop();
+        float bottom = limits.getBottom();
         float width  = right - left;
         float height = top   - bottom;
         left   -= width  * padding;

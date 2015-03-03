@@ -104,20 +104,21 @@ public class ModalState {
 	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
 		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
-			throw new InterpreterException("Polar coorfimates mode not realized yet!");
+			throw new InterpreterException("Polar coordinates mode not realized yet!");
+            // TODO polar coordinates mode should be implemented
 		} else {
 			// TODO axis rotation needed
 			if(words.has(TokenParameter.X)){
 				double x_param = 0;
 				x_param = words.get(TokenParameter.X);
-				x_param = InterpreterState.modalState.toMM(x_param);
+				x_param = toMM(x_param);
 				if(!InterpreterState.modalState.isAbsolute()) x_param += refCNCPoint.getX();
 				resultCNCPoint.setX(x_param);
 			};
 			if(words.has(TokenParameter.Y)){
 				double y_param = 0;
 				y_param = words.get(TokenParameter.Y);
-				y_param = InterpreterState.modalState.toMM(y_param);
+				y_param = toMM(y_param);
 				if(!InterpreterState.modalState.isAbsolute()) y_param += refCNCPoint.getY();
 				resultCNCPoint.setY(y_param);
 			};
@@ -134,14 +135,14 @@ public class ModalState {
 			if(words.has(TokenParameter.I)){
 				double i_param = 0;
 				i_param = words.get(TokenParameter.I);
-				i_param = InterpreterState.modalState.toMM(i_param);
+				i_param = toMM(i_param);
 				if(InterpreterState.modalState.isArcCenterRelative()) i_param += refCNCPoint.getX();
 				resultCNCPoint.setX(i_param);
 			};
 			if(words.has(TokenParameter.J)){
 				double j_param = 0;
 				j_param = words.get(TokenParameter.J);
-				j_param = InterpreterState.modalState.toMM(j_param);
+				j_param = toMM(j_param);
 				if(InterpreterState.modalState.isArcCenterRelative()) j_param += refCNCPoint.getY();
 				resultCNCPoint.setY(j_param);
 			};
@@ -149,4 +150,9 @@ public class ModalState {
 		return resultCNCPoint;
 	}
 
+    public double getR(ParamExpressionList words) throws InterpreterException {
+        if(words.has(TokenParameter.R)){
+            return toMM(words.get(TokenParameter.R));
+        } else return 0;
+    }
 }

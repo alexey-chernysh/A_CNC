@@ -1,4 +1,4 @@
-package ru.android_cnc.acnc.Drivers.CanonicalCommands;
+package ru.android_cnc.acnc.Draw;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -25,9 +25,9 @@ public class DrawableAttributes {
         paintBeforeWork.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterWork  = new Paint();
-        paintAfterWork.setColor(Color.YELLOW);
+        paintAfterWork.setColor(Color.RED);
         paintAfterWork.setAntiAlias(true);
-        paintAfterWork.setStrokeWidth(2f);
+        paintAfterWork.setStrokeWidth(1.5f);
         paintAfterWork.setStyle(Paint.Style.STROKE);
         paintAfterWork.setStrokeCap(Paint.Cap.ROUND);
 
@@ -39,7 +39,7 @@ public class DrawableAttributes {
         paintBeforeFree.setStrokeCap(Paint.Cap.ROUND);
 
         paintAfterFree  = new Paint();
-        paintAfterFree.setColor(Color.LTGRAY);
+        paintAfterFree.setColor(Color.YELLOW);
         paintAfterFree.setAntiAlias(true);
         paintAfterFree.setStrokeWidth(1);
         paintAfterFree.setStyle(Paint.Style.STROKE);
@@ -59,6 +59,11 @@ public class DrawableAttributes {
     public static void setScale(double scale){}
 
     private static void setLineWidth(int width){
+        paintBeforeWork.setStrokeWidth(width);
+        paintAfterWork.setStrokeWidth(width);
+    }
+
+    public static void setWidth(float width) {
         paintBeforeWork.setStrokeWidth(width);
         paintAfterWork.setStrokeWidth(width);
     }

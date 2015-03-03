@@ -6,8 +6,6 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
-
 public class CCommandTorchOff extends CanonCommand {
 	// cutter OFF = turn torch off + lift torch up for free motion
 
@@ -21,7 +19,13 @@ public class CCommandTorchOff extends CanonCommand {
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas) {
+    public void draw(Canvas canvas) {
 
     }
+
+    @Override
+    public String toString(){
+        return "Torch OFF";
+    }
+
 }

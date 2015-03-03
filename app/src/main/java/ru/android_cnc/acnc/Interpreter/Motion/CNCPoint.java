@@ -40,4 +40,9 @@ public class CNCPoint {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 
+    @Override
+    public String toString(){
+        return " X = " + x_ + "; Y = " + y_ + ";";
+    }
+
 }

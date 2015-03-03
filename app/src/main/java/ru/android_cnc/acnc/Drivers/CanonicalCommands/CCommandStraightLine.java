@@ -4,10 +4,10 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
+import ru.android_cnc.acnc.Draw.DrawableAttributes;
+import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -30,14 +30,22 @@ public class CCommandStraightLine extends CanonCommand {
 		// all motions are absolute to current home point
 		// init fields
 		super(CanonCommand.type.MOTION);
+
 		if(s != null) start_ = s;
 		else throw new InterpreterException("Null start point in motion command");
 		if(e != null) end_ = e;
 		else throw new InterpreterException("Null end point in motion command");
+
 		setVelocityPlan(vp);
 		mode_ = m;
 		setOffsetMode(crc);
+        checkLimits();
 	}
+
+    private void checkLimits() throws InterpreterException {
+        this.limits = new DrawableObjectLimits(this.getStart());
+        this.limits = DrawableObjectLimits.combine(this.limits, this.getEnd());
+    }
 
 	public void applyCutterRadiusCompensation(){
 		if(offsetMode_.getMode() != CutterRadiusCompensation.mode.OFF) {
@@ -45,10 +53,10 @@ public class CCommandStraightLine extends CanonCommand {
 			double alfa = getStartTangentAngle();
 			if(offsetMode_.getMode() != CutterRadiusCompensation.mode.LEFT) alfa += Math.PI/2;
 			else alfa -= Math.PI/2;
-			double dx = kerf_offset*Math.sin(alfa);
-			double dy = kerf_offset*Math.cos(alfa);
-			start_ = new CNCPoint(start_.getX()+dx, start_.getY()+dy);
-			end_ = new CNCPoint(end_.getX()+dx, end_.getY()+dy);
+			double dx = kerf_offset*Math.cos(alfa);
+			double dy = kerf_offset*Math.sin(alfa);
+			start_ = new CNCPoint(start_.getX()-dx, start_.getY()-dy);
+			end_ = new CNCPoint(end_.getX()-dx, end_.getY()-dy);
 		}
 	}
 
@@ -145,18 +153,34 @@ public class CCommandStraightLine extends CanonCommand {
 		this.velocityPlan_.setEndVel(endVel);
 	}
 
+    public double getOffsetRadius(){
+        return offsetMode_.getRadius();
+    }
+
     @Override
     public void execute() {
 
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas){
+    public void draw(Canvas canvas){
         canvas.drawLine((float)this.getStart().getX(),
                         (float)this.getStart().getY(),
                         (float)this.getEnd().getX(),
                         (float)this.getEnd().getY(),
                         DrawableAttributes.getPaintBefore(this.getOffsetMode()));
     };
+
+    @Override
+    public String toString(){
+        String result = "Straight motion: ";
+
+        if(isFreeRun()) result += "Free run";
+        else result += "Work run";
+
+        result += " from " + start_.toString() + " to " + end_;
+
+        return result;
+    }
 
 }

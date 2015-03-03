@@ -54,7 +54,7 @@ public class MainActivity
     private String gcodeSource;
 
     public MainActivity() {
-        fileName = "plast.cnc";
+        fileName = "rectangle.cnc";
     }
 
     @Override
@@ -81,7 +81,6 @@ public class MainActivity
             inputStream.close();
         }
 		catch (FileNotFoundException e){
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         catch (IOException eio){

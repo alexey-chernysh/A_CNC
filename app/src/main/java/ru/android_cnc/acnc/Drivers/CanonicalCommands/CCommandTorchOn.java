@@ -6,8 +6,6 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
-
 public class CCommandTorchOn extends CanonCommand {
 	
 	// cutter ON = initial positioning + ignition + perforation
@@ -22,7 +20,13 @@ public class CCommandTorchOn extends CanonCommand {
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas) {
+    public void draw(Canvas canvas) {
 
     }
+
+    @Override
+    public String toString(){
+        return "Torch ON";
+    }
+
 }

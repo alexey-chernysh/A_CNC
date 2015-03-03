@@ -40,7 +40,7 @@ public class InterpreterState {
 		toolSet = new ToolSet();
 		spindle = new Spindle();
 		feedRate = new FeedRate();
-		offsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 0.0);
+		offsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 1.5);
 		zeroOffsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 0.0);
 		modalState.initToDefaultState();
 	};

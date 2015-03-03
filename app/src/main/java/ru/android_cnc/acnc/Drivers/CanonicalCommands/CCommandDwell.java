@@ -4,12 +4,10 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.app.ProgressDialog;
 import android.graphics.Canvas;
 
 import java.util.concurrent.TimeUnit;
 
-import ru.android_cnc.acnc.GraphView.CNCViewContext;
 import ru.android_cnc.acnc.HAL.HALMashine;
 
 public class CCommandDwell extends CanonCommand {
@@ -62,7 +60,7 @@ public class CCommandDwell extends CanonCommand {
     }
 
     @Override
-    public void draw(CNCViewContext context, Canvas canvas) {
+    public void draw(Canvas canvas) {
 /*
         final ProgressDialog progress = new ProgressDialog(context.getViewContext());
         progress.setMessage("Dwell: ");

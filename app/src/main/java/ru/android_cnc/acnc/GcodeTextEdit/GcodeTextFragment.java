@@ -86,7 +86,7 @@ public class GcodeTextFragment extends Fragment {
             editTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    onButtonPressed(s.toString());
+                    onTextEditButtonPressed(s.toString());
                 }
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -100,8 +100,7 @@ public class GcodeTextFragment extends Fragment {
         return result;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(String s) {
+    public void onTextEditButtonPressed(String s) {
         if (mListener != null) {
             String argumentTag = getString(R.string.SOURCE_TEXT);
             Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
@@ -138,7 +137,6 @@ public class GcodeTextFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnGcodeEditFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onGcodeEditFragmentInteraction(String newStr);
     }
 

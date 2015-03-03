@@ -43,7 +43,6 @@ public class ParamExpressionList {
 				try {
 					result += " " + TokenParameter.values()[i].toString() + currentExp.evalute();
 				} catch (InterpreterException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			};
