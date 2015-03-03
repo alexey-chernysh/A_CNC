@@ -80,7 +80,7 @@ public class CCommandStraightLine extends CanonCommand {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 
-	public double getStartTangentAngle() { return Math.atan2(this.getDY(), this.getDX()); }
+	public double getStartTangentAngle() { return normalizeInRadian(Math.atan2(this.getDY(), this.getDX())); }
 
 	public double getEndTangentAngle() { return getStartTangentAngle();	}
 
@@ -183,4 +183,9 @@ public class CCommandStraightLine extends CanonCommand {
         return result;
     }
 
+    public static double normalizeInRadian(double angle){
+        while(angle >   Math.PI) angle -= 2*Math.PI;
+        while(angle <  -Math.PI) angle += 2*Math.PI;
+        return angle;
+    }
 }

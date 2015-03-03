@@ -13,7 +13,13 @@ import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 public enum MCommandSet {
 	M0(0, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Program stop
 	M1(1, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Optional program stop
-	M2(2, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Program end
+	M2(2, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){   // Program end
+        @Override
+        public void evalute() throws InterpreterException {
+            InterpreterState.modalState.set(modalGroup, this);
+            ProgramLoader.command_sequence.prepare();
+        };
+    }, // Program end
 	M3(3, MCommandModalGroupSet.M_GROUP7_SPINDLE_TURNING){ // Rotate spindle clockwise
 	}, 
 	M4(4, MCommandModalGroupSet.M_GROUP7_SPINDLE_TURNING){}, // Rotate spindle counterclockwise

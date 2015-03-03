@@ -56,15 +56,8 @@ public class DrawableAttributes {
         return paintAfterWork;
     }
 
-    public static void setScale(double scale){}
-
-    private static void setLineWidth(int width){
-        paintBeforeWork.setStrokeWidth(width);
-        paintAfterWork.setStrokeWidth(width);
-    }
-
     public static void setWidth(float width) {
-        paintBeforeWork.setStrokeWidth(width);
-        paintAfterWork.setStrokeWidth(width);
+        paintBeforeWork.setStrokeWidth(2*width);
+        paintAfterWork.setStrokeWidth(2*width);
     }
 }

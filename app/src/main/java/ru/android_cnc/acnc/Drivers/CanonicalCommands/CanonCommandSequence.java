@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
+
+import static ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine.normalizeInRadian;
 
 public class CanonCommandSequence {
 	
@@ -42,9 +45,12 @@ public class CanonCommandSequence {
                     else throw new InterpreterException("Unsupported command");
                 }
             } else seq_.add(command);
+	}
+
+    public void prepare() throws InterpreterException {
         checkLimits();
         logIt();
-	}
+    }
 
     private void checkLimits() throws InterpreterException {
         int seq_length = seq_.size();
@@ -73,48 +79,35 @@ public class CanonCommandSequence {
 	private void addFreeMotion(CCommandStraightLine command) throws InterpreterException {
 		CCommandStraightLine lastMotion = findLastMotion();
 		if(lastMotion != null){ 
-			// last motion is straight or arc working run, link stright motion may be needed
-			CNCPoint lastEnd = lastMotion.getEnd();
-			CNCPoint newStart = command.getStart();
-			if(CNCPoint.distance(newStart,lastEnd) > 0.0){
-				CCommandStraightLine link = new CCommandStraightLine(lastEnd,
-										   newStart, 
-										   command.getVelocityPlan(), 
-										   MotionMode.FREE, 
-										   command.getOffsetMode());
-				seq_.add(link);
-			}
+			// last motion is straight or arc working run, correction needed
+            command.setStart(lastMotion.getEnd());
 		}
 		seq_.add(command);
 	}
 
-	private void addCuttingStraightMotion(CCommandStraightLine command) throws InterpreterException {
+	@SuppressLint("LongLogTag")
+    private void addCuttingStraightMotion(CCommandStraightLine command) throws InterpreterException {
 		CNCPoint unOffsetedStart = command.getStart().clone();
+        Log.i("Straight line before offset", command.toString());
 		command.applyCutterRadiusCompensation();
+        Log.i("Straight line after offset", command.toString());
 		CCommandStraightLine lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move 
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
-				CNCPoint lastEnd = lastMotion.getEnd();
-				CNCPoint newStart = command.getStart();
-				if(CNCPoint.distance(newStart,lastEnd) > 0.0){
-					CCommandStraightLine link = new CCommandStraightLine(lastEnd,
-											   newStart, 
-											   lastMotion.getVelocityPlan(), 
-											   MotionMode.FREE, 
-											   lastMotion.getOffsetMode());
-					seq_.add(link);
-				}
+                lastMotion.setEnd(command.getStart());
 			} else {
 				// cutting motion before this
 				double alfaCurrent = command.getStartTangentAngle();
 				double alfaPrev = lastMotion.getEndTangentAngle();
-				final double d_alfa = alfaCurrent - alfaPrev;
+				final double d_alfa = normalizeInRadian(alfaCurrent - alfaPrev);
+                Log.i("Angles", " - " + alfaCurrent + "; " + alfaPrev + "; " + d_alfa);
 				switch(command.getOffsetMode().getMode()){
 				case LEFT:
 					if(d_alfa > 0.0){ // motion direction turn left
 						// line turn left and left offset
-						if(lastMotion instanceof CCommandStraightLine){  // Straight line before
+						if(lastMotion instanceof CCommandStraightLine){
+						    // Straight line before
 							// calculate length shortening of new line
 							double d_l = command.getOffsetMode().getRadius() * Math.sin(d_alfa/2.0);
 							// correct previous line
@@ -134,11 +127,11 @@ public class CanonCommandSequence {
 							// line turn right and left offset
 							// linking arc with kerf offset radius needed
 							CCommandArcLine link = new CCommandArcLine(lastMotion.getEnd(),
-									  				   command.getStart(),
-									  				   unOffsetedStart,
-									  				   ArcDirection.COUNTERCLOCKWISE,
-									  				   command.getVelocityPlan(),
-									  				   command.getOffsetMode());
+									  				                   command.getStart(),
+									  				                   unOffsetedStart,
+									  				                   ArcDirection.CLOCKWISE,
+									  				                   command.getVelocityPlan(),
+									  				                   command.getOffsetMode());
 							seq_.add(link);
 						};
 					}
@@ -150,7 +143,7 @@ public class CanonCommandSequence {
 						CCommandArcLine newArc = new CCommandArcLine(lastMotion.getEnd(),
 													 command.getStart(),
 													 unOffsetedStart,
-													 ArcDirection.CLOCKWISE,
+													 ArcDirection.COUNTERCLOCKWISE,
 													 command.getVelocityPlan(),
 													 command.getOffsetMode());
 						seq_.add(newArc);
@@ -273,7 +266,7 @@ public class CanonCommandSequence {
 	
 	private CCommandStraightLine findLastMotion() {
 		int size = seq_.size();
-		for(int i = (size-1); i>0; i--){
+		for(int i = (size-1); i>=0; i--){
 			Object command = seq_.get(i);
 			if(command instanceof CCommandStraightLine) return (CCommandStraightLine)command;
 			if(command instanceof CCommandArcLine) return (CCommandArcLine)command;

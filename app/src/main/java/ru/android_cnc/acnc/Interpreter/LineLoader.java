@@ -483,7 +483,9 @@ public class LineLoader extends CommandLineLoader {
 		
 		// 20 perform motion
 		this.G_MOTION.evalute(this.wordList_);
-		
+
+        this.M1_M2_M3.evalute();
+
 		int size = this.varAssignmentSet_.size();
 		for(int i=0; i<size; i++){
 			ExpressionVarAssignment currentVar = this.varAssignmentSet_.get(i);

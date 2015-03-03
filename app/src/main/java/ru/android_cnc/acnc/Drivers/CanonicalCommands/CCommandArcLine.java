@@ -14,6 +14,9 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class CCommandArcLine extends CCommandStraightLine {
 	
 	// arc specific fields
@@ -21,7 +24,7 @@ public class CCommandArcLine extends CCommandStraightLine {
 	private ArcDirection arcDirection_;
 	public static final double arcTol = 0.000001;
 
-	public CCommandArcLine(CNCPoint startCNCPoint,
+    public CCommandArcLine(CNCPoint startCNCPoint,
                            CNCPoint endCNCPoint,
                            CNCPoint centerCNCPoint,
                            ArcDirection arcDirection,
@@ -35,6 +38,23 @@ public class CCommandArcLine extends CCommandStraightLine {
         checkLimits();
 	}
 
+    @Override
+    public void applyCutterRadiusCompensation() {
+        double R = this.radius();
+        double dR = this.getOffsetRadius();
+        if(this.getOffsetMode().getMode() == CutterRadiusCompensation.mode.LEFT){
+            if(this.arcDirection_ == ArcDirection.CLOCKWISE) R += dR;
+            else R -= dR;
+        } else {
+            if(this.arcDirection_ == ArcDirection.CLOCKWISE) R -= dR;
+            else R += dR;
+        };
+        double startAngle = this.getStartRadialAngle();
+        double endAngle = this.getEndRadialAngle();
+        this.setStart(new CNCPoint(R*cos(startAngle),R*sin(startAngle)));
+        this.setEnd(new CNCPoint(R*cos(endAngle),R*sin(endAngle)));
+    }
+
     private void checkLimits() throws InterpreterException {
         // start & end points checked in Straight Line constructor
         // so we need check points on arc only
@@ -46,8 +66,8 @@ public class CCommandArcLine extends CCommandStraightLine {
             if((beta>alfaStart)&&(beta<alfaEnd)){
                 double R = this.radius();
                 limits = DrawableObjectLimits.combine(this.limits,
-                                                      new CNCPoint(this.getCenter().getX() + R*Math.cos(beta),
-                                                                   this.getCenter().getY() + R*Math.sin(beta)));
+                                                      new CNCPoint(this.getCenter().getX() + R* cos(beta),
+                                                                   this.getCenter().getY() + R* sin(beta)));
             }
         }
     }
@@ -63,25 +83,25 @@ public class CCommandArcLine extends CCommandStraightLine {
 	public double getStartRadialAngle() {
 		double dx = this.getStart().getX() - this.getCenter().getX();
 		double dy = this.getStart().getY() - this.getCenter().getY();
-		return Math.atan2(dy, dx);
+		return normalizeInRadian(Math.atan2(dy, dx));
 	}
 
 	@Override
 	public double getStartTangentAngle() {
 		double alfa = getStartRadialAngle();
-		return Radial2Tangent(alfa);
+		return normalizeInRadian(Radial2Tangent(alfa));
 	}
 		
 	public double getEndRadialAngle() {
 		double dx = this.getEnd().getX() - this.getCenter().getX();
 		double dy = this.getEnd().getY() - this.getCenter().getY();
-		return Math.atan2(dy, dx);
+		return normalizeInRadian(Math.atan2(dy, dx));
 	}
 	
 	@Override
 	public double getEndTangentAngle() {
 		double alfa = getEndRadialAngle();
-		return Radial2Tangent(alfa);
+		return normalizeInRadian(Radial2Tangent(alfa));
 	}
 	
 	private double Radial2Tangent(double alfa){
@@ -104,7 +124,7 @@ public class CCommandArcLine extends CCommandStraightLine {
 	public double angle(){
 		double alfa1 = getStartRadialAngle();
 		double alfa2 = getEndRadialAngle();
-		return (alfa2 - alfa1);
+		return normalizeInRadian(alfa2 - alfa1);
 	}
 	
 	@Override
@@ -123,8 +143,8 @@ public class CCommandArcLine extends CCommandStraightLine {
 			double a = this.getStartRadialAngle();
 			if(this.arcDirection_ == ArcDirection.CLOCKWISE) a += d_a;
 			else a -= d_a;
-			double x = center_.getX() + r * Math.sin(a);
-			double y = center_.getY() + r * Math.cos(a);
+			double x = center_.getX() + r * cos(a);
+			double y = center_.getY() + r * sin(a);
 			newStart = new CNCPoint(x,y);
 		}		
 		
@@ -133,8 +153,8 @@ public class CCommandArcLine extends CCommandStraightLine {
 			double a = this.getEndRadialAngle();
 			if(this.arcDirection_ == ArcDirection.CLOCKWISE) a -= d_a;
 			else a += d_a;
-			double x = center_.getX() + r * Math.sin(a);
-			double y = center_.getY() + r * Math.cos(a);
+			double x = center_.getX() + r * cos(a);
+			double y = center_.getY() + r * sin(a);
 			newEnd = new CNCPoint(x,y);
 		}
 		return new CCommandArcLine(newStart,
@@ -170,7 +190,8 @@ public class CCommandArcLine extends CCommandStraightLine {
         while(B<=A) B += 360.f;
         B -= A;
         Paint currentPaint = DrawableAttributes.getPaintBefore(this.getOffsetMode());
-        boolean atr = R1<=this.getOffsetRadius();
+//        boolean atr = R1<=this.getOffsetRadius();
+        boolean atr = false;
         if(Math.abs(B-A)<360.f)
             canvas.drawArc(rect, A, B, atr, currentPaint);
         else {
@@ -179,4 +200,14 @@ public class CCommandArcLine extends CCommandStraightLine {
             canvas.drawArc(rect, C, B, atr, currentPaint);
         }
     }
+
+    @Override
+    public String toString(){
+        String result = "Arc motion: ";
+
+        result += " from " + start_.toString() + " to " + end_ + ", center " + center_;
+
+        return result;
+    }
+
 }
