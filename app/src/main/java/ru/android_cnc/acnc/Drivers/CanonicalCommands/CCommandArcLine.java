@@ -107,14 +107,8 @@ public class CCommandArcLine extends CCommandStraightLine {
 	}
 	
 	private double Radial2Tangent(double alfa){
-		if(this.getArcDirection() == ArcDirection.CLOCKWISE){
-			alfa += Math.PI/2.0;
-			if(alfa > Math.PI) alfa -= 2.0 * Math.PI;
-		} else {
-			alfa -= Math.PI/2.0;
-			if(alfa > Math.PI) alfa += 2.0 * Math.PI;
-		};
-		return alfa;
+		if(this.getArcDirection() == ArcDirection.CLOCKWISE) return alfa - Math.PI/2.0;
+		else return alfa + Math.PI/2.0;
 	}
 		
 	public double radius(){

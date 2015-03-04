@@ -54,7 +54,7 @@ public class MainActivity
     private String gcodeSource;
 
     public MainActivity() {
-        fileName = "H-plast.cnc";
+        fileName = "plast.cnc";
     }
 
     @Override

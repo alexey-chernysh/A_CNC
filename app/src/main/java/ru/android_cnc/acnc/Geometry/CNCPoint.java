@@ -63,7 +63,7 @@ public class CNCPoint {
         double y11 = line1.getStart().getY();
         double x12 = line1.getEnd().getX();
         double y12 = line1.getEnd().getY();
-        Log.i("Crossing", "Line 1 x1 " + x11 + " y1 " + y11 + " x2 " + x12 + " y2 " + y12);
+//        Log.i("Crossing", "Line 1 x1 " + x11 + " y1 " + y11 + " x2 " + x12 + " y2 " + y12);
 
         double dx1 = x12 - x11;
 
@@ -75,14 +75,14 @@ public class CNCPoint {
             if(x11 != 0.0) a1 = (y11 - b1)/x11;
             else  a1 = (y12 - b1)/x12;
         } else line1_is_vertical = true;
-        Log.i("Crossing", "Line 1 a " + a1 + " b " + b1 + " v " + line1_is_vertical);
+//        Log.i("Crossing", "Line 1 a " + a1 + " b " + b1 + " v " + line1_is_vertical);
 
         // solve y = a*x + b equation for second line
         double x21 = line2.getStart().getX();
         double y21 = line2.getStart().getY();
         double x22 = line2.getEnd().getX();
         double y22 = line2.getEnd().getY();
-        Log.i("Crossing", "Line 2 x1 " + x21 + " y1 " + y21 + " x2 " + x22 + " y2 " + y22);
+//        Log.i("Crossing", "Line 2 x1 " + x21 + " y1 " + y21 + " x2 " + x22 + " y2 " + y22);
 
         double dx2 = x22 - x21;
 
@@ -95,7 +95,7 @@ public class CNCPoint {
             else  a2 = (y22 - b2)/x22;
         }
         else line2_is_vertical = true;
-        Log.i("Crossing", "Line 2 a " + a2 + " b " + b2 + " v " + line2_is_vertical);
+//        Log.i("Crossing", "Line 2 a " + a2 + " b " + b2 + " v " + line2_is_vertical);
 
         if(line1_is_vertical){
             if(line2_is_vertical){
@@ -121,4 +121,110 @@ public class CNCPoint {
             }
         }
     }
+
+    public static CNCPoint getCrossingPoint(CCommandStraightLine line,
+                                             CCommandArcLine arc,
+                                             ConnectionType type){
+        // find connection point of line & circle nearest to end of one & start of another
+        double rx = 0.0;
+        double ry = 0.0;
+
+        double arcCenterX = arc.getCenter().getX();
+        double arcCenterY = arc.getCenter().getY();
+        double arcR = arc.radius();
+
+        double LineStartX = line.getStart().getX();
+        double lineStartY = line.getStart().getY();
+        double lineEndX = line.getEnd().getX();
+        double lineEndY = line.getEnd().getY();
+
+        double lineDX = lineEndX - LineStartX;
+        double lineDY = lineEndY - lineStartY;
+
+        if(Math.abs(lineDX)>0){  // line is not vertical
+            if(Math.abs(lineDY)>0){ // line is not horizontal
+                // get canonical formula (y = a*x + b) for line
+                double a1 = 0.0;
+                double b1 = (lineStartY*lineEndX - lineEndY*LineStartX)/lineDX;
+                if(LineStartX != 0.0) a1 = (lineStartY - b1)/LineStartX;
+                else  a1 = (lineEndY - b1)/lineEndX;
+                double aD = 1.0 + a1*a1;
+                double byc = b1 - arcCenterY;
+                double bD = 2.d*(byc*a1 - arcCenterX);
+                double cD = arcCenterX*arcCenterX + byc*byc - arcR*arcR;
+                double Det = bD*bD - 4.0*aD*cD;
+                if(Det<0) Det = 0d;
+                double rx1 = (-bD + Math.sqrt(Det))/2/aD;
+                double rx2 = (-bD - Math.sqrt(Det))/2/aD;
+                switch(type){
+                    case ENDSTART:
+                        if( Math.abs(rx1-lineEndX) < Math.abs(rx2-lineEndX) ) rx = rx1;
+                        else rx = rx2;
+                        break;
+                    case STARTEND:
+                        if( Math.abs(rx1-LineStartX) < Math.abs(rx2-LineStartX) ) rx = rx1;
+                        else rx = rx2;
+                        break;
+                    default:
+                        break;
+                }
+                ry = a1*rx + b1;
+            } else {
+                // line is horizontal
+                // connection is at point with y of line
+                ry = lineEndY;
+                double t = ry - arcCenterY;
+                t = arcR*arcR - t*t;
+                if(t>0){
+                    t = Math.sqrt(t);
+                    double rx1 = arcCenterX + t;
+                    double rx2 = arcCenterX - t;
+                    switch(type){
+                        case ENDSTART:
+                            if(Math.abs(rx1-lineEndX) < Math.abs(rx2-lineEndX)) rx = rx1;
+                            else rx = rx2;
+                            break;
+                        case STARTEND:
+                        default:
+                            if(Math.abs(rx1-LineStartX) < Math.abs(rx2-LineStartX)) rx = rx1;
+                            else rx = rx2;
+                            break;
+                    }
+                } else { // tangent line
+                    rx = arcCenterX;
+                }
+            };
+        } else {
+            // line is vertical
+            // connection is at point with x of line
+            rx = lineEndX;
+            double t = rx - arcCenterX;
+            t = arcR*arcR - t*t;
+            if(t>0){
+                t = Math.sqrt(t);
+                double ry1 = arcCenterY + t;
+                double ry2 = arcCenterY - t;
+                switch(type){
+                    case ENDSTART:
+                        if(Math.abs(ry1-lineEndY) < Math.abs(ry2-lineEndY)) ry = ry1;
+                        else ry = ry2;
+                        break;
+                    case STARTEND:
+                    default:
+                        if(Math.abs(ry1-lineStartY) < Math.abs(ry2-lineStartY)) ry = ry1;
+                        else ry = ry2;
+                        break;
+                }
+            } else { // tangent line
+                ry = arcCenterY;
+            }
+        }
+        return new CNCPoint(rx, ry);
+    }
+
+    public enum ConnectionType {
+        ENDSTART,
+        STARTEND
+    }
+
 }

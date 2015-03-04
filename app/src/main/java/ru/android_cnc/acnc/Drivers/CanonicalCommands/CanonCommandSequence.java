@@ -17,6 +17,8 @@ import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 import static ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine.normalizeInRadian;
+import static ru.android_cnc.acnc.Geometry.CNCPoint.distance;
+import static ru.android_cnc.acnc.Geometry.CNCPoint.getCrossingPoint;
 
 public class CanonCommandSequence {
 	
@@ -88,11 +90,12 @@ public class CanonCommandSequence {
 	@SuppressLint("LongLogTag")
     private void addCuttingStraightMotion(CCommandStraightLine command) throws InterpreterException {
 		CNCPoint unOffsetedStart = command.getStart().clone();
-//        Log.i("Straight line before offset", command.toString());
+        Log.i("Line before offset", command.toString());
 		command.applyCutterRadiusCompensation();
-//        Log.i("Straight line after offset", command.toString());
+        Log.i("Line after offset", command.toString());
 		CCommandStraightLine lastMotion = findLastMotion();
-		if(lastMotion != null){ // its no first move 
+		if(lastMotion != null){ // its no first move
+            Log.i("Line before current", lastMotion.toString());
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
                 lastMotion.setEnd(command.getStart());
@@ -101,24 +104,26 @@ public class CanonCommandSequence {
 				double alfaCurrent = command.getStartTangentAngle();
 				double alfaPrev = lastMotion.getEndTangentAngle();
 				final double d_alfa = normalizeInRadian(alfaCurrent - alfaPrev);
-//                Log.i("Angles", " - " + alfaCurrent + "; " + alfaPrev + "; " + d_alfa);
+                Log.i("Angles", " Dir current " + alfaCurrent + "; Dir before" + alfaPrev + "; Diff " + d_alfa);
 				switch(command.getOffsetMode().getMode()){
 				case LEFT:
 					if(d_alfa > 0.0){ // motion direction turn left
 						// line turn left and left offset
 						if(lastMotion instanceof CCommandStraightLine){
 						    // Straight line before
-                            CNCPoint connectionPoint = CNCPoint.getCrossingPoint(lastMotion,command);
+                            CNCPoint connectionPoint = getCrossingPoint(lastMotion, command);
                             if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
                             lastMotion.setEnd(connectionPoint);
                             command.setStart(connectionPoint);
 						} else {
 							// arc line before 
 							// TODO current algorithm wrong
-							CCommandArcLine arc = (CCommandArcLine)lastMotion;
-							CNCPoint connectionCNCPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
-							arc.setEnd(connectionCNCPoint);
-							command.setStart(connectionCNCPoint);
+                            if(distance(lastMotion.getEnd(),command.getStart())>0.0){
+                                CCommandArcLine arc = (CCommandArcLine)lastMotion;
+                                CNCPoint connectionCNCPoint = getCrossingPoint(command, arc, CNCPoint.ConnectionType.STARTEND);
+                                arc.setEnd(connectionCNCPoint);
+                                command.setStart(connectionCNCPoint);
+                            }
 						};
 					} else {
 						if((d_alfa < 0.0)&&(command.getOffsetMode().getRadius()>0.0)){
@@ -150,16 +155,18 @@ public class CanonCommandSequence {
 							// line turn right and right offset
 							if(lastMotion instanceof CCommandStraightLine){
 							    // stright line before
-                                CNCPoint connectionPoint = CNCPoint.getCrossingPoint(lastMotion,command);
+                                CNCPoint connectionPoint = getCrossingPoint(lastMotion, command);
                                 if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
                                 lastMotion.setEnd(connectionPoint);
                                 command.setStart(connectionPoint);
 							} else {
 								// arc line before 
-								CCommandArcLine arc = (CCommandArcLine)lastMotion;
-								CNCPoint connectionCNCPoint = getConnectionPoint(command, arc, ConnectionType.STARTEND);
-								arc.setEnd(connectionCNCPoint);
-								command.setStart(connectionCNCPoint);
+                                if(distance(lastMotion.getEnd(),command.getStart())>0.0){
+                                    CCommandArcLine arc = (CCommandArcLine)lastMotion;
+                                    CNCPoint connectionCNCPoint = getCrossingPoint(command, arc, CNCPoint.ConnectionType.STARTEND);
+                                    arc.setEnd(connectionCNCPoint);
+                                    command.setStart(connectionCNCPoint);
+                                }
 							};
 						};
 					};
@@ -182,7 +189,7 @@ public class CanonCommandSequence {
 				// free run line should be connected to start of new motion
 				CNCPoint lastEnd = lastMotion.getEnd();
 				CNCPoint newStart = command.getStart();
-				if(CNCPoint.distance(newStart, lastEnd) > 0.0){
+				if(distance(newStart, lastEnd) > 0.0){
 					CCommandStraightLine link = new CCommandStraightLine(lastEnd,
 											   newStart, 
 											   lastMotion.getVelocityPlan(), 
@@ -201,15 +208,17 @@ public class CanonCommandSequence {
 					if(d_alfa > 0.0){
 						// line turn left and left offset
 						if(lastMotion instanceof CCommandStraightLine){  // Straight line before
-							CNCPoint connectionCNCPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
+							CNCPoint connectionCNCPoint = getCrossingPoint(lm, command, CNCPoint.ConnectionType.ENDSTART);
 							lastMotion.setEnd(connectionCNCPoint);
 							command.setStart(connectionCNCPoint);
 						} else {
 							// arc line before 
-							CCommandArcLine arc = (CCommandArcLine)lastMotion;
-							CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
-							arc.setEnd(connectionCNCPoint);
-							command.setStart(connectionCNCPoint);
+                            if(distance(lastMotion.getEnd(),command.getStart())>0.0){
+                                CCommandArcLine arc = (CCommandArcLine)lastMotion;
+                                CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
+                                arc.setEnd(connectionCNCPoint);
+                                command.setStart(connectionCNCPoint);
+                            }
 						};
 					} else {
 						if(d_alfa < 0.0){
@@ -240,14 +249,16 @@ public class CanonCommandSequence {
 						if(d_alfa < 0.0){
 							// line turn right and right offset
 							if(lastMotion instanceof CCommandStraightLine){  // stright line before
-								CNCPoint connectionCNCPoint = getConnectionPoint(lm, command, ConnectionType.ENDSTART);
+								CNCPoint connectionCNCPoint = getCrossingPoint(lm, command, CNCPoint.ConnectionType.ENDSTART);
 								lastMotion.setEnd(connectionCNCPoint);
 								command.setStart(connectionCNCPoint);
 							} else { // arc line before 
-								CCommandArcLine arc = (CCommandArcLine)lastMotion;
-								CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
-								arc.setEnd(connectionCNCPoint);
-								command.setStart(connectionCNCPoint);
+                                if(distance(lastMotion.getEnd(),command.getStart())>0.0){
+                                    CCommandArcLine arc = (CCommandArcLine)lastMotion;
+                                    CNCPoint connectionCNCPoint = getConnectionPoint(arc, command);
+                                    arc.setEnd(connectionCNCPoint);
+                                    command.setStart(connectionCNCPoint);
+                                }
 							};
 						};
 					};
@@ -274,109 +285,6 @@ public class CanonCommandSequence {
     public DrawableObjectLimits getLimits() {
         return limits;
     }
-
-    private enum ConnectionType {
-		ENDSTART,
-		STARTEND
-	}
-	
-	private CNCPoint getConnectionPoint(CCommandStraightLine Line, CCommandArcLine Arc, ConnectionType type){
-		// find connection point of line & circle nearest to end of one & start of another
-		double rx = 0.0;
-		double ry = 0.0;
-
-		double arccx = Arc.getCenter().getX();
-		double arccy = Arc.getCenter().getY();
-		double dx = Arc.getStart().getX() - arccx;
-		double dy = Arc.getStart().getY() - arccy;
-		double arcr = Math.sqrt(dx*dx + dy*dy);
-
-		double lsx = Line.getStart().getX();
-		double lsy = Line.getStart().getY();
-		double lex = Line.getEnd().getX();
-		double ley = Line.getEnd().getY();
-
-		double ldx = lex - lsx;
-		double ldy = ley - lsy;
-		
-		if(Math.abs(ldx)>0){  // line is not vertical
-			if(Math.abs(ldy)>0){ // line is not horizontal
-				// get canonical formula (y = a*x + b) for line
-				double a1 = ldy/ldx;
-				double b1 = lsy - a1 * lsx;
-				double aD = 1.0 + a1*a1;
-				double byc = b1 - arccy;
-				double bD = 2.d*(byc*a1 - arccx);
-				double cD = arccx*arccx + byc*byc - arcr*arcr;
-				double Det = bD*bD - 4.0*aD*cD;
-				if(Det<0) Det = 0d;
-				double rx1 = (-bD + Math.sqrt(Det))/2/aD;
-				double rx2 = (-bD - Math.sqrt(Det))/2/aD;
-				switch(type){
-				case ENDSTART:
-					if( Math.abs(rx1-lex) < Math.abs(rx2-lex) ) rx = rx1;
-					else rx = rx2;
-					break;
-				case STARTEND:
-					if( Math.abs(rx1-lsx) < Math.abs(rx2-lsx) ) rx = rx1;
-					else rx = rx2;
-					break;
-				default:
-					break;
-				}
-				ry = a1*rx + b1;
-			} else { 
-				// line is horizontal 
-				// connection is at point with y of line
-				ry = ley;
-				double t = ry - arccy;
-				t = arcr*arcr - t*t;
-				if(t>0){
-					t = Math.sqrt(t);
-					double rx1 = arccx + t;
-					double rx2 = arccx - t;
-					switch(type){
-					case ENDSTART:
-						if(Math.abs(rx1-lex) < Math.abs(rx2-lex)) rx = rx1;
-						else rx = rx2;
-						break;
-					case STARTEND:
-					default:
-						if(Math.abs(rx1-lsx) < Math.abs(rx2-lsx)) rx = rx1;
-						else rx = rx2;
-						break;
-					}
-				} else { // tangent line
-					 rx = arccx;
-				}
-			};
-		} else {
-			// line is vertical
-			// connection is at point with x of line
-			rx = lex;
-			double t = rx - arccx;
-			t = arcr*arcr - t*t;
-			if(t>0){
-				t = Math.sqrt(t);
-				double ry1 = arccy + t;
-				double ry2 = arccy - t;
-				switch(type){
-				case ENDSTART:
-					if(Math.abs(ry1-ley) < Math.abs(ry2-ley)) ry = ry1;
-					else ry = ry2;
-					break;
-				case STARTEND:
-				default:
-					if(Math.abs(ry1-lsy) < Math.abs(ry2-lsy)) ry = ry1;
-					else ry = ry2;
-					break;
-				}
-			} else { // tangent line
-				 ry = arccy;
-			}
-		}
-		return new CNCPoint(rx, ry);
-	}
 
 	private CNCPoint getConnectionPoint(CCommandArcLine A1, CCommandArcLine A2){
 		CNCPoint result;
