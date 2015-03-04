@@ -11,7 +11,7 @@ import ru.android_cnc.acnc.HAL.ExternalEventController.ExternalEventController;
 import ru.android_cnc.acnc.HAL.InvertorController.InvertorController;
 import ru.android_cnc.acnc.HAL.MotionController.MotionController;
 import ru.android_cnc.acnc.HAL.TorchHeightController.TorchHeightController;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 
 public class HALMashine implements Runnable {
 

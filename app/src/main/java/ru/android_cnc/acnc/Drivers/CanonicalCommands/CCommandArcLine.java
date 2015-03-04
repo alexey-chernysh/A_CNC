@@ -11,7 +11,7 @@ import android.graphics.RectF;
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 import static java.lang.Math.cos;
@@ -51,8 +51,10 @@ public class CCommandArcLine extends CCommandStraightLine {
         };
         double startAngle = this.getStartRadialAngle();
         double endAngle = this.getEndRadialAngle();
-        this.setStart(new CNCPoint(R*cos(startAngle),R*sin(startAngle)));
-        this.setEnd(new CNCPoint(R*cos(endAngle),R*sin(endAngle)));
+        double cx = getCenter().getX();
+        double cy = getCenter().getY();
+        this.setStart(new CNCPoint(cx+R*cos(startAngle),cy+R*sin(startAngle)));
+        this.setEnd(new CNCPoint(cx+R*cos(endAngle),cy+R*sin(endAngle)));
     }
 
     private void checkLimits() throws InterpreterException {

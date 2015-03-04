@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 import static ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine.normalizeInRadian;
@@ -88,9 +88,9 @@ public class CanonCommandSequence {
 	@SuppressLint("LongLogTag")
     private void addCuttingStraightMotion(CCommandStraightLine command) throws InterpreterException {
 		CNCPoint unOffsetedStart = command.getStart().clone();
-        Log.i("Straight line before offset", command.toString());
+//        Log.i("Straight line before offset", command.toString());
 		command.applyCutterRadiusCompensation();
-        Log.i("Straight line after offset", command.toString());
+//        Log.i("Straight line after offset", command.toString());
 		CCommandStraightLine lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move 
 			if(lastMotion.isFreeRun()) {
@@ -101,19 +101,17 @@ public class CanonCommandSequence {
 				double alfaCurrent = command.getStartTangentAngle();
 				double alfaPrev = lastMotion.getEndTangentAngle();
 				final double d_alfa = normalizeInRadian(alfaCurrent - alfaPrev);
-                Log.i("Angles", " - " + alfaCurrent + "; " + alfaPrev + "; " + d_alfa);
+//                Log.i("Angles", " - " + alfaCurrent + "; " + alfaPrev + "; " + d_alfa);
 				switch(command.getOffsetMode().getMode()){
 				case LEFT:
 					if(d_alfa > 0.0){ // motion direction turn left
 						// line turn left and left offset
 						if(lastMotion instanceof CCommandStraightLine){
 						    // Straight line before
-							// calculate length shortening of new line
-							double d_l = command.getOffsetMode().getRadius() * Math.sin(d_alfa/2.0);
-							// correct previous line
-							lastMotion.truncTail(d_l);
-							// correct current line
-							command.truncHead(d_l);
+                            CNCPoint connectionPoint = CNCPoint.getCrossingPoint(lastMotion,command);
+                            if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
+                            lastMotion.setEnd(connectionPoint);
+                            command.setStart(connectionPoint);
 						} else {
 							// arc line before 
 							// TODO current algorithm wrong
@@ -150,13 +148,12 @@ public class CanonCommandSequence {
 					} else {
 						if(d_alfa < 0.0){
 							// line turn right and right offset
-							if(lastMotion instanceof CCommandStraightLine){  // stright line before
-								// calc length shortening of new line
-								double d_l = command.getOffsetMode().getRadius() * Math.sin(d_alfa/2.0);
-								// correct previous line
-								lastMotion.truncTail(d_l);
-								// correct current line
-								command.truncHead(d_l);
+							if(lastMotion instanceof CCommandStraightLine){
+							    // stright line before
+                                CNCPoint connectionPoint = CNCPoint.getCrossingPoint(lastMotion,command);
+                                if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
+                                lastMotion.setEnd(connectionPoint);
+                                command.setStart(connectionPoint);
 							} else {
 								// arc line before 
 								CCommandArcLine arc = (CCommandArcLine)lastMotion;
@@ -221,7 +218,7 @@ public class CanonCommandSequence {
 							CCommandArcLine link = new CCommandArcLine(lastMotion.getEnd(),
 									  					command.getStart(),
 									  					unOffsetedStart,
-									  					ArcDirection.COUNTERCLOCKWISE,
+									  					ArcDirection.CLOCKWISE,
 									  					command.getVelocityPlan(),
 									  					command.getOffsetMode());
 							seq_.add(link);
@@ -235,7 +232,7 @@ public class CanonCommandSequence {
 						CCommandArcLine newArc = new CCommandArcLine(lastMotion.getEnd(),
 														command.getStart(),
 														unOffsetedStart,
-								  						ArcDirection.CLOCKWISE,
+								  						ArcDirection.COUNTERCLOCKWISE,
 									  					command.getVelocityPlan(),
 									  					command.getOffsetMode());
 						seq_.add(newArc);

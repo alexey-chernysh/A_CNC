@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 public class CCommandStraightLine extends CanonCommand {

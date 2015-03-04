@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.HAL.MotionController;
 
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 
 public class MotionController implements Runnable {
 	

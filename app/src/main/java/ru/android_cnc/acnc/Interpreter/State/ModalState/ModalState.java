@@ -7,7 +7,7 @@ package ru.android_cnc.acnc.Interpreter.State.ModalState;
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ModalState {

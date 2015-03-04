@@ -1,9 +1,7 @@
 package ru.android_cnc.acnc.Draw;
 
-import android.util.Log;
-
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.Motion.CNCPoint;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
 
 /**
  * Created by Sales on 03.03.2015.
