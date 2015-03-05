@@ -20,6 +20,10 @@
             android:name=".FileDialog"
             android:label="@string/title_activity_file_dialog" >
         </activity>
+        <activity
+            android:name=".GraphView.CNCControlActivity"
+            android:label="@string/title_activity_cnccontrol" >
+        </activity>
     </application>
 
 </manifest>

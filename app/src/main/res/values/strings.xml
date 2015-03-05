@@ -3,6 +3,7 @@
 
     <string name="app_name">A CNC</string>
     <string name="empty_string"></string>
+    <string name="SOURCE_FILE_NAME">source_file_name</string>
     <string name="edit_text">Edit G-code text</string>
     <string name="view_graph">View G-code</string>
     <string name="edit_graph">Edit G-code</string>
@@ -25,5 +26,8 @@
     <string name="create">Save</string>
     <string name="no_data">No Data</string>
     <string name="err">Error</string>
+    <string name="title_activity_cnccontrol">CNCControlActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
+import ru.android_cnc.acnc.GraphView.CNCControlActivity;
 import ru.android_cnc.acnc.GraphView.CNCControlFragment;
 import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
@@ -117,7 +118,7 @@ public class MainActivity
     }
 
     private void switch2CNCView(){
-        try{
+/*        try{
             ProgramLoader programLoader = new ProgramLoader();
             programLoader.load(gcodeSource);
             programLoader.evalute();
@@ -128,6 +129,10 @@ public class MainActivity
         transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
         transaction.add(R.id.container, CNCControlFragment.newInstance("3","4"));
         transaction.commit();
+*/
+        Intent intent = new Intent(MainActivity.this, CNCControlActivity.class);
+        intent.putExtra(getString(R.string.SOURCE_FILE_NAME), fileName);
+        startActivity(intent);
     }
 
     public void onSectionAttached(int number) {
