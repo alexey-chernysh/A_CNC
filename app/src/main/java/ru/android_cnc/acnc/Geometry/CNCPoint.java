@@ -9,6 +9,7 @@ import android.util.Log;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
 
+import static java.lang.Math.log1p;
 import static java.lang.Math.sqrt;
 
 public class CNCPoint {
@@ -52,7 +53,9 @@ public class CNCPoint {
         return " X = " + x_ + "; Y = " + y_ + ";";
     }
 
-    public static CNCPoint getCrossingPoint(CCommandStraightLine line1, CCommandStraightLine line2) {
+    public static CNCPoint getCrossLineNLine(CCommandStraightLine line1, CCommandStraightLine line2) {
+        Log.i("Crossing 2 lines 1- ", line1.toString());
+        Log.i("Crossing 2 lines 2- ", line2.toString());
         if(line1 == null) return null;
         if(line1.length() <= 0) return null;
         if(line2 == null) return null;
@@ -122,10 +125,12 @@ public class CNCPoint {
         }
     }
 
-    public static CNCPoint getCrossingPoint(CCommandStraightLine line,
-                                             CCommandArcLine arc,
-                                             ConnectionType type){
+    public static CNCPoint getCrossLineNArc(CCommandStraightLine line,
+                                            CCommandArcLine arc,
+                                            ConnectionType type){
         // find connection point of line & circle nearest to end of one & start of another
+        Log.i("Crossing line & arcs - ", line.toString());
+        Log.i("arc - ", arc.toString());
         double rx = 0.0;
         double ry = 0.0;
 
@@ -141,58 +146,44 @@ public class CNCPoint {
         double lineDX = lineEndX - LineStartX;
         double lineDY = lineEndY - lineStartY;
 
+        CNCPoint solution1;
+        CNCPoint solution2;
         if(Math.abs(lineDX)>0){  // line is not vertical
             if(Math.abs(lineDY)>0){ // line is not horizontal
-                // get canonical formula (y = a*x + b) for line
+                // solve line canonical equation y = a*x + b for a & b
                 double a1 = 0.0;
                 double b1 = (lineStartY*lineEndX - lineEndY*LineStartX)/lineDX;
                 if(LineStartX != 0.0) a1 = (lineStartY - b1)/LineStartX;
                 else  a1 = (lineEndY - b1)/lineEndX;
+
+                // substitute line equation in circle equation
+                // (x - xc)^2 + (y - yc)^2 = R^2
+                // and solve square equation against x
                 double aD = 1.0 + a1*a1;
                 double byc = b1 - arcCenterY;
                 double bD = 2.d*(byc*a1 - arcCenterX);
                 double cD = arcCenterX*arcCenterX + byc*byc - arcR*arcR;
                 double Det = bD*bD - 4.0*aD*cD;
-                if(Det<0) Det = 0d;
+                if(Det<0) return null;
                 double rx1 = (-bD + Math.sqrt(Det))/2/aD;
+                double ry1 = a1*rx1 + b1;
+                solution1 = new CNCPoint(rx1,ry1);
                 double rx2 = (-bD - Math.sqrt(Det))/2/aD;
-                switch(type){
-                    case ENDSTART:
-                        if( Math.abs(rx1-lineEndX) < Math.abs(rx2-lineEndX) ) rx = rx1;
-                        else rx = rx2;
-                        break;
-                    case STARTEND:
-                        if( Math.abs(rx1-LineStartX) < Math.abs(rx2-LineStartX) ) rx = rx1;
-                        else rx = rx2;
-                        break;
-                    default:
-                        break;
-                }
-                ry = a1*rx + b1;
+                double ry2 = a1*rx2 + b1;
+                solution2 = new CNCPoint(rx2,ry2);
             } else {
                 // line is horizontal
                 // connection is at point with y of line
                 ry = lineEndY;
                 double t = ry - arcCenterY;
                 t = arcR*arcR - t*t;
-                if(t>0){
+                if(t>=0){
                     t = Math.sqrt(t);
                     double rx1 = arcCenterX + t;
+                    solution1 = new CNCPoint(rx1,ry);
                     double rx2 = arcCenterX - t;
-                    switch(type){
-                        case ENDSTART:
-                            if(Math.abs(rx1-lineEndX) < Math.abs(rx2-lineEndX)) rx = rx1;
-                            else rx = rx2;
-                            break;
-                        case STARTEND:
-                        default:
-                            if(Math.abs(rx1-LineStartX) < Math.abs(rx2-LineStartX)) rx = rx1;
-                            else rx = rx2;
-                            break;
-                    }
-                } else { // tangent line
-                    rx = arcCenterX;
-                }
+                    solution2 = new CNCPoint(rx2,ry);
+                } else return null;
             };
         } else {
             // line is vertical
@@ -200,26 +191,100 @@ public class CNCPoint {
             rx = lineEndX;
             double t = rx - arcCenterX;
             t = arcR*arcR - t*t;
-            if(t>0){
+            if(t>=0){
                 t = Math.sqrt(t);
                 double ry1 = arcCenterY + t;
+                solution1 = new CNCPoint(rx,ry1);
                 double ry2 = arcCenterY - t;
-                switch(type){
-                    case ENDSTART:
-                        if(Math.abs(ry1-lineEndY) < Math.abs(ry2-lineEndY)) ry = ry1;
-                        else ry = ry2;
-                        break;
-                    case STARTEND:
-                    default:
-                        if(Math.abs(ry1-lineStartY) < Math.abs(ry2-lineStartY)) ry = ry1;
-                        else ry = ry2;
-                        break;
+                solution2 = new CNCPoint(rx,ry2);
+            } else return null;
+        }
+        double dist1;
+        double dist2;
+        switch(type){
+            case ENDSTART:
+                dist1 = distance(line.getEnd(),solution1) + distance(arc.getStart(),solution1);
+                dist2 = distance(line.getEnd(),solution2) + distance(arc.getStart(),solution2);
+                break;
+            case STARTEND:
+                dist1 = distance(line.getStart(),solution1) + distance(arc.getEnd(),solution1);
+                dist2 = distance(line.getStart(),solution2) + distance(arc.getEnd(),solution2);
+                break;
+            default:
+                return null;
+        };
+        Log.i("Solution ", "Line" + line.toString() + " Arc" + arc.toString());
+        if(dist1<dist2){
+            Log.i("Solution ", " Cross " + solution1);
+            return solution1;
+        } else {
+            Log.i("Solution ", " Cross " + solution2);
+            return solution2;
+        }
+    }
+
+    public static CNCPoint getCrossArcNArc(CCommandArcLine A1,
+                                           CCommandArcLine A2){
+        CNCPoint result;
+        Log.i("Crossing 2 arcs 1- ", A1.toString());
+        Log.i("Crossing 2 arcs 2- ", A2.toString());
+
+        double dxsa1 = A1.getStart().getX() - A1.getCenter().getX();
+        double dysa1 = A1.getStart().getY() - A1.getCenter().getY();
+        double dxea1 = A1.getEnd().getX() - A1.getCenter().getX();
+        double dyea1 = A1.getEnd().getY() - A1.getCenter().getY();
+        double r2a1 = dxsa1*dxsa1 + dysa1*dysa1;
+        double ra1 = Math.sqrt(r2a1);
+
+        double dxsa2 = A2.getStart().getX() - A2.getCenter().getX();
+        double dysa2 = A2.getStart().getY() - A2.getCenter().getY();
+        double r2a2 = dxsa2*dxsa2 + dysa2*dysa2;
+        double ra2 = Math.sqrt(r2a2);
+
+        double dxc = A2.getCenter().getX() - A1.getCenter().getX();
+        double dyc = A2.getCenter().getY() - A1.getCenter().getY();
+        double ac = Math.atan2(dyc, dxc);
+        double r2c = dxc*dxc + dyc*dyc;
+        double rc = Math.sqrt(r2c);
+
+        double overlap = rc - ra1 - ra2;
+        double meps = 0.001; //Drawing.DwgConst.masheps;
+        if(Math.abs(overlap) < meps){ // centers offseted, one connection point
+            double xcp = A2.getStart().getX();
+            double ycp = A2.getStart().getY();
+            result = new CNCPoint(xcp, ycp);
+        } else {
+            if(rc < meps){ // centers are equal
+                double ae1 = Math.atan2(dyea1, dxea1);
+                double as2 = Math.atan2(dysa2, dxsa2);
+                double acp = (ae1 + as2)/2d;
+                double xcp = A1.getCenter().getX() + ra1*Math.cos(acp);
+                double ycp = A1.getCenter().getY() + ra1*Math.sin(acp);
+                result = new CNCPoint(xcp, ycp);
+            } else {	// different centers, two connection point
+                double d1 = (r2a1 - r2a2 + r2c)/(2d*rc);
+                double t = r2a1 - d1*d1;
+                if(t<0) t = 0;
+                double h = Math.sqrt(t);
+                double dah = Math.atan2(h, d1);
+                // first point
+                double xcp1 = A1.getCenter().getX() + ra1*Math.cos(ac-dah);
+                double ycp1 = A1.getCenter().getY() + ra1*Math.sin(ac-dah);
+                // second point
+                double xcp2 = A1.getCenter().getX() + ra1*Math.cos(ac+dah);
+                double ycp2 = A1.getCenter().getY() + ra1*Math.sin(ac+dah);
+                double dx1 = A1.getEnd().getX() - xcp1;
+                double dy1 = A1.getEnd().getY() - ycp1;
+                double dx2 = A1.getEnd().getX() - xcp2;
+                double dy2 = A1.getEnd().getY() - ycp2;
+                if((dx1*dx1 + dy1*dy1)<(dx2*dx2 + dy2*dy2)){ // choose nearest point
+                    result = new CNCPoint(xcp1, ycp1);
+                }else{
+                    result = new CNCPoint(xcp2, ycp2);
                 }
-            } else { // tangent line
-                ry = arcCenterY;
             }
         }
-        return new CNCPoint(rx, ry);
+        return result;
     }
 
     public enum ConnectionType {

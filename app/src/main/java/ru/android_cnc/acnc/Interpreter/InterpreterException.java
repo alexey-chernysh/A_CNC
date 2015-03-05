@@ -4,6 +4,8 @@
 
 package ru.android_cnc.acnc.Interpreter;
 
+import android.util.Log;
+
 public class InterpreterException extends Exception {
 
 	private	String message_ = null;
@@ -12,7 +14,7 @@ public class InterpreterException extends Exception {
 	public InterpreterException(){}
 	
 	public InterpreterException(String msg){
-		message_ = msg;
+        message_ = msg;
 	}
 
 	public InterpreterException(String msg, int p){

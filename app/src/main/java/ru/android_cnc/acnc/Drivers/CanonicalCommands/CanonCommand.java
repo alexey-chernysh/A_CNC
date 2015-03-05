@@ -19,7 +19,6 @@ public abstract class CanonCommand {
 
     abstract public void execute();
     abstract public void draw(Canvas canvas);
-    public DrawableObjectLimits limits = null;
 
 	public type getType() throws InterpreterException {
 		if(type_ != type.UNDEFINED)	return type_;

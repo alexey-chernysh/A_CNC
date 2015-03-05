@@ -12,7 +12,7 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
-public class CCommandStraightLine extends CanonCommand {
+public class CCommandStraightLine extends CCommandMotion {
 
 	// straight line & arc common fields
 	protected CNCPoint start_;
@@ -29,7 +29,7 @@ public class CCommandStraightLine extends CanonCommand {
                                 CutterRadiusCompensation crc) throws InterpreterException {
 		// all motions are absolute to current home point
 		// init fields
-		super(CanonCommand.type.MOTION);
+		super(MotionType.STRAIGHT);
 
 		if(s != null) start_ = s;
 		else throw new InterpreterException("Null start point in motion command");
@@ -39,10 +39,10 @@ public class CCommandStraightLine extends CanonCommand {
 		setVelocityPlan(vp);
 		mode_ = m;
 		setOffsetMode(crc);
-        checkLimits();
 	}
 
-    private void checkLimits() throws InterpreterException {
+    @Override
+    public void checkLimits() throws InterpreterException {
         this.limits = new DrawableObjectLimits(this.getStart());
         this.limits = DrawableObjectLimits.combine(this.limits, this.getEnd());
     }

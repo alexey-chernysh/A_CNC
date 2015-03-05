@@ -31,11 +31,10 @@ public class CCommandArcLine extends CCommandStraightLine {
                            VelocityPlan vp,
                            CutterRadiusCompensation offsetMode) throws InterpreterException {
 		super(startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
+        setMotionType(MotionType.ARC);
 
 		this.center_ = centerCNCPoint;
 		this.arcDirection_ = arcDirection;
-
-        checkLimits();
 	}
 
     @Override
@@ -57,9 +56,11 @@ public class CCommandArcLine extends CCommandStraightLine {
         this.setEnd(new CNCPoint(cx+R*cos(endAngle),cy+R*sin(endAngle)));
     }
 
-    private void checkLimits() throws InterpreterException {
+    @Override
+    public void checkLimits() throws InterpreterException {
         // start & end points checked in Straight Line constructor
         // so we need check points on arc only
+        super.checkLimits();
         double alfaStart = this.getStartRadialAngle();
         double alfaEnd = this.getEndRadialAngle();
         double delta = Math.PI/2.0;
