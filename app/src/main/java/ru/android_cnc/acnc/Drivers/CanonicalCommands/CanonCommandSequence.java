@@ -98,12 +98,12 @@ public class CanonCommandSequence {
 	@SuppressLint("LongLogTag")
     private void addCuttingStraightMotion(CCommandStraightLine command) throws InterpreterException {
 		CNCPoint unOffsetedStart = command.getStart().clone();
-        Log.i("Line before offset", command.toString());
+//        Log.i("Line before offset", command.toString());
 		command.applyCutterRadiusCompensation();
-        Log.i("Line after offset", command.toString());
-		CCommandStraightLine lastMotion = (CCommandStraightLine)findLastMotion();
+//        Log.i("Line after offset", command.toString());
+		CCommandMotion lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move
-            Log.i("Line before current", lastMotion.toString());
+//            Log.i("Line before current", lastMotion.toString());
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
                 lastMotion.setEnd(command.getStart());
@@ -112,16 +112,17 @@ public class CanonCommandSequence {
 				float alfaCurrent = (float)command.getStartTangentAngle();
                 float alfaPrev = (float)lastMotion.getEndTangentAngle();
 				final float d_alfa = (float)normalizeInRadian(alfaCurrent - alfaPrev);
-                Log.i("Angles", " Dir current " + alfaCurrent + "; Dir before" + alfaPrev + "; Diff " + d_alfa);
+//                Log.i("Angles", " Dir current " + alfaCurrent + "; Dir before" + alfaPrev + "; Diff " + d_alfa);
 				switch(command.getOffsetMode().getMode()){
 				case LEFT:
 					if(d_alfa > 0.0){ // motion direction turn left
 						// line turn left and left offset
 						if(lastMotion.getMotionType() == CCommandMotion.MotionType.STRAIGHT){
 						    // Straight line before
-                            CNCPoint connectionPoint = getCrossLineNLine(lastMotion, command);
+                            CCommandStraightLine line = (CCommandStraightLine)lastMotion;
+                            CNCPoint connectionPoint = getCrossLineNLine(line, command);
                             if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
-                            lastMotion.setEnd(connectionPoint);
+                            line.setEnd(connectionPoint);
                             command.setStart(connectionPoint);
 						} else {
 							// arc line before 
@@ -146,7 +147,7 @@ public class CanonCommandSequence {
 							seq_.add(link);
 						} else {
                             // smooth line connection
-                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
+//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
                         }
 					}
 					break;
@@ -165,10 +166,11 @@ public class CanonCommandSequence {
 						if(d_alfa < 0.0){
 							// line turn right and right offset
 							if(lastMotion.getMotionType() == CCommandMotion.MotionType.STRAIGHT){
-							    // stright line before
-                                CNCPoint connectionPoint = getCrossLineNLine(lastMotion, command);
+							    // straight line before
+                                CCommandStraightLine line = (CCommandStraightLine)lastMotion;
+                                CNCPoint connectionPoint = getCrossLineNLine(line, command);
                                 if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
-                                lastMotion.setEnd(connectionPoint);
+                                line.setEnd(connectionPoint);
                                 command.setStart(connectionPoint);
 							} else {
 								// arc line before 
@@ -182,7 +184,7 @@ public class CanonCommandSequence {
 							};
 						} else {
                             // smooth line connection
-                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
+//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
                         }
 					};
 					break;
@@ -198,7 +200,7 @@ public class CanonCommandSequence {
 	private void addCuttingArcMotion(CCommandArcLine command) throws InterpreterException {
 		CNCPoint unOffsetedStart = command.getStart().clone();
 		command.applyCutterRadiusCompensation();
-		CCommandStraightLine lastMotion = (CCommandStraightLine)findLastMotion();
+		CCommandMotion lastMotion = findLastMotion();
 		if(lastMotion != null){ // its no first move
 			if(lastMotion.isFreeRun()) {
 				// free run line should be connected to start of new motion
@@ -222,9 +224,10 @@ public class CanonCommandSequence {
                                     if(d_alfa > 0.0){
                                         // line turn left and left offset
                                         if(lastMotion.getMotionType() == CCommandMotion.MotionType.STRAIGHT){  // Straight line before
-                                            CNCPoint connectionPoint = getCrossLineNArc(lastMotion, command, CNCPoint.ConnectionType.ENDSTART);
+                                            CCommandStraightLine line = (CCommandStraightLine)lastMotion;
+                                            CNCPoint connectionPoint = getCrossLineNArc(line, command, CNCPoint.ConnectionType.ENDSTART);
                                             if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
-                                            lastMotion.setEnd(connectionPoint);
+                                            line.setEnd(connectionPoint);
 							command.setStart(connectionPoint);
 						} else {
 							// arc line before 
@@ -249,7 +252,7 @@ public class CanonCommandSequence {
 							seq_.add(link);
 						}else {
                             // smooth line connection
-                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
+//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
                         }
 					}
 					break;
@@ -268,8 +271,9 @@ public class CanonCommandSequence {
 						if(d_alfa < 0.0){
 							// line turn right and right offset
 							if(lastMotion.getMotionType() == CCommandMotion.MotionType.STRAIGHT){  // stright line before
-								CNCPoint connectionCNCPoint = getCrossLineNArc(lastMotion, command, CNCPoint.ConnectionType.ENDSTART);
-								lastMotion.setEnd(connectionCNCPoint);
+                                CCommandStraightLine line = (CCommandStraightLine)lastMotion;
+								CNCPoint connectionCNCPoint = getCrossLineNArc(line, command, CNCPoint.ConnectionType.ENDSTART);
+								line.setEnd(connectionCNCPoint);
 								command.setStart(connectionCNCPoint);
 							} else { // arc line before 
                                 if(distance(lastMotion.getEnd(),command.getStart())>0.0){
@@ -281,7 +285,7 @@ public class CanonCommandSequence {
 							};
 						}else {
                             // smooth line connection
-                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
+//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
                         }
 					};
 					break;

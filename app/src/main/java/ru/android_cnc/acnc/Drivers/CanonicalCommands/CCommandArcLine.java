@@ -17,7 +17,7 @@ import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class CCommandArcLine extends CCommandStraightLine {
+public class CCommandArcLine extends CCommandMotion {
 	
 	// arc specific fields
 	protected CNCPoint center_;
@@ -30,8 +30,7 @@ public class CCommandArcLine extends CCommandStraightLine {
                            ArcDirection arcDirection,
                            VelocityPlan vp,
                            CutterRadiusCompensation offsetMode) throws InterpreterException {
-		super(startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
-        setMotionType(MotionType.ARC);
+		super(MotionType.ARC, startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
 
 		this.center_ = centerCNCPoint;
 		this.arcDirection_ = arcDirection;
@@ -60,7 +59,8 @@ public class CCommandArcLine extends CCommandStraightLine {
     public void checkLimits() throws InterpreterException {
         // start & end points checked in Straight Line constructor
         // so we need check points on arc only
-        super.checkLimits();
+        this.limits = new DrawableObjectLimits(this.getStart());
+        this.limits = DrawableObjectLimits.combine(this.limits, this.getEnd());
         double alfaStart = this.getStartRadialAngle();
         double alfaEnd = this.getEndRadialAngle();
         double delta = Math.PI/2.0;
@@ -106,8 +106,13 @@ public class CCommandArcLine extends CCommandStraightLine {
 		double alfa = getEndRadialAngle();
 		return normalizeInRadian(Radial2Tangent(alfa));
 	}
-	
-	private double Radial2Tangent(double alfa){
+
+    @Override
+    public void setVelocityProfile(double startVel, double endVel) {
+
+    }
+
+    private double Radial2Tangent(double alfa){
 		if(this.getArcDirection() == ArcDirection.CLOCKWISE) return alfa - Math.PI/2.0;
 		else return alfa + Math.PI/2.0;
 	}
@@ -187,7 +192,6 @@ public class CCommandArcLine extends CCommandStraightLine {
         while(B<=A) B += 360.f;
         B -= A;
         Paint currentPaint = DrawableAttributes.getPaintBefore(this.getOffsetMode());
-//        boolean atr = R1<=this.getOffsetRadius();
         boolean atr = false;
         if(Math.abs(B-A)<360.f)
             canvas.drawArc(rect, A, B, atr, currentPaint);

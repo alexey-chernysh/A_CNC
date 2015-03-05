@@ -40,7 +40,7 @@ public class GcodeTextFragment extends Fragment {
         sourceText = st;
         Bundle args = new Bundle();
         String argumentTag = context.getString(R.string.SOURCE_TEXT);
-        Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
+//        Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
         args.putString(argumentTag, sourceText);
         fragment.setArguments(args);
         return fragment;
@@ -103,7 +103,7 @@ public class GcodeTextFragment extends Fragment {
     public void onTextEditButtonPressed(String s) {
         if (mListener != null) {
             String argumentTag = getString(R.string.SOURCE_TEXT);
-            Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
+//            Log.i(TEXT_FRAGMENT,"Argument tag =" + argumentTag);
             getArguments().putString(argumentTag, s);
             mListener.onGcodeEditFragmentInteraction(s);
         }

@@ -411,7 +411,7 @@ public class LineLoader extends CommandLineLoader {
 		// 1 display message
 		if(this.message_ != null){
             ProgramLoader.command_sequence.add(new CCommandMessage(this.message_));
-            Log.i("GCODE MESSAGE: ",this.message_);
+//            Log.i("GCODE MESSAGE: ",this.message_);
         }
 
 		// 2 set feed rate mode

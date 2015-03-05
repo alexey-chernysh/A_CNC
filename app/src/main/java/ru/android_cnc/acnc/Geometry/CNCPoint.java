@@ -54,8 +54,8 @@ public class CNCPoint {
     }
 
     public static CNCPoint getCrossLineNLine(CCommandStraightLine line1, CCommandStraightLine line2) {
-        Log.i("Crossing 2 lines 1- ", line1.toString());
-        Log.i("Crossing 2 lines 2- ", line2.toString());
+//        Log.i("Crossing 2 lines 1- ", line1.toString());
+//        Log.i("Crossing 2 lines 2- ", line2.toString());
         if(line1 == null) return null;
         if(line1.length() <= 0) return null;
         if(line2 == null) return null;
@@ -129,8 +129,8 @@ public class CNCPoint {
                                             CCommandArcLine arc,
                                             ConnectionType type){
         // find connection point of line & circle nearest to end of one & start of another
-        Log.i("Crossing line & arcs - ", line.toString());
-        Log.i("arc - ", arc.toString());
+//        Log.i("Crossing line & arcs - ", line.toString());
+//        Log.i("arc - ", arc.toString());
         double rx = 0.0;
         double ry = 0.0;
 
@@ -213,12 +213,12 @@ public class CNCPoint {
             default:
                 return null;
         };
-        Log.i("Solution ", "Line" + line.toString() + " Arc" + arc.toString());
+//        Log.i("Solution ", "Line" + line.toString() + " Arc" + arc.toString());
         if(dist1<dist2){
-            Log.i("Solution ", " Cross " + solution1);
+//            Log.i("Solution ", " Cross " + solution1);
             return solution1;
         } else {
-            Log.i("Solution ", " Cross " + solution2);
+//            Log.i("Solution ", " Cross " + solution2);
             return solution2;
         }
     }
@@ -226,8 +226,8 @@ public class CNCPoint {
     public static CNCPoint getCrossArcNArc(CCommandArcLine A1,
                                            CCommandArcLine A2){
         CNCPoint result;
-        Log.i("Crossing 2 arcs 1- ", A1.toString());
-        Log.i("Crossing 2 arcs 2- ", A2.toString());
+//        Log.i("Crossing 2 arcs 1- ", A1.toString());
+//        Log.i("Crossing 2 arcs 2- ", A2.toString());
 
         double dxsa1 = A1.getStart().getX() - A1.getCenter().getX();
         double dysa1 = A1.getStart().getY() - A1.getCenter().getY();

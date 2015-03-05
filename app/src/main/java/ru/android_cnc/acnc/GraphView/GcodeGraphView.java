@@ -66,10 +66,10 @@ public class GcodeGraphView extends View {
 
         scale = Math.min(widthSize/width_with_pad, heightSize/height_with_pad);
         offset_x = (widthSize /scale  - width )/2.0f;
-        offset_y = (heightSize/scale  - height)/2.0f - height_with_pad;
+        offset_y = (heightSize/scale  - height)/4.0f - height_with_pad;
 
-        Log.i("Part mesure: ", " width = " + width + ", height = " + height);
-        Log.i("View mesure: ", " width = " + widthSize + ", height = " + heightSize);
+//        Log.i("Part mesure: ", " width = " + width + ", height = " + height);
+//        Log.i("View mesure: ", " width = " + widthSize + ", height = " + heightSize);
     }
 
     private float x_on_down = 0.0f;
