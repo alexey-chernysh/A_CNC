@@ -8,6 +8,8 @@
     <string name="edit_graph">Edit G-code</string>
     <string name="file_open">Open file</string>
     <string name="SOURCE_TEXT">G_code_source</string>
+    <string name="CNC_VIEW">cnc_view</string>
+    <string name="CNC_CONTROL">cnc_control</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

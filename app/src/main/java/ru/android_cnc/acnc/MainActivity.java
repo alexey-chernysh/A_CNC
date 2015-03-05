@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
+import ru.android_cnc.acnc.GraphView.CNCControlFragment;
 import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
@@ -38,7 +39,8 @@ public class MainActivity
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             GcodeTextFragment.OnGcodeEditFragmentInteractionListener,
             GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener,
-            GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener {
+            GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener,
+            CNCControlFragment.OnCNCControlFragmentInteractionListener {
 
     private static final String MAIN_ACTIVITY = "A CNC MAIN ACTIVITY";
     /**
@@ -124,6 +126,7 @@ public class MainActivity
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, GcodeGraphViewFragment.newInstance("2", "3"));
+        transaction.add(R.id.container, CNCControlFragment.newInstance("3","4"));
         transaction.commit();
     }
 
@@ -222,6 +225,11 @@ public class MainActivity
 
     @Override
     public void onGcodeGraphEditFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onCNCControlFragmentInteraction(Uri uri) {
+
     }
 
     /**
