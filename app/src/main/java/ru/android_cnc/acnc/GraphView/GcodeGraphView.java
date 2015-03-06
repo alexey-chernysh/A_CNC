@@ -35,11 +35,13 @@ public class GcodeGraphView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+/*
         canvas.save();
         canvas.scale(scale, -scale);
         canvas.translate(offset_x, offset_y);
         ProgramLoader.command_sequence.draw(canvas);
         canvas.restore();
+*/
     }
 
     @Override
@@ -47,6 +49,7 @@ public class GcodeGraphView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         final float padding = 0.1f;
+        if(ProgramLoader.command_sequence == null)return;
         DrawableObjectLimits limits = ProgramLoader.command_sequence.getLimits();
         float left   = limits.getLeft();
         float right  = limits.getRight();

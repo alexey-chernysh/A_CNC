@@ -24,6 +24,14 @@
             android:name=".GraphView.CNCControlActivity"
             android:label="@string/title_activity_cnccontrol" >
         </activity>
+        <activity
+            android:name=".GraphView.CNCControlViewActivity"
+            android:label="@string/title_activity_cnccontrol_view"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.android_cnc.acnc.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

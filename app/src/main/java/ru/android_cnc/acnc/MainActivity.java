@@ -26,11 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
-import ru.android_cnc.acnc.GraphView.CNCControlActivity;
 import ru.android_cnc.acnc.GraphView.CNCControlFragment;
+import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;
 import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
-import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 
 
 public class MainActivity
@@ -130,7 +128,7 @@ public class MainActivity
         transaction.add(R.id.container, CNCControlFragment.newInstance("3","4"));
         transaction.commit();
 */
-        Intent intent = new Intent(MainActivity.this, CNCControlActivity.class);
+        Intent intent = new Intent(MainActivity.this, CNCControlViewActivity.class);
         intent.putExtra(getString(R.string.SOURCE_FILE_NAME), fileName);
         startActivity(intent);
     }

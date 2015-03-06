@@ -29,5 +29,6 @@
     <string name="title_activity_cnccontrol">CNCControlActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_cnccontrol_view">CNCControlViewActivity</string>
 
 </resources>
