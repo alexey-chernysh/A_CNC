@@ -1,37 +1,109 @@
 package ru.android_cnc.acnc.GraphView;
 
+import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.text.Spannable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import ru.android_cnc.acnc.Drivers.Cutter.CutterDriver;
+import ru.android_cnc.acnc.Geometry.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.R;
 
 public class CNCControlViewActivity
         extends ActionBarActivity
         implements
-        GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener,
+        CNC2DViewFragment.OnGcodeGraphViewFragmentInteractionListener,
         CNCControlFragment.OnCNCControlFragmentInteractionListener{
+
+    private String fileName = null;
+    private String sourceText = null;
+    private Spannable spannedText = null;
+    private ProgramLoader programLoader = null;
+    private CutterDriver driver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cnccontrol_view);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_left, new GcodeGraphViewFragment())
-                    .commit();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_right, new CNCControlFragment())
-                    .commit();
-        }
+        if(prepare()){
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_left, new CNC2DViewFragment())
+                        .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_right, new CNCControlFragment())
+                        .commit();
+            }
+        }else{
+            // TODO serve errors
+        };
 
     }
+
+    private boolean prepare(){
+        boolean allFine = true;
+        Intent intent = getIntent();
+        fileName = intent.getStringExtra(getString(R.string.SOURCE_FILE_NAME));
+        if(fileName == null) allFine = false;
+        else {
+            Log.i("File name:", fileName);
+
+            AssetManager assetManager = getAssets();
+            try {
+                InputStream inputStream = assetManager.open(fileName);
+                int size = inputStream.available();
+                byte[] buffer = new byte[size];
+                inputStream.read(buffer);
+                sourceText = new String(buffer);
+                inputStream.close();
+            } catch (FileNotFoundException e) {
+                allFine = false;
+                e.printStackTrace();
+            } catch (IOException eio) {
+                allFine = false;
+                eio.printStackTrace();
+            }
+        }
+
+        if(allFine){
+            try {
+                programLoader = new ProgramLoader();
+                spannedText = programLoader.load(sourceText);
+                programLoader.evalute();
+            }
+            catch (InterpreterException ie){
+                allFine = false;
+            };
+        }
+
+        if(allFine){
+            try {
+                driver = new CutterDriver();
+                driver.loadProgram(programLoader.command_sequence);
+            }
+            catch (InterpreterException ie){
+                allFine = false;
+            };
+        }
+
+        return allFine;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,4 +136,23 @@ public class CNCControlViewActivity
     public void onGcodeGraphViewFragmentInteraction(Uri uri) {
 
     }
+    public void onStartButtonClick(View v){
+        Log.i("CNC control fragment ", "Start button clicked");
+        if(driver != null)driver.startProgram();
+    }
+
+    public void onStopButtonClick(View v){
+        Log.i("CNC control fragment ", "Stop button clicked");
+        if(driver != null)driver.pauseProgram();
+    }
+
+    public void displayPointCoordinates(CNCPoint point){
+        Double t = point.getX();
+        TextView fieldX = (TextView)findViewById(R.id.text_value_X);
+        fieldX.setText(t.toString());
+        t = point.getY();
+        TextView fieldY = (TextView)findViewById(R.id.text_value_Y);
+        fieldY.setText(t.toString());
+    }
+
 }

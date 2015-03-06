@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment">
-    <ru.android_cnc.acnc.GraphView.GcodeGraphView
+    tools:context="ru.android_cnc.acnc.GraphView.CNC2DViewFragment">
+    <ru.android_cnc.acnc.GraphView.CNC2DView
         android:id="@+id/gcode_graph_view"
         android:background="@android:color/white"
         android:layout_width="match_parent"

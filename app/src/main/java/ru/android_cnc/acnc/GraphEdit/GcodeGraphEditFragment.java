@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.android_cnc.acnc.GraphView.GcodeGraphView;
 import ru.android_cnc.acnc.R;
 
 

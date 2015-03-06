@@ -14,7 +14,7 @@ import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 /**
  * @author Alexey Chernysh
  */
-public class GcodeGraphView extends View {
+public class CNC2DView extends View {
 
     private float scale;
     private float offset_x;
@@ -22,7 +22,7 @@ public class GcodeGraphView extends View {
 
     private ScaleGestureDetector mScaleDetector;
 
-    public GcodeGraphView(Context context, AttributeSet attrs) {
+    public CNC2DView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         scale = 1.0f;
@@ -35,13 +35,11 @@ public class GcodeGraphView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-/*
         canvas.save();
         canvas.scale(scale, -scale);
         canvas.translate(offset_x, offset_y);
         ProgramLoader.command_sequence.draw(canvas);
         canvas.restore();
-*/
     }
 
     @Override

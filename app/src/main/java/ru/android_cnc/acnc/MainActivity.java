@@ -1,7 +1,6 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
@@ -17,18 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
 
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextFragment;
 import ru.android_cnc.acnc.GraphEdit.GcodeGraphEditFragment;
 import ru.android_cnc.acnc.GraphView.CNCControlFragment;
 import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;
-import ru.android_cnc.acnc.GraphView.GcodeGraphViewFragment;
+import ru.android_cnc.acnc.GraphView.CNC2DViewFragment;
 
 
 public class MainActivity
@@ -37,7 +34,7 @@ public class MainActivity
         implements
             NavigationDrawerFragment.NavigationDrawerCallbacks,
             GcodeTextFragment.OnGcodeEditFragmentInteractionListener,
-            GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener,
+            CNC2DViewFragment.OnGcodeGraphViewFragmentInteractionListener,
             GcodeGraphEditFragment.OnGcodeGraphEditFragmentInteractionListener,
             CNCControlFragment.OnCNCControlFragmentInteractionListener {
 

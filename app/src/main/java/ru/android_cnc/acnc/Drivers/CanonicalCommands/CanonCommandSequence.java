@@ -318,4 +318,12 @@ public class CanonCommandSequence {
             seq_.get(i).draw(canvas);
         }
     }
+
+    public void remove(int i) {
+        seq_.remove(i);
+    }
+
+    public void add(int i, CanonCommand command) {
+        seq_.add(i,command);
+    }
 }

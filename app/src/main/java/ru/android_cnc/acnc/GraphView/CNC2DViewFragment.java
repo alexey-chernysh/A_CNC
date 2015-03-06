@@ -13,14 +13,14 @@ import ru.android_cnc.acnc.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GcodeGraphViewFragment.OnGcodeGraphViewFragmentInteractionListener} interface
+ * {@link CNC2DViewFragment.OnGcodeGraphViewFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GcodeGraphViewFragment#newInstance} factory method to
+ * Use the {@link CNC2DViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GcodeGraphViewFragment extends Fragment {
+public class CNC2DViewFragment extends Fragment {
 
-    GcodeGraphView gcodeGraphView;
+    CNC2DView CNC2DView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,8 +42,8 @@ public class GcodeGraphViewFragment extends Fragment {
      * @return A new instance of fragment GraphicalViewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GcodeGraphViewFragment newInstance(String param1, String param2) {
-        GcodeGraphViewFragment fragment = new GcodeGraphViewFragment();
+    public static CNC2DViewFragment newInstance(String param1, String param2) {
+        CNC2DViewFragment fragment = new CNC2DViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -51,7 +51,7 @@ public class GcodeGraphViewFragment extends Fragment {
         return fragment;
     }
 
-    public GcodeGraphViewFragment() {
+    public CNC2DViewFragment() {
         // Required empty public constructor
     }
 
@@ -68,9 +68,9 @@ public class GcodeGraphViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View _view = inflater.inflate(R.layout.fragment_gcode_graph_view, container, false);
-        gcodeGraphView = (GcodeGraphView) _view.findViewById(R.id.gcode_graph_view);
-        gcodeGraphView.setParams((float)100.0, (float)300.0);
+        View _view = inflater.inflate(R.layout.fragment_cnc_2d_view, container, false);
+        CNC2DView = (CNC2DView) _view.findViewById(R.id.gcode_graph_view);
+        CNC2DView.setParams((float)100.0, (float)300.0);
         return _view;
     }
 
