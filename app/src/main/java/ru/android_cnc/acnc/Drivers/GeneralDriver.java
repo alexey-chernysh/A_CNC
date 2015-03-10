@@ -4,6 +4,8 @@
 
 package ru.android_cnc.acnc.Drivers;
 
+import android.view.View;
+
 import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
@@ -14,7 +16,7 @@ public interface GeneralDriver {
 	
 	void loadProgram(CanonCommandSequence sourceCommands) throws InterpreterException;
 	
-	void startProgram(); 
+	void startProgram(View v);
 	
 	void pauseProgram();
 	

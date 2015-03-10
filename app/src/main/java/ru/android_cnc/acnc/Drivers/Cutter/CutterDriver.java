@@ -16,6 +16,9 @@
 
 package ru.android_cnc.acnc.Drivers.Cutter;
 
+import android.os.Handler;
+import android.view.View;
+
 import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
@@ -39,7 +42,7 @@ public class CutterDriver implements GeneralDriver {
 	public void loadProgram(CanonCommandSequence sourceCommands) throws InterpreterException {
 		
 		commands_ = sourceCommands;
-		buildVelocityProfile();
+//		buildVelocityProfile();
 	}
 
 	private void buildVelocityProfile() throws InterpreterException {
@@ -143,24 +146,45 @@ public class CutterDriver implements GeneralDriver {
 			if(((CCommandStraightLine)before).getMode() == MotionMode.WORK) return before;
 		if(before instanceof CCommandArcLine) return before;
 		return null;
-	} 
+	}
+
+    Thread executionThread = null;
+    Handler mHandler = new Handler();
 
 	@Override
-	public void startProgram() {
-		// TODO Auto-generated method stub
-		
+	public void startProgram(View v) {
+        final View view = v;
+        if(executionThread == null){
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    {
+                        view.postInvalidate();
+                        mHandler.postDelayed(this, 1000);
+                    }
+                }
+            };
+            mHandler.post(runnable);
+            executionThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int n = commands_.size();
+                    for(int i=0; i<n; i++)commands_.get(i).execute();
+                    mHandler.removeCallbacks(runnable);
+                }
+            });
+        }
+        executionThread.start(); // запускаем
 	}
 
 	@Override
 	public void pauseProgram() {
-		// TODO Auto-generated method stub
-		
+        executionThread.interrupt();
 	}
 
 	@Override
 	public void resumeProgram() {
-		// TODO Auto-generated method stub
-		
+        executionThread.start(); // запускаем
 	}
 
 	@Override

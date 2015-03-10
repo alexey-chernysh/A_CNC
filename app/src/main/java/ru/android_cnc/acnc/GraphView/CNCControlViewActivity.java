@@ -3,6 +3,7 @@ package ru.android_cnc.acnc.GraphView;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -35,6 +36,7 @@ public class CNCControlViewActivity
     private Spannable spannedText = null;
     private ProgramLoader programLoader = null;
     private CutterDriver driver = null;
+    private View view2D = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +140,9 @@ public class CNCControlViewActivity
     }
     public void onStartButtonClick(View v){
         Log.i("CNC control fragment ", "Start button clicked");
-        if(driver != null)driver.startProgram();
+        CNC2DViewFragment frag = (CNC2DViewFragment)getSupportFragmentManager().findFragmentById(R.layout.fragment_cnc_2d_view);
+        View cncView = frag.getCNCView();
+        if(driver != null)driver.startProgram(cncView);
     }
 
     public void onStopButtonClick(View v){

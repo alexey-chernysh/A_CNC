@@ -20,7 +20,7 @@ import ru.android_cnc.acnc.R;
  */
 public class CNC2DViewFragment extends Fragment {
 
-    CNC2DView CNC2DView;
+    private CNC2DView CNCView = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,9 +69,13 @@ public class CNC2DViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View _view = inflater.inflate(R.layout.fragment_cnc_2d_view, container, false);
-        CNC2DView = (CNC2DView) _view.findViewById(R.id.gcode_graph_view);
-        CNC2DView.setParams((float)100.0, (float)300.0);
+        CNCView = (CNC2DView) _view.findViewById(R.id.gcode_graph_view);
+        CNCView.setParams((float)100.0, (float)300.0);
         return _view;
+    }
+
+    public View getCNCView(){
+        return CNCView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
