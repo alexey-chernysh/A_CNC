@@ -7,6 +7,7 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
@@ -181,31 +182,28 @@ public class CCommandArcLine extends CCommandMotion {
 
     @Override
     public void draw(Canvas canvas) {
-        double cx = center_.getX();
-        double cy = center_.getY();
-        double sx = start_.getX();
-        double sy = start_.getY();
-        double ex = end_.getX();
-        double ey = end_.getY();
-        double dxs = sx - cx;
-        double dys = sy - cy;
-        double R1 = Math.sqrt(dxs*dxs + dys*dys);
-        RectF rect = new RectF((float)(cx-R1), (float)(cy-R1), (float)(cx+R1), (float)(cy+R1));
-        float A = (float)Math.toDegrees(Math.atan2(dys, dxs));
-        float B = (float)Math.toDegrees(Math.atan2(ey - cy, ex - cx));
+        float p = (float)(getMotionPhase()/length());
+        double R = this.radius();
+        RectF rect = new RectF((float)(this.getCenter().getX()-R),
+                               (float)(this.getCenter().getY()-R),
+                               (float)(this.getCenter().getX()+R),
+                               (float)(this.getCenter().getY()+R));
+        float A = (float)Math.toDegrees(this.getStartRadialAngle());
+        float B = (float)Math.toDegrees(this.getEndRadialAngle());
+        float AB = A + (B-A)*p;;
         if(getArcDirection() != ArcDirection.COUNTERCLOCKWISE) { // exchange points
             float T = A; A = B; B = T;
         }
-        while(B<=A) B += 360.f;
-        B -= A;
-        Paint currentPaint = DrawableAttributes.getPaintBefore(this.getOffsetMode());
-        boolean atr = false;
-        if(Math.abs(B-A)<360.f)
-            canvas.drawArc(rect, A, B, atr, currentPaint);
+        while(B<=A)B+=360.0;
+        Log.i("Drawing arc: ", "A- " + A + " B- " + B + " B-A- " + (B-A) + " AB- " + AB);
+        if(p <= 0.0)
+            canvas.drawArc(rect, A, B-A, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+        else
+        if(p >= 1.0)
+            canvas.drawArc(rect, A, B-A, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
         else {
-            float C = (B + A)/2.0f;
-            canvas.drawArc(rect, A, C, atr, currentPaint);
-            canvas.drawArc(rect, C, B, atr, currentPaint);
+            canvas.drawArc(rect, A, AB-A, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
+            canvas.drawArc(rect, AB, B-AB, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
         }
     }
 
