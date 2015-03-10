@@ -20,6 +20,8 @@ public abstract class CCommandMotion extends CanonCommand {
     private VelocityPlan velocityPlan_;
     private CutterRadiusCompensation offsetMode_;
     private MotionType motionType;
+
+    private double MotionPhase = 0.0; // from 0 to length
     public DrawableObjectLimits limits = null;
 
     public CCommandMotion(MotionType mt,
@@ -97,4 +99,13 @@ public abstract class CCommandMotion extends CanonCommand {
         STRAIGHT,
         ARC
     }
+
+    public double getMotionPhase() {
+        return MotionPhase;
+    }
+
+    public void setMotionPhase(double mP) {
+        MotionPhase = mP;
+    }
+
 }

@@ -37,6 +37,7 @@ public class CNCControlViewActivity
     private ProgramLoader programLoader = null;
     private CutterDriver driver = null;
     private View view2D = null;
+    private Fragment cncViewFrag = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,9 @@ public class CNCControlViewActivity
         setContentView(R.layout.activity_cnccontrol_view);
         if(prepare()){
             if (savedInstanceState == null) {
+                cncViewFrag = new CNC2DViewFragment();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_left, new CNC2DViewFragment())
+                        .replace(R.id.container_left, cncViewFrag)
                         .commit();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_right, new CNCControlFragment())
@@ -140,9 +142,13 @@ public class CNCControlViewActivity
     }
     public void onStartButtonClick(View v){
         Log.i("CNC control fragment ", "Start button clicked");
-        CNC2DViewFragment frag = (CNC2DViewFragment)getSupportFragmentManager().findFragmentById(R.layout.fragment_cnc_2d_view);
-        View cncView = frag.getCNCView();
-        if(driver != null)driver.startProgram(cncView);
+        if(cncViewFrag != null){
+            View cncView = ((CNC2DViewFragment)cncViewFrag).getCNCView();
+            if(cncView != null)
+                if(driver != null)
+                    driver.startProgram(cncView);
+
+        }
     }
 
     public void onStopButtonClick(View v){

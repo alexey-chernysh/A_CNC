@@ -160,7 +160,7 @@ public class CutterDriver implements GeneralDriver {
                 public void run() {
                     {
                         view.postInvalidate();
-                        mHandler.postDelayed(this, 1000);
+                        mHandler.postDelayed(this, 100);
                     }
                 }
             };
@@ -171,6 +171,7 @@ public class CutterDriver implements GeneralDriver {
                     int n = commands_.size();
                     for(int i=0; i<n; i++)commands_.get(i).execute();
                     mHandler.removeCallbacks(runnable);
+                    view.postInvalidate();
                 }
             });
         }

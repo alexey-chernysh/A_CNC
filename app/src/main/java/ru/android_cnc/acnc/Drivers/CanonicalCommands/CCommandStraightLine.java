@@ -12,6 +12,8 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
+import static android.os.SystemClock.sleep;
+
 public class CCommandStraightLine extends CCommandMotion {
 
 
@@ -91,16 +93,47 @@ public class CCommandStraightLine extends CCommandMotion {
 
     @Override
     public void execute() {
-
+        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refesh 10 times in sec
+        double l = length();
+        double p;
+        while((p=getMotionPhase())<l){
+            setMotionPhase(Math.min(p+=dl,l));
+            sleep(100);
+        }
     }
 
     @Override
     public void draw(Canvas canvas){
-        canvas.drawLine((float)this.getStart().getX(),
+        double p = getMotionPhase();
+        double l = length();
+        if(p <= 0.0)
+            canvas.drawLine((float)this.getStart().getX(),
+                            (float)this.getStart().getY(),
+                            (float)this.getEnd().getX(),
+                            (float)this.getEnd().getY(),
+                            DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+        else
+            if(p >= l)
+                canvas.drawLine((float)this.getStart().getX(),
                         (float)this.getStart().getY(),
                         (float)this.getEnd().getX(),
                         (float)this.getEnd().getY(),
-                        DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+                        DrawableAttributes.getPaintAfter(this.getOffsetMode()));
+            else {
+                double tmp = p/l;
+                float tmp_x = (float)(this.getStart().getX() + tmp*this.getDX());
+                float tmp_y = (float)(this.getStart().getY() + tmp*this.getDY());
+                canvas.drawLine((float)this.getStart().getX(),
+                                (float)this.getStart().getY(),
+                                tmp_x,
+                                tmp_y,
+                                DrawableAttributes.getPaintAfter(this.getOffsetMode()));
+                canvas.drawLine(tmp_x,
+                                tmp_y,
+                                (float)this.getEnd().getX(),
+                                (float)this.getEnd().getY(),
+                                DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+            }
     };
 
     @Override

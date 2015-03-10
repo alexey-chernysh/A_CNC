@@ -89,8 +89,7 @@ public class CanonCommandSequence {
 		CCommandMotion lastMotion = findLastMotion();
 		if(lastMotion != null){ 
 			// last motion is straight or arc working run, correction needed
-            CCommandStraightLine line = (CCommandStraightLine)lastMotion;
-            command.setStart(line.getEnd());
+            command.setStart(lastMotion.getEnd());
 		}
 		seq_.add(command);
 	}

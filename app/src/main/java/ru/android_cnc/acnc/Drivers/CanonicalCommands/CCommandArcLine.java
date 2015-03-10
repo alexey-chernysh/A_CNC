@@ -14,6 +14,7 @@ import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
+import static android.os.SystemClock.sleep;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -169,7 +170,13 @@ public class CCommandArcLine extends CCommandMotion {
 
     @Override
     public void execute() {
-
+        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refesh 10 times in sec
+        double l = length();
+        double p;
+        while((p=getMotionPhase())<l){
+            setMotionPhase(Math.min(p+=dl,l));
+            sleep(100);
+        }
     }
 
     @Override

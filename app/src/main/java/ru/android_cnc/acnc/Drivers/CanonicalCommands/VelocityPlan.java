@@ -44,13 +44,14 @@ public class VelocityPlan {
 	}
 
     public void buildSteps(CCommandStraightLine line){
+        double length = line.length();
         double dx = line.getDX();
         if(Math.abs(dx) > x_mm_in_step) {
             if(dx > 0.0) x_move = Move.FOWARD;
             else x_move = Move.BACKWARD;
 
             nx = (int)Math.round(dx/x_mm_in_step);
-            double x_step = 1.0/nx;
+            double x_step = length/nx;
             x_step_plan = new double[nx];
             x_step_plan[0] = x_step/2.0;
             for (int i=1; i<nx; i++)
@@ -64,7 +65,7 @@ public class VelocityPlan {
             else y_move = Move.BACKWARD;
 
             ny = (int)Math.round(dy/y_mm_in_step);
-            double y_step = 1.0/ny;
+            double y_step = length/ny;
             y_step_plan = new double[ny];
             y_step_plan[0] = y_step/2.0;
             for (int i=1; i<ny; i++)
@@ -76,6 +77,7 @@ public class VelocityPlan {
     public void buildSteps(CCommandArcLine arc){
 
         double R = arc.radius();
+        double length = arc.length();
         double alfaStart = arc.getStartRadialAngle();
         double alfaEnd = arc.getEndRadialAngle();
 
@@ -101,7 +103,7 @@ public class VelocityPlan {
             // normalize to current arc
             double alfa = arc.angle();
             for (int i=0; i<nx; i++)
-                x_step_plan[i] = (x_step_plan[i] - alfaStart)/alfa;
+                x_step_plan[i] = length*(x_step_plan[i] - alfaStart)/alfa;
             min_y_step = Math.min(2*x_step_plan[0],2*(1.0-x_step_plan[nx-1]));
         };
 
@@ -127,7 +129,7 @@ public class VelocityPlan {
             // normalize to current arc
             double alfa = arc.angle();
             for (int i=0; i<ny; i++)
-                y_step_plan[i] = (y_step_plan[i] - alfaStart)/alfa;
+                y_step_plan[i] = length*(y_step_plan[i] - alfaStart)/alfa;
             min_y_step = Math.min(2.0*y_step_plan[0],2.0*(1.0-y_step_plan[ny-1]));
         };
 
