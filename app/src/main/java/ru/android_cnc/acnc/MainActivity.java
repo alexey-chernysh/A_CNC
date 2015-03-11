@@ -52,7 +52,7 @@ public class MainActivity
     private String gcodeSource;
 
     public MainActivity() {
-        fileName = "part_with_arc1.cnc";
+        fileName = "plast.cnc";
     }
 
     @Override

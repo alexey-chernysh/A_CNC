@@ -16,6 +16,7 @@ import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 import static android.os.SystemClock.sleep;
+import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -128,7 +129,9 @@ public class CCommandArcLine extends CCommandMotion {
 	public double angle(){
 		double alfa1 = getStartRadialAngle();
 		double alfa2 = getEndRadialAngle();
-		return normalizeInRadian(alfa2 - alfa1);
+        double result = normalizeInRadian(alfa2 - alfa1);
+		if(result == 0.0) return 2.0 * Math.PI;
+        else return result;
 	}
 	
 	@Override
@@ -168,18 +171,11 @@ public class CCommandArcLine extends CCommandMotion {
 						   this.getVelocityPlan(),
 						   this.getOffsetMode());
 	}
-
-    @Override
-    public void execute() {
-        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refesh 10 times in sec
-        double l = length();
-        double p;
-        while((p=getMotionPhase())<l){
-            setMotionPhase(Math.min(p+=dl,l));
-            sleep(100);
+    /*
+        @Override
+        public void execute() {
         }
-    }
-
+    */
     @Override
     public void draw(Canvas canvas) {
         float p = (float)(getMotionPhase()/length());
@@ -202,8 +198,13 @@ public class CCommandArcLine extends CCommandMotion {
         if(p >= 1.0)
             canvas.drawArc(rect, A, B-A, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
         else {
-            canvas.drawArc(rect, A, AB-A, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
-            canvas.drawArc(rect, AB, B-AB, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+            if(getArcDirection() != ArcDirection.CLOCKWISE) {
+                canvas.drawArc(rect, A, AB-A, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
+                canvas.drawArc(rect, AB, B-AB, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+            } else  {
+                canvas.drawArc(rect, A, AB-A, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
+                canvas.drawArc(rect, AB, B-AB, false, DrawableAttributes.getPaintAfter(this.getOffsetMode()));
+            };
         }
     }
 

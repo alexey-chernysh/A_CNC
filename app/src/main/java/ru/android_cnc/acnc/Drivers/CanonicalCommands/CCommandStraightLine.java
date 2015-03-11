@@ -90,18 +90,11 @@ public class CCommandStraightLine extends CCommandMotion {
 		getVelocityPlan().setStartVel(startVel);
         getVelocityPlan().setEndVel(endVel);
 	}
-
+/*
     @Override
     public void execute() {
-        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refesh 10 times in sec
-        double l = length();
-        double p;
-        while((p=getMotionPhase())<l){
-            setMotionPhase(Math.min(p+=dl,l));
-            sleep(100);
-        }
     }
-
+*/
     @Override
     public void draw(Canvas canvas){
         double p = getMotionPhase();
