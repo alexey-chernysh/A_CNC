@@ -9,18 +9,26 @@ import android.util.Log;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
 
-import static java.lang.Math.log1p;
 import static java.lang.Math.sqrt;
 
 public class CNCPoint {
-	
-	private double x_;
-	private double y_;
-	
-	public CNCPoint(double x, double y){ this.x_ = x; this.y_ = y;	}
+
+    // 3D position
+    // at 3 axis
+	private double x_ = 0.0;
+	private double y_ = 0.0;
+    private double z_ = 0.0;
+    // at 3 rotations
+    private double a_ = 0.0;
+    private double b_ = 0.0;
+    private double c_ = 0.0;
+
+    public CNCPoint(){}
+	public CNCPoint(double x, double y){ this.x_ = x; this.y_ = y; }
+    public CNCPoint(double x, double y, double z){ this.x_ = x; this.y_ = y; this.z_ = z; }
+    public CNCPoint(double x, double y, double z, double a, double b, double c){ this.x_ = x; this.y_ = y; this.z_ = z; this.a_ = a; this.b_ = b; this.c_ = c;}
 
 	public double getX() { return x_; }
-
 	public CNCPoint setX(double x) {
         this.x_ = x;
         return this;
@@ -29,28 +37,66 @@ public class CNCPoint {
 	public double getY() {
         return y_;
     }
-
 	public CNCPoint setY(double y) {
         this.y_ = y;
         return this;
     }
-	
-	public void shift(double dX, double dY){
+
+    public double getZ() {
+        return z_;
+    }
+    public CNCPoint setZ(double z) {
+        this.z_ = z;
+        return this;
+    }
+
+    public double getA() {
+        return a_;
+    }
+    public CNCPoint setA(double a) {
+        this.a_ = a;
+        return this;
+    }
+
+    public double getB() {
+        return b_;
+    }
+    public CNCPoint setB(double b) {
+        this.b_ = b;
+        return this;
+    }
+
+    public double getC() {
+        return c_;
+    }
+    public CNCPoint setC(double c) {
+        this.c_ = c;
+        return this;
+    }
+
+    public void shift(double dX, double dY){
         this.x_ += dX;
         this.y_ += dY;
     }
-	
-	public CNCPoint clone(){ return new CNCPoint(this.x_, this.y_); }
+    public void shift(double dX, double dY, double dZ){
+        this.x_ += dX;
+        this.y_ += dY;
+        this.z_ += dZ;
+    }
+
+    @Override
+    public CNCPoint clone(){ return new CNCPoint(this.x_, this.y_, this.z_, this.a_, this.b_, this.c_); }
 
 	public static double distance(CNCPoint p1, CNCPoint p2) {
 		double dx = p1.getX() - p2.getX();
 		double dy = p1.getY() - p2.getY();
-		return sqrt(dx * dx + dy * dy);
+        double dz = p1.getZ() - p2.getZ();
+		return sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
     @Override
     public String toString(){
-        return " X = " + x_ + "; Y = " + y_ + ";";
+        return " X = " + x_ + "; Y = " + y_ + "; Z = " + z_ + ";";
     }
 
     public static CNCPoint getCrossLineNLine(CCommandStraightLine line1, CCommandStraightLine line2) {

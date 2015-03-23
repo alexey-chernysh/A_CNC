@@ -83,7 +83,7 @@ public abstract class CCommandMotion extends CanonCommand {
 
     @Override
     public void execute() {
-        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refesh 10 times in sec
+        double dl = 30.0/10.0; // 30.0 mm/sec ~= 2000 mm/min, refresh 10 times in sec
         double l = length();
         double p;
         while((p=getMotionPhase()) < l){
