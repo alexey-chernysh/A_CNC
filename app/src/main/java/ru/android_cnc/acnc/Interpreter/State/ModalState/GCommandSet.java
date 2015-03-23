@@ -451,7 +451,7 @@ public enum GCommandSet {
 				int P = words.getInt(TokenParameter.P);
 				InterpreterState.vars_.setCurrentWorkOffsetNum(P);
 			} 
-			else InterpreterState.vars_.setCurrentWorkOffsetNum(1);
+			else InterpreterState.vars_.setCurrentWorkOffsetNum(6);
 		}
 	}, 
 	G61(61.0, GCommandModalGroupSet.G_GROUP13_PATH_CONTROL_MODE), // Exact stop mode
@@ -508,15 +508,22 @@ public enum GCommandSet {
 	G92(92.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){// Offset coordinates and set parameters
 		@Override
 		public void evalute(ParamExpressionList words) throws InterpreterException{
-			InterpreterState.setHomePoint(words.get(TokenParameter.X), 
-										  words.get(TokenParameter.Y));
-		};
+            if(words.hasXYZ()||words.hasABC())
+    			InterpreterState.setHomePoint(words.get(TokenParameter.X),
+	    									  words.get(TokenParameter.Y),
+                                              words.get(TokenParameter.Z),
+                                              words.get(TokenParameter.A),
+                                              words.get(TokenParameter.B),
+                                              words.get(TokenParameter.C));
+            else throw new InterpreterException("G92 without arguments");
+
+        };
 	}, 
 	G92_1(92.1, GCommandModalGroupSet.G_GROUP0_NON_MODAL), // Cancel G92 etc.
 	G92_2(92.2, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // G92 X0 Y0
 		@Override
 		public void evalute(ParamExpressionList words) throws InterpreterException{
-			InterpreterState.setHomePoint(0.0, 0.0);
+			InterpreterState.setHomePoint(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		};
 	}, 
 	G92_3(92.3, GCommandModalGroupSet.G_GROUP0_NON_MODAL), //

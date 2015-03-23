@@ -61,11 +61,13 @@ public class InterpreterState {
 		return InterpreterState.homePosition.getY();
 	}
 	
-	public static void setHomePoint(double X, double Y) {
+	public static void setHomePoint(double X, double Y, double Z, double A, double B, double C) {
 		InterpreterState.homePosition.setX(InterpreterState.homePosition.getX() + X);
 		InterpreterState.lastPosition.setX(InterpreterState.lastPosition.getX() - X);
 		InterpreterState.homePosition.setY(InterpreterState.homePosition.getY() + Y);
 		InterpreterState.lastPosition.setY(InterpreterState.lastPosition.getY() - Y);
+        InterpreterState.homePosition.setZ(InterpreterState.homePosition.getZ() + Z);
+        InterpreterState.lastPosition.setZ(InterpreterState.lastPosition.getZ() - Z);
 	}
 
 	public static CNCPoint getLastPosition() {

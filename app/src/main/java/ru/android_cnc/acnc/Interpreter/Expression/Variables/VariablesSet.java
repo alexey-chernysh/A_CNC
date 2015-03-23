@@ -14,15 +14,16 @@ public class VariablesSet {
 	private static final int G30HomePos_ = 5180;
 	private static final int ScalePos_ = 5190;
 	private static final int G92OffsetPos_ = 5210;
-	private static final int workOffsetsPos_ = 5220;
+	private static final int currentWorkOffsetsNumPos_ = 5220;
 	private static final int shift_ = 20;
 	private VarArray va = new VarArray();
-	public static final int maxToolNumber = 254;
+	public static final int maxToolNumber = 255;
 	
 	public VariablesSet() throws InterpreterException {
-        setCurrentScaleX(1.0);
-        setCurrentScaleY(1.0);
-        setCurrentScaleZ(1.0);
+        setScale(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+        set(currentWorkOffsetsNumPos_, 1.0);
+        for(int i=1; i<=maxToolNumber;i++)
+            setWorkingToolOffset(i, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}
 	
 	public double get(int num) throws InterpreterException{
@@ -32,14 +33,18 @@ public class VariablesSet {
 	public void set(int num, double value) throws InterpreterException{
 		this.va.set(num, value);
 	}
-	
+
+    private static final int offset_base = 0;
 	private static final int offset_X = 1;
 	private static final int offset_Y = 2;
 	private static final int offset_Z = 3;
 	private static final int offset_A = 4;
 	private static final int offset_B = 5;
 	private static final int offset_C = 6;
-	
+
+    private void setBase(int base, double value) throws InterpreterException{
+        this.va.set(base + offset_base, value);
+    }
 	private void setX(int base, double value) throws InterpreterException{
 		this.va.set(base + offset_X, value);
 	}
@@ -58,7 +63,10 @@ public class VariablesSet {
 	private void setC(int base, double value) throws InterpreterException{
 		this.va.set(base + offset_C, value);
 	}
-	
+
+    private double getBase(int base) throws InterpreterException{
+        return this.va.get(base + offset_base);
+    }
 	private double getX(int base) throws InterpreterException{
 		return this.va.get(base + offset_X);
 	}
@@ -79,7 +87,7 @@ public class VariablesSet {
 	}
 
 	public void setToolFixtureOffset(int L, TokenParameter tp, double value) throws InterpreterException{
-		int varPosition = workOffsetsPos_ + (L-1)*shift_;
+		int varPosition = currentWorkOffsetsNumPos_ + (L-1)*shift_;
 		switch(tp){
 		case X:
 			this.setX(varPosition, value);
@@ -103,10 +111,11 @@ public class VariablesSet {
 			throw new InterpreterException("Illegal alfa word (" + tp.toString() + ") in G10");
 		}
 	}
-	
+
+    // G10 implementation
 	public void setWorkingToolOffset(int P, double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
 		if((P>0)&(P<=VariablesSet.maxToolNumber)){
-			int varPosition = workOffsetsPos_ + (P-1)*shift_;
+			int varPosition = currentWorkOffsetsNumPos_ + (P-1)*shift_;
 			this.setX(varPosition, X);
 			this.setY(varPosition, Y);
 			this.setZ(varPosition, Z);
@@ -135,7 +144,7 @@ public class VariablesSet {
 	public double getCurrentScaleZ() throws InterpreterException{
 		return this.getZ(ScalePos_);
 	}
-    public void setCurrentScaleX(double s) throws InterpreterException { this.setX(ScalePos_,s);}
+    public void setCurrentScaleX(double s) throws InterpreterException { this.setX(ScalePos_, s);}
     public void setCurrentScaleY(double s) throws InterpreterException { this.setY(ScalePos_, s);}
     public void setCurrentScaleZ(double s) throws InterpreterException { this.setZ(ScalePos_, s);}
 
@@ -146,26 +155,39 @@ public class VariablesSet {
 		return ((sx==sy)&&(sy==sz)&&(sx==sz));
 	}
 	
-	public void setG92Offset(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
-		int varPosition = G92OffsetPos_;
-		this.setX(varPosition, X);
-		this.setY(varPosition, Y);
-		this.setZ(varPosition, Z);
-		this.setA(varPosition, A);
-		this.setB(varPosition, B);
-		this.setC(varPosition, C);
-}
+	public void setCoordinateOffset(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+		this.setX(G92OffsetPos_, X);
+		this.setY(G92OffsetPos_, Y);
+		this.setZ(G92OffsetPos_, Z);
+		this.setA(G92OffsetPos_, A);
+		this.setB(G92OffsetPos_, B);
+		this.setC(G92OffsetPos_, C);
+        this.setBase(G92OffsetPos_, 1.0);
+    }
 
-	public void setCurrentWorkOffsetNum(int P) throws InterpreterException{
-		this.va.set(VariablesSet.workOffsetsPos_, P);
+    public CNCPoint getCoordinateOffset() throws InterpreterException{
+        CNCPoint result = new CNCPoint();
+        if(this.getBase(G92OffsetPos_)>0.0){
+            result.setX(this.getX(G92OffsetPos_));
+            result.setY(this.getY(G92OffsetPos_));
+            result.setZ(this.getZ(G92OffsetPos_));
+            result.setA(this.getA(G92OffsetPos_));
+            result.setB(this.getB(G92OffsetPos_));
+            result.setC(this.getC(G92OffsetPos_));
+        }
+        return result;
+    }
+
+    public void setCurrentWorkOffsetNum(int P) throws InterpreterException{
+		this.va.set(VariablesSet.currentWorkOffsetsNumPos_, P);
 	}
 	
 	private int getCurrentWorkOffsetNum() throws InterpreterException{
-		return (int)this.va.get(VariablesSet.workOffsetsPos_);
+		return (int)this.va.get(VariablesSet.currentWorkOffsetsNumPos_);
 	}
 	
 	public double getOffsetX(int i) throws InterpreterException{
-		if(i>0)	return this.getX(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getX(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
@@ -175,7 +197,7 @@ public class VariablesSet {
 	}
 	
 	public double getOffsetY(int i) throws InterpreterException{
-		if(i>0)	return this.getY(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getY(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
@@ -185,7 +207,7 @@ public class VariablesSet {
 	}
 	
 	public double getOffsetZ(int i) throws InterpreterException{
-		if(i>0)	return this.getZ(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getZ(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
@@ -195,7 +217,7 @@ public class VariablesSet {
 	}
 	
 	public double getOffsetA(int i) throws InterpreterException{
-		if(i>0)	return this.getA(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getA(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
@@ -205,7 +227,7 @@ public class VariablesSet {
 	}
 	
 	public double getOffsetB(int i) throws InterpreterException{
-		if(i>0)	return this.getB(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getB(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
@@ -215,7 +237,7 @@ public class VariablesSet {
 	}
 	
 	public double getOffsetC(int i) throws InterpreterException{
-		if(i>0)	return this.getC(workOffsetsPos_ + (i - 1)*shift_);
+		if(i>0)	return this.getC(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	

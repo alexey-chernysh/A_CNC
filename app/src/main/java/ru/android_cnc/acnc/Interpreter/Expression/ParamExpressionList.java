@@ -60,6 +60,10 @@ public class ParamExpressionList {
 		return (has(TokenParameter.X)||has(TokenParameter.Y)||has(TokenParameter.Z));
 	}
 
+    public boolean hasABC() {
+        return (has(TokenParameter.A)||has(TokenParameter.B)||has(TokenParameter.C));
+    }
+
 	public double get(TokenParameter word) throws InterpreterException {
 		int i = word.ordinal();
 		if(expressionList[i] != null) return expressionList[i].evalute();
