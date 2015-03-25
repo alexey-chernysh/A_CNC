@@ -16,7 +16,7 @@ public class VariablesSet {
 	private static final int G92OffsetPos_ = 5210;
 	private static final int currentWorkOffsetsNumPos_ = 5220;
 	private static final int shift_ = 20;
-	private VarArray va = new VarArray();
+	private static VarArray va = new VarArray();
 	public static final int maxToolNumber = 255;
 	
 	public VariablesSet() throws InterpreterException {
@@ -41,50 +41,57 @@ public class VariablesSet {
 	private static final int offset_A = 4;
 	private static final int offset_B = 5;
 	private static final int offset_C = 6;
+    private static final int offset_D = 7;
 
-    private void setBase(int base, double value) throws InterpreterException{
-        this.va.set(base + offset_base, value);
+    private static void setBase(int base, double value) throws InterpreterException{
+        va.set(base + offset_base, value);
     }
-	private void setX(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_X, value);
+	private static void setX(int base, double value) throws InterpreterException{
+		va.set(base + offset_X, value);
 	}
-	private void setY(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_Y, value);
+	private static void setY(int base, double value) throws InterpreterException{
+		va.set(base + offset_Y, value);
 	}
-	private void setZ(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_Z, value);
+	private static void setZ(int base, double value) throws InterpreterException{
+		va.set(base + offset_Z, value);
 	}
-	private void setA(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_A, value);
+	private static void setA(int base, double value) throws InterpreterException{
+		va.set(base + offset_A, value);
 	}
-	private void setB(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_B, value);
+	private static void setB(int base, double value) throws InterpreterException{
+		va.set(base + offset_B, value);
 	} 
-	private void setC(int base, double value) throws InterpreterException{
-		this.va.set(base + offset_C, value);
+	private static void setC(int base, double value) throws InterpreterException{
+		va.set(base + offset_C, value);
 	}
-
-    private double getBase(int base) throws InterpreterException{
-        return this.va.get(base + offset_base);
+    private static void setD(int base, double value) throws InterpreterException{
+        va.set(base + offset_D, value);
     }
-	private double getX(int base) throws InterpreterException{
-		return this.va.get(base + offset_X);
+
+    private static double getBase(int base) throws InterpreterException{
+        return va.get(base + offset_base);
+    }
+	private static double getX(int base) throws InterpreterException{
+		return va.get(base + offset_X);
 	}
-	private double getY(int base) throws InterpreterException{
-		return this.va.get(base + offset_Y);
+	private static double getY(int base) throws InterpreterException{
+		return va.get(base + offset_Y);
 	}
-	private double getZ(int base) throws InterpreterException{
-		return this.va.get(base + offset_Z);
+	private static double getZ(int base) throws InterpreterException{
+		return va.get(base + offset_Z);
 	}
-	private double getA(int base) throws InterpreterException{
-		return this.va.get(base + offset_A);
+	private static double getA(int base) throws InterpreterException{
+		return va.get(base + offset_A);
 	}
-	private double getB(int base) throws InterpreterException{
-		return this.va.get(base + offset_B);
+	private static double getB(int base) throws InterpreterException{
+		return va.get(base + offset_B);
 	}
-	private double getC(int base) throws InterpreterException{
-		return this.va.get(base + offset_C);
+	private static double getC(int base) throws InterpreterException{
+		return va.get(base + offset_C);
 	}
+    private static double getD(int base) throws InterpreterException{
+        return va.get(base + offset_D);
+    }
 
 	public void setToolFixtureOffset(int L, TokenParameter tp, double value) throws InterpreterException{
 		int varPosition = currentWorkOffsetsNumPos_ + (L-1)*shift_;
@@ -135,23 +142,29 @@ public class VariablesSet {
 			this.setC(varPosition, C);
 	}
 	
-	public double getCurrentScaleX() throws InterpreterException{
-		return this.getX(ScalePos_);
+	public static double getScaleX() throws InterpreterException{
+		return getX(ScalePos_);
 	}
-	public double getCurrentScaleY() throws InterpreterException{
-		return this.getY(ScalePos_);
+	public static double getScaleY() throws InterpreterException{
+		return getY(ScalePos_);
 	}
-	public double getCurrentScaleZ() throws InterpreterException{
-		return this.getZ(ScalePos_);
+	public static double getScaleZ() throws InterpreterException{
+		return getZ(ScalePos_);
 	}
-    public void setCurrentScaleX(double s) throws InterpreterException { this.setX(ScalePos_, s);}
-    public void setCurrentScaleY(double s) throws InterpreterException { this.setY(ScalePos_, s);}
-    public void setCurrentScaleZ(double s) throws InterpreterException { this.setZ(ScalePos_, s);}
+    public static double getScaleA() throws InterpreterException{
+        return getA(ScalePos_);
+    }
+    public static double getScaleB() throws InterpreterException{
+        return getB(ScalePos_);
+    }
+    public static double getScaleC() throws InterpreterException{
+        return getC(ScalePos_);
+    }
 
 	public boolean scalesAreEquals() throws InterpreterException{
-		double sx = getCurrentScaleX();
-		double sy = getCurrentScaleY();
-		double sz = getCurrentScaleZ();
+		double sx = getScaleX();
+		double sy = getScaleY();
+		double sz = getScaleZ();
 		return ((sx==sy)&&(sy==sz)&&(sx==sz));
 	}
 	

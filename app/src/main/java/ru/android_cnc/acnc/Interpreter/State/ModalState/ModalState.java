@@ -6,23 +6,27 @@ package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ModalState {
 	
-	private GCommandSet[] g_state_;
-	private MCommandSet[] m_state_;
+	private static GCommandSet[] g_state_;
+	private static MCommandSet[] m_state_;
+
+    static {
+        int i;
+        g_state_ = new GCommandSet[GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal()];
+        for(i=0; i< GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal(); i++)
+            g_state_[i] = GCommandSet.GDUMMY;
+        m_state_ = new MCommandSet[MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal()];
+        for(i=0; i< MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal(); i++)
+            m_state_[i] = MCommandSet.MDUMMY;
+    }
 		
 	public ModalState(){
-		int i;
-		g_state_ = new GCommandSet[GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal()];
-		for(i=0; i< GCommandModalGroupSet.G_GROUP0_NON_MODAL.ordinal(); i++)
-			g_state_[i] = GCommandSet.GDUMMY;
-		m_state_ = new MCommandSet[MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal()];
-		for(i=0; i< MCommandModalGroupSet.M_GROUP0_NON_MODAL.ordinal(); i++)
-			m_state_[i] = MCommandSet.MDUMMY;
 	};
 		
 	public void initToDefaultState() throws InterpreterException {
@@ -51,7 +55,7 @@ public class ModalState {
 		
 	};
 	
-	public void set(GCommandModalGroupSet group, GCommandSet command) throws InterpreterException{
+	public static void set(GCommandModalGroupSet group, GCommandSet command) throws InterpreterException{
 		if(group != GCommandModalGroupSet.G_GROUP0_NON_MODAL){
 			if(command.modalGroup == group){
 				g_state_[group.ordinal()] = command;
@@ -61,7 +65,7 @@ public class ModalState {
 		
 	}
 	
-	public GCommandSet getGModalState(GCommandModalGroupSet group){
+	public static GCommandSet getGModalState(GCommandModalGroupSet group){
 		return g_state_[group.ordinal()];
 	}
 	
@@ -88,42 +92,81 @@ public class ModalState {
 		}
 	}
 
-	public boolean isPolar() {
-		return (this.getGModalState(GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES) == GCommandSet.G15);
+	public static boolean isPolar() {
+		return (getGModalState(GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES) == GCommandSet.G15);
 	};
 
-	public boolean isAbsolute(){
+	public static boolean isAbsolute(){
 		// TODO G53 command needed
-		return (this.getGModalState(GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE) == GCommandSet.G90);
+		return (getGModalState(GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE) == GCommandSet.G90);
 	}
 
-	private boolean isArcCenterRelative() {
-		return (this.getGModalState(GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GCommandSet.G91_1);
+	private static boolean isArcCenterRelative() {
+		return (getGModalState(GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GCommandSet.G91_1);
 	}
 
 	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
-		CNCPoint resultCNCPoint = refCNCPoint.clone();
+		CNCPoint result = null;
+        if((!words.hasXYZ())&&(!words.hasXYZ())) return result;
+
+        if(InterpreterState.modalState.isAbsolute()) result = refCNCPoint.clone();
+        else result = new CNCPoint(); // new null point
+
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Polar coordinates mode not realized yet!");
             // TODO polar coordinates mode should be implemented
 		} else {
 			// TODO axis rotation needed
-			if(words.has(TokenParameter.X)){
-				double x_param = 0;
-				x_param = words.get(TokenParameter.X);
-				x_param = toMM(x_param);
-				if(!InterpreterState.modalState.isAbsolute()) x_param += refCNCPoint.getX();
-				resultCNCPoint.setX(x_param);
-			};
-			if(words.has(TokenParameter.Y)){
-				double y_param = 0;
-				y_param = words.get(TokenParameter.Y);
+
+            if(words.has(TokenParameter.X)){
+                double x_param = words.get(TokenParameter.X);
+                x_param = toMM(x_param);
+                x_param *= VariablesSet.getScaleX();
+                if(!InterpreterState.modalState.isAbsolute()) x_param += refCNCPoint.getX();
+                result.setX(x_param);
+            };
+
+            if(words.has(TokenParameter.Y)){
+				double y_param = words.get(TokenParameter.Y);
 				y_param = toMM(y_param);
+                y_param *= VariablesSet.getScaleX();
 				if(!InterpreterState.modalState.isAbsolute()) y_param += refCNCPoint.getY();
-				resultCNCPoint.setY(y_param);
+				result.setY(y_param);
 			};
+
+            if(words.has(TokenParameter.Z)){
+                double z_param = words.get(TokenParameter.Z);
+                z_param = toMM(z_param);
+                z_param *= VariablesSet.getScaleZ();
+                if(!InterpreterState.modalState.isAbsolute()) z_param += refCNCPoint.getZ();
+                result.setZ(z_param);
+            };
+
+            if(words.has(TokenParameter.A)){
+                double a_param = words.get(TokenParameter.A);
+                a_param = toMM(a_param);
+                a_param *= VariablesSet.getScaleA();
+                if(!InterpreterState.modalState.isAbsolute()) a_param += refCNCPoint.getA();
+                result.setZ(a_param);
+            };
+
+            if(words.has(TokenParameter.B)){
+                double b_param = words.get(TokenParameter.B);
+                b_param = toMM(b_param);
+                b_param *= VariablesSet.getScaleB();
+                if(!InterpreterState.modalState.isAbsolute()) b_param += refCNCPoint.getB();
+                result.setZ(b_param);
+            };
+
+            if(words.has(TokenParameter.C)){
+                double c_param = words.get(TokenParameter.C);
+                c_param = toMM(c_param);
+                c_param *= VariablesSet.getScaleC();
+                if(!InterpreterState.modalState.isAbsolute()) c_param += refCNCPoint.getC();
+                result.setZ(c_param);
+            };
 		}
-		return resultCNCPoint;
+		return result;
 	}
 
 	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
