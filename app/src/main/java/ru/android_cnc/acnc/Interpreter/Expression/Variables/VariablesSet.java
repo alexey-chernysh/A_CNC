@@ -18,20 +18,27 @@ public class VariablesSet {
 	private static final int shift_ = 20;
 	private static VarArray va = new VarArray();
 	public static final int maxToolNumber = 255;
+
+    static {
+        try {
+            setScale(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+            set(currentWorkOffsetsNumPos_, 1.0);
+            for(int i=1; i<=maxToolNumber;i++)
+                setWorkingToolOffset(i, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        } catch (InterpreterException e) {
+            e.printStackTrace();
+        }
+    };
 	
 	public VariablesSet() throws InterpreterException {
-        setScale(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
-        set(currentWorkOffsetsNumPos_, 1.0);
-        for(int i=1; i<=maxToolNumber;i++)
-            setWorkingToolOffset(i, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}
 	
-	public double get(int num) throws InterpreterException{
-		return this.va.get(num);
+	public static double get(int num) throws InterpreterException{
+		return va.get(num);
 	}
 	
-	public void set(int num, double value) throws InterpreterException{
-		this.va.set(num, value);
+	public static void set(int num, double value) throws InterpreterException{
+		va.set(num, value);
 	}
 
     private static final int offset_base = 0;
@@ -120,26 +127,26 @@ public class VariablesSet {
 	}
 
     // G10 implementation
-	public void setWorkingToolOffset(int P, double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+	public static void setWorkingToolOffset(int P, double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
 		if((P>0)&(P<=VariablesSet.maxToolNumber)){
 			int varPosition = currentWorkOffsetsNumPos_ + (P-1)*shift_;
-			this.setX(varPosition, X);
-			this.setY(varPosition, Y);
-			this.setZ(varPosition, Z);
-			this.setA(varPosition, A);
-			this.setB(varPosition, B);
-			this.setC(varPosition, C);
+			setX(varPosition, X);
+			setY(varPosition, Y);
+			setZ(varPosition, Z);
+			setA(varPosition, A);
+			setB(varPosition, B);
+			setC(varPosition, C);
 		}
 	}
 	
-	public void setScale(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+	public static void setScale(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
 			int varPosition = ScalePos_;
-			this.setX(varPosition, X);
-			this.setY(varPosition, Y);
-			this.setZ(varPosition, Z);
-			this.setA(varPosition, A);
-			this.setB(varPosition, B);
-			this.setC(varPosition, C);
+			setX(varPosition, X);
+			setY(varPosition, Y);
+			setZ(varPosition, Z);
+			setA(varPosition, A);
+			setB(varPosition, B);
+			setC(varPosition, C);
 	}
 	
 	public static double getScaleX() throws InterpreterException{
@@ -165,7 +172,9 @@ public class VariablesSet {
 		double sx = getScaleX();
 		double sy = getScaleY();
 		double sz = getScaleZ();
-		return ((sx==sy)&&(sy==sz)&&(sx==sz));
+		return (  (Math.abs(sx) == Math.abs(sy))
+                &&(Math.abs(sy) == Math.abs(sz))
+                &&(Math.abs(sx) == Math.abs(sz)));
 	}
 	
 	public void setCoordinateOffset(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
@@ -271,14 +280,42 @@ public class VariablesSet {
 			else return false;
 	}
 	
-	public CNCPoint getHomePointG28() throws InterpreterException {
-		CNCPoint homeCNCPoint =  new CNCPoint(this.getX(G28HomePos_), this.getY(G28HomePos_));
+	public static CNCPoint getHomePointG28() throws InterpreterException {
+		CNCPoint homeCNCPoint =  new CNCPoint(getX(G28HomePos_),
+                                              getY(G28HomePos_),
+                                              getZ(G28HomePos_),
+                                              getA(G28HomePos_),
+                                              getB(G28HomePos_),
+                                              getC(G28HomePos_));
 		return homeCNCPoint;
 	}
+
+    public static void setG28HomePos(CNCPoint pos) throws InterpreterException {
+        setX(G28HomePos_, pos.getX());
+        setY(G28HomePos_, pos.getY());
+        setZ(G28HomePos_, pos.getY());
+        setA(G28HomePos_, pos.getA());
+        setB(G28HomePos_, pos.getB());
+        setC(G28HomePos_, pos.getC());
+    }
 	
-	public CNCPoint getHomePointG30() throws InterpreterException {
-		CNCPoint homeCNCPoint =  new CNCPoint(this.getX(G30HomePos_), this.getY(G30HomePos_));
+	public static CNCPoint getHomePointG30() throws InterpreterException {
+		CNCPoint homeCNCPoint =  new CNCPoint(getX(G30HomePos_),
+                                              getY(G30HomePos_),
+                                              getZ(G30HomePos_),
+                                              getA(G30HomePos_),
+                                              getB(G30HomePos_),
+                                              getC(G30HomePos_));
 		return homeCNCPoint;
 	}
-	
+
+    public static void setG30HomePos(CNCPoint pos) throws InterpreterException {
+        setX(G30HomePos_, pos.getX());
+        setY(G30HomePos_, pos.getY());
+        setZ(G30HomePos_, pos.getY());
+        setA(G30HomePos_, pos.getA());
+        setB(G30HomePos_, pos.getB());
+        setC(G30HomePos_, pos.getC());
+    }
+
 }

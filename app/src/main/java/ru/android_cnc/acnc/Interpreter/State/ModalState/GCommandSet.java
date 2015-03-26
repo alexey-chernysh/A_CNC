@@ -311,7 +311,13 @@ public enum GCommandSet {
 			InterpreterState.setLastPosition(homeCNCPoint);
 		}
 	}, 
-	G28_1(28.1, GCommandModalGroupSet.G_GROUP0_NON_MODAL), // Reference axes
+	G28_1(28.1, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // Reference axes
+        @Override
+        public void evalute(ParamExpressionList words) throws InterpreterException{
+            CNCPoint position = words.getPoint();
+            InterpreterState.vars_.setG28HomePos(position);
+        };
+    },
 	G30(30.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // Return home
 		@Override
 		public void evalute(ParamExpressionList words) throws InterpreterException {
@@ -337,7 +343,14 @@ public enum GCommandSet {
 			ProgramLoader.command_sequence.add(motion2);
 			InterpreterState.setLastPosition(homeCNCPoint);
 		}
-	}, 
+	},
+    G30_1(30.1, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // Reference axes
+        @Override
+        public void evalute(ParamExpressionList words) throws InterpreterException{
+            CNCPoint position = words.getPoint();
+            InterpreterState.vars_.setG30HomePos(position);
+        };
+    },
 	G31(31.0, GCommandModalGroupSet.G_GROUP1_MOTION), // Straight probe
 	G40(40.0, GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION){ // Cancel cutter radius compensation
 		@Override
@@ -406,7 +419,12 @@ public enum GCommandSet {
 			InterpreterState.vars_.setScale(X, Y, Z, A, B, C);
 		}
 	}, 
-	G52(52.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL), // Temporary coordinate system offsets
+	G52(52.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){// Temporary coordinate system offsets
+        @Override
+        public void evalute(ParamExpressionList words) throws InterpreterException {
+            G92.evalute(words);
+        }
+    },
 	G53(53.0, GCommandModalGroupSet.G_GROUP0_G53_MODIFIER), // Move in absolute machine coordinate system
 	G54(54.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 1
 		@Override
