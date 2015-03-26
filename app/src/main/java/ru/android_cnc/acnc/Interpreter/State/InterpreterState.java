@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
+import ru.android_cnc.acnc.Geometry.Rotation;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
@@ -28,7 +29,8 @@ public class InterpreterState {
 	private static double currentFeedRate_ = 0.0; // max velocity mm in sec
 
 	public static ModalState modalState;
-	
+
+    public static Rotation rotation = Rotation.getInstance();
 	public static ToolSet toolSet;
 	public static Spindle spindle;
 	public static FeedRate feedRate;
@@ -43,7 +45,7 @@ public class InterpreterState {
 		offsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 1.5);
 		zeroOffsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 0.0);
 		modalState.initToDefaultState();
-	};
+	}
 
 	public static double getCurrentFeedRate() {
 		return InterpreterState.currentFeedRate_;
