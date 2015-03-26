@@ -474,8 +474,23 @@ public enum GCommandSet {
 	}, 
 	G61(61.0, GCommandModalGroupSet.G_GROUP13_PATH_CONTROL_MODE), // Exact stop mode
 	G64(64.0, GCommandModalGroupSet.G_GROUP13_PATH_CONTROL_MODE), // Constant Velocity mode
-	G68(68.0, GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION), // Rotate program coordinate system
-	G69(69.0, GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION), // Cancel program coordinate system rotation
+	G68(68.0, GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION){ // Rotate program coordinate system
+        public void evalute(ParamExpressionList words) throws InterpreterException {
+            double A = 0.0;
+            double B = 0.0;
+            double R = 0.0;
+            if(words.has(TokenParameter.A)) A = words.get(TokenParameter.A);
+            if(words.has(TokenParameter.B)) B = words.get(TokenParameter.B);
+            if(words.has(TokenParameter.R)) R = words.get(TokenParameter.R);
+            if(words.has(TokenParameter.I)) InterpreterState.rotation.add(A, B, R);
+            else InterpreterState.rotation.replace(A, B, R);
+        }
+    },
+	G69(69.0, GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION){ // Cancel program coordinate system rotation
+        public void evalute(ParamExpressionList words) throws InterpreterException {
+            InterpreterState.rotation.cancel();
+        }
+    },
 	G70(70.0, GCommandModalGroupSet.G_GROUP6_UNITS){ // Inch unit
 		@Override
 		public void evalute(ParamExpressionList words) throws InterpreterException {

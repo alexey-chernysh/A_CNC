@@ -268,9 +268,8 @@ public class VariablesSet {
 		return getOffsetC(i);
 	}
 	
-	public double getRadius(int toolNum){
-		// TODO real code needed
-		return 0.0;
+	public double getRadius(int toolNum) throws InterpreterException {
+		return getD(toolNum)/2.0;
 	}
 	
 	public boolean IsConstant(int num) throws InterpreterException{
@@ -289,7 +288,6 @@ public class VariablesSet {
                                               getC(G28HomePos_));
 		return homeCNCPoint;
 	}
-
     public static void setG28HomePos(CNCPoint pos) throws InterpreterException {
         setX(G28HomePos_, pos.getX());
         setY(G28HomePos_, pos.getY());
@@ -298,7 +296,6 @@ public class VariablesSet {
         setB(G28HomePos_, pos.getB());
         setC(G28HomePos_, pos.getC());
     }
-	
 	public static CNCPoint getHomePointG30() throws InterpreterException {
 		CNCPoint homeCNCPoint =  new CNCPoint(getX(G30HomePos_),
                                               getY(G30HomePos_),
@@ -308,7 +305,6 @@ public class VariablesSet {
                                               getC(G30HomePos_));
 		return homeCNCPoint;
 	}
-
     public static void setG30HomePos(CNCPoint pos) throws InterpreterException {
         setX(G30HomePos_, pos.getX());
         setY(G30HomePos_, pos.getY());
