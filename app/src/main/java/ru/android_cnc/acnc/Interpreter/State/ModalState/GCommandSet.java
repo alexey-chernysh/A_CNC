@@ -482,13 +482,13 @@ public enum GCommandSet {
             if(words.has(TokenParameter.A)) A = words.get(TokenParameter.A);
             if(words.has(TokenParameter.B)) B = words.get(TokenParameter.B);
             if(words.has(TokenParameter.R)) R = words.get(TokenParameter.R);
-            if(words.has(TokenParameter.I)) InterpreterState.rotation.add(A, B, R);
-            else InterpreterState.rotation.replace(A, B, R);
+            if(words.has(TokenParameter.I)) InterpreterState.coordinateRotation.add(A, B, R);
+            else InterpreterState.coordinateRotation.replace(A, B, R);
         }
     },
 	G69(69.0, GCommandModalGroupSet.G_GROUP16_COORDINATE_ROTATION){ // Cancel program coordinate system rotation
         public void evalute(ParamExpressionList words) throws InterpreterException {
-            InterpreterState.rotation.cancel();
+            InterpreterState.coordinateRotation.cancel();
         }
     },
 	G70(70.0, GCommandModalGroupSet.G_GROUP6_UNITS){ // Inch unit

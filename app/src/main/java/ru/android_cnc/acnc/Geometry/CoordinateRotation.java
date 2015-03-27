@@ -6,36 +6,36 @@ import java.util.Stack;
  * Created by Sales on 26.03.2015.
  */
 
-public class Rotation {
+public class CoordinateRotation {
 
-    private static Rotation ourInstance = new Rotation();
-    private Stack<CoordinateRotation> stack_;
+    private static CoordinateRotation ourInstance = new CoordinateRotation();
+    private static Stack<Rotation> stack_;
 
-    public static Rotation getInstance() {
+    public static CoordinateRotation getInstance() {
         return ourInstance;
     }
 
-    private Rotation() {
-        stack_ = new Stack<CoordinateRotation>();
-        CoordinateRotation nullRotation = new CoordinateRotation(0.0, 0.0, 0.0);
+    private CoordinateRotation() {
+        stack_ = new Stack<Rotation>();
+        Rotation nullRotation = new Rotation(0.0, 0.0, 0.0);
         stack_.push(nullRotation);
     }
 
     public void add(double x, double y, double a){
-        CoordinateRotation newRotation = new CoordinateRotation(x,y,a);
+        Rotation newRotation = new Rotation(x,y,a);
         stack_.push(newRotation);
     }
 
     public void replace(double x, double y, double a){
         stack_.pop();
-        CoordinateRotation newRotation = new CoordinateRotation(x,y,a);
+        Rotation newRotation = new Rotation(x,y,a);
         stack_.push(newRotation);
     }
 
     public void cancel(){
         stack_.pop();
         if(stack_.empty()){
-            CoordinateRotation newRotation = new CoordinateRotation(0.0, 0.0, 0.0);
+            Rotation newRotation = new Rotation(0.0, 0.0, 0.0);
             stack_.push(newRotation);
         }
     }
@@ -48,14 +48,14 @@ public class Rotation {
         return result;
     }
 
-    private class CoordinateRotation {
+    private class Rotation {
         // reference point coordinates
         double refX_ = 0.0;
         double refY_ = 0.0;
         // rotation angle in degrees
         double angle_ = 0.0;
 
-        public CoordinateRotation(double refX, double refY, double angle){
+        public Rotation(double refX, double refY, double angle){
             this.refX_ = refX;
             this.refY_ = refY;
             this.angle_ = angle;

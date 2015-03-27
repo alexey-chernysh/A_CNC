@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
-import ru.android_cnc.acnc.Geometry.Rotation;
+import ru.android_cnc.acnc.Geometry.CoordinateRotation;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
@@ -30,7 +30,7 @@ public class InterpreterState {
 
 	public static ModalState modalState;
 
-    public static Rotation rotation = Rotation.getInstance();
+    public static CoordinateRotation coordinateRotation = CoordinateRotation.getInstance();
 	public static ToolSet toolSet;
 	public static Spindle spindle;
 	public static FeedRate feedRate;

@@ -11,16 +11,16 @@ public class Spindle extends OverrideSwitch {
 	private double max_ = 2000; 
 	private double default_ = 2000; 
 	private double current_ = default_; 
-	private SpindleRotation state =  SpindleRotation.OFF;
+	private State state_ =  State.OFF;
+    private Direction direction_ = Direction.CLOCKWISE;
 	
 	public Spindle(){
 		//TODO save & restore
 	}
 	
-	public double getDefaulte() {
+	public double getDefault() {
 		return default_;
 	}
-
 	public void setDefault(double defaultSpindleRate) {
 		if( defaultSpindleRate <= this.max_ ){
 			this.default_ = defaultSpindleRate;
@@ -32,7 +32,6 @@ public class Spindle extends OverrideSwitch {
 	public double getMax() {
 		return max_;
 	}
-
 	public void setMax(double maxSpindleRate) {
 		this.max_ = maxSpindleRate;
 		if( this.default_ > this.max_ ) 
@@ -43,7 +42,6 @@ public class Spindle extends OverrideSwitch {
 		if(this.OverrideEnabled()&&this.isOverride()) return this.default_;
 		else return current_;
 	}
-
 	public void setSpeed(double newCurrentSpindleRate) {
 		if( newCurrentSpindleRate <= this.max_ ){
 			this.current_ = newCurrentSpindleRate;
@@ -52,18 +50,20 @@ public class Spindle extends OverrideSwitch {
 		}
 	}
 
-	public  SpindleRotation getState() {
-		return this.state;
+	public State getState() {
+		return this.state_;
 	}
+	public void setState(State newState) { this.state_ = newState; }
 
-	public void setState(SpindleRotation newState) {
-		this.state = newState;
-	}
+    public Direction getDirection(){return this.direction_;}
+    public void setDirection(Direction d){this.direction_ = d;}
 
-	public enum SpindleRotation {
-		UNDEFINED,
+	public enum State {
 		OFF,
-		CLOCKWISE, 
-		COUNTERCLOCKWISE
+        ON
 	}
+    public enum Direction {
+        CLOCKWISE,
+        COUNTERCLOCKWISE
+    }
 }
