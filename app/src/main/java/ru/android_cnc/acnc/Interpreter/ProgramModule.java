@@ -10,15 +10,21 @@ public class ProgramModule {
 	
 	private int startLine_ = -1;
 	private int endLine_ = -1;
-	public final int num;
+    public final String moduleName; // program/subroutine number/name (o code)
 	private ArrayList<LineLoader> programBody_;
 	
 	public ProgramModule(int n, ArrayList<LineLoader> lineArray){
-		this.num = n;
+        Integer num = n;
+		this.moduleName = num.toString();
 		programBody_ = lineArray;
 	}
-	
-	public void setStart(int sl){
+
+    public ProgramModule(String name, ArrayList<LineLoader> lineArray){
+        this.moduleName = name;
+        programBody_ = lineArray;
+    }
+
+    public void setStart(int sl){
 		this.startLine_ = sl;
 	}
 

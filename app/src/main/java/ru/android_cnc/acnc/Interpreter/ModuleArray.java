@@ -18,9 +18,9 @@ public class ModuleArray {
 		modules.add(nm);
 	}
 	
-	public ProgramModule getByNum(int n) throws InterpreterException{
+	public ProgramModule getByName(String name) throws InterpreterException{
 		for(int i=0; i<modules.size(); i++)
-			if(modules.get(i).num == n ) return modules.get(i);
+			if(modules.get(i).moduleName.equals(name)) return modules.get(i);
 		throw new InterpreterException("Request for unknown module!");
 	}
 
