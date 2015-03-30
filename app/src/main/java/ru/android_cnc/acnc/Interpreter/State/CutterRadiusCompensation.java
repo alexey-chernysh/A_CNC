@@ -4,6 +4,9 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
+import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
+import ru.android_cnc.acnc.Interpreter.InterpreterException;
+
 public class CutterRadiusCompensation {
 	
 	private double offset_ = 0.0;
@@ -18,15 +21,18 @@ public class CutterRadiusCompensation {
 		if(r < 0.0) offset_ = 0.0;
 		else offset_ = r;
 	}
-	
+    public void setRadiusByToolNum(int toolNum) throws InterpreterException {
+        double r  = VariablesSet.getToolDiameter(toolNum)/2.0;
+    }
+    public double getRadius(){
+        return Math.abs(offset_);
+    }
+
 	public void setMode(mode m){
 		mode_ = m;
 	}
 	public mode getMode(){
 		return mode_;
-	}
-	public double getRadius(){
-		return Math.abs(offset_);
 	}
 
     @Override

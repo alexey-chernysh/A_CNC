@@ -14,7 +14,8 @@ public class VariablesSet {
 	private static final int G30HomePos_ = 5180;
 	private static final int ScalePos_ = 5190;
 	private static final int G92OffsetPos_ = 5210;
-	private static final int currentWorkOffsetsNumPos_ = 5220;
+    private static final int toolOffsetBase_ = 5220;
+	private static final int currentWorkOffsetsNumPos_ = toolOffsetBase_;
 	private static final int shift_ = 20;
 	private static VarArray va = new VarArray();
 	public static final int maxToolNumber = 255;
@@ -268,10 +269,6 @@ public class VariablesSet {
 		return getOffsetC(i);
 	}
 	
-	public double getRadius(int toolNum) throws InterpreterException {
-		return getD(toolNum)/2.0;
-	}
-	
 	public boolean IsConstant(int num) throws InterpreterException{
 		if(num <= 0) throw new InterpreterException("Reference to non initialized variable");
 		else
@@ -314,4 +311,10 @@ public class VariablesSet {
         setC(G30HomePos_, pos.getC());
     }
 
+    public static double getToolDiameter(int toolNum) throws InterpreterException {
+        return getD(toolOffsetBase_ + toolNum*shift_);
+    }
+    public static double getToolHeight(int toolNum) throws InterpreterException {
+        return getZ(toolOffsetBase_ + toolNum*shift_);
+    }
 }

@@ -36,6 +36,7 @@ public class InterpreterState {
 	public static FeedRate feedRate;
 	public static CutterRadiusCompensation offsetMode;
 	public static CutterRadiusCompensation zeroOffsetMode;
+    public static ToolHeightCompensation toolHeightCompensation = ToolHeightCompensation.getInstance();
 
 	public InterpreterState() throws InterpreterException {
 		modalState = new ModalState();

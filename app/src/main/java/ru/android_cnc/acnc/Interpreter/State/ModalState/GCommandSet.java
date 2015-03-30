@@ -391,8 +391,24 @@ public enum GCommandSet {
 			if(offset > 0.0)InterpreterState.offsetMode.setRadius(offset);
 		};
 	}, 
-	G43(43.0, GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET), // Apply tool length offset (plus)
-	G49(49.0, GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET), // Cancel tool length offset
+	G43(43.0, GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET){ // Apply tool length offset (plus)
+        @Override
+        public void evalute(ParamExpressionList words) throws InterpreterException {
+            if(words.has(TokenParameter.H)){
+                int h = (int)words.get(TokenParameter.H);
+                if((h>0)&&(h<=255)){
+                    InterpreterState.toolHeightCompensation.setHeight(h);
+                    InterpreterState.toolHeightCompensation.setOn();
+                } else new InterpreterException("H parameter should be in range 1...255 for G43");
+            } else new InterpreterException("H parameter needed for G43");
+        }
+    },
+	G49(49.0, GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET){ // Cancel tool length offset
+        @Override
+        public void evalute(ParamExpressionList words) throws InterpreterException {
+            InterpreterState.toolHeightCompensation.setOff();
+        }
+    },
 	G50(50.0, GCommandModalGroupSet.G_GROUP18_SCALING){ // Reset all scale factors to 1.0
 		@Override
 		public void evalute(ParamExpressionList words) throws InterpreterException {
