@@ -333,6 +333,42 @@ public class CNCPoint {
         return result;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CNCPoint)) return false;
+
+        CNCPoint point = (CNCPoint) o;
+
+        if (Double.compare(point.a_, a_) != 0) return false;
+        if (Double.compare(point.b_, b_) != 0) return false;
+        if (Double.compare(point.c_, c_) != 0) return false;
+        if (Double.compare(point.x_, x_) != 0) return false;
+        if (Double.compare(point.y_, y_) != 0) return false;
+        if (Double.compare(point.z_, z_) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x_);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y_);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z_);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(a_);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(b_);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(c_);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     public enum ConnectionType {
         ENDSTART,
         STARTEND
