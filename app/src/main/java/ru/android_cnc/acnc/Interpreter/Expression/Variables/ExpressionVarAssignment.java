@@ -20,9 +20,9 @@ public class ExpressionVarAssignment {
 		this.varValExp_ = ev;
 	}
 
-	public void evalute() throws InterpreterException {
-		this.lastNum_ = this.varNumExp_.integerEvalute();
-		this.lastValue_ = this.varValExp_.evalute();
+	public void evaluate() throws InterpreterException {
+		this.lastNum_ = this.varNumExp_.integerEvaluate();
+		this.lastValue_ = this.varValExp_.evaluate();
 		InterpreterState.vars_.set(this.lastNum_, this.lastValue_);
 	}
 

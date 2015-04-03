@@ -7,6 +7,7 @@ package ru.android_cnc.acnc.Geometry;
 import android.util.Log;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandMotion;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
 
 import static java.lang.Math.sqrt;
@@ -99,9 +100,23 @@ public class CNCPoint {
         return " X = " + x_ + "; Y = " + y_ + "; Z = " + z_ + ";";
     }
 
-    public static CNCPoint getCrossLineNLine(CCommandStraightLine line1, CCommandStraightLine line2) {
-//        Log.i("Crossing 2 lines 1- ", line1.toString());
-//        Log.i("Crossing 2 lines 2- ", line2.toString());
+    public static CNCPoint getCrossingPoint(CCommandMotion line1, CCommandMotion line2){
+        if(line1 instanceof CCommandStraightLine){
+            if(line2 instanceof CCommandStraightLine)
+                return getCrossLineNLine((CCommandStraightLine)line1, (CCommandStraightLine)line2);
+            if(line2 instanceof CCommandArcLine)
+                return getCrossLineNArc((CCommandStraightLine)line1, (CCommandArcLine)line2, ConnectionType.ENDSTART);
+        };
+        if(line1 instanceof CCommandArcLine) {
+            if(line2 instanceof CCommandStraightLine)
+                return getCrossLineNArc((CCommandStraightLine)line2, (CCommandArcLine)line1, ConnectionType.STARTEND);
+            if(line2 instanceof CCommandArcLine)
+                return getCrossArcNArc((CCommandArcLine)line1, (CCommandArcLine)line2);
+        }
+        return null;
+    }
+
+    private static CNCPoint getCrossLineNLine(CCommandStraightLine line1, CCommandStraightLine line2) {
         if(line1 == null) return null;
         if(line1.length() <= 0) return null;
         if(line2 == null) return null;
@@ -112,7 +127,6 @@ public class CNCPoint {
         double y11 = line1.getStart().getY();
         double x12 = line1.getEnd().getX();
         double y12 = line1.getEnd().getY();
-//        Log.i("Crossing", "Line 1 x1 " + x11 + " y1 " + y11 + " x2 " + x12 + " y2 " + y12);
 
         double dx1 = x12 - x11;
 
@@ -124,14 +138,12 @@ public class CNCPoint {
             if(x11 != 0.0) a1 = (y11 - b1)/x11;
             else  a1 = (y12 - b1)/x12;
         } else line1_is_vertical = true;
-//        Log.i("Crossing", "Line 1 a " + a1 + " b " + b1 + " v " + line1_is_vertical);
 
         // solve y = a*x + b equation for second line
         double x21 = line2.getStart().getX();
         double y21 = line2.getStart().getY();
         double x22 = line2.getEnd().getX();
         double y22 = line2.getEnd().getY();
-//        Log.i("Crossing", "Line 2 x1 " + x21 + " y1 " + y21 + " x2 " + x22 + " y2 " + y22);
 
         double dx2 = x22 - x21;
 
@@ -144,7 +156,6 @@ public class CNCPoint {
             else  a2 = (y22 - b2)/x22;
         }
         else line2_is_vertical = true;
-//        Log.i("Crossing", "Line 2 a " + a2 + " b " + b2 + " v " + line2_is_vertical);
 
         if(line1_is_vertical){
             if(line2_is_vertical){
@@ -171,12 +182,10 @@ public class CNCPoint {
         }
     }
 
-    public static CNCPoint getCrossLineNArc(CCommandStraightLine line,
+    private static CNCPoint getCrossLineNArc(CCommandStraightLine line,
                                             CCommandArcLine arc,
                                             ConnectionType type){
         // find connection point of line & circle nearest to end of one & start of another
-//        Log.i("Crossing line & arcs - ", line.toString());
-//        Log.i("arc - ", arc.toString());
         double rx = 0.0;
         double ry = 0.0;
 
@@ -259,17 +268,14 @@ public class CNCPoint {
             default:
                 return null;
         };
-//        Log.i("Solution ", "Line" + line.toString() + " Arc" + arc.toString());
         if(dist1<dist2){
-//            Log.i("Solution ", " Cross " + solution1);
             return solution1;
         } else {
-//            Log.i("Solution ", " Cross " + solution2);
             return solution2;
         }
     }
 
-    public static CNCPoint getCrossArcNArc(CCommandArcLine A1,
+    private static CNCPoint getCrossArcNArc(CCommandArcLine A1,
                                            CCommandArcLine A2){
         CNCPoint result;
 //        Log.i("Crossing 2 arcs 1- ", A1.toString());

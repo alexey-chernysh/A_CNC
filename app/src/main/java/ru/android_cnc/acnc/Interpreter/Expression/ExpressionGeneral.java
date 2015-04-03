@@ -10,13 +10,13 @@ public class ExpressionGeneral { // general expression used in NGC274 code
 	
 	private boolean constant = false;
 
-	public double evalute() throws InterpreterException {
+	public double evaluate() throws InterpreterException {
 		new InterpreterException("Empty expression evolution!");
 		return 0.0;
 	}
 	
-	public int integerEvalute() throws InterpreterException { 
-		double resultDouble  = this.evalute();
+	public int integerEvaluate() throws InterpreterException {
+		double resultDouble  = this.evaluate();
 		int    resultInteger = (int)resultDouble;
 		if(resultDouble != ((double)resultInteger)) 
 			throw new InterpreterException("Integer value required!");
@@ -35,7 +35,7 @@ public class ExpressionGeneral { // general expression used in NGC274 code
     public String toString(){
         Double tmp = 0.0;
         try{
-            tmp = this.evalute();
+            tmp = this.evaluate();
         }
         catch (InterpreterException ie){
 

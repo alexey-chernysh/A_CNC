@@ -17,8 +17,8 @@ public class ExpressionVariable extends ExpressionGeneral {
 	}
 
 	@Override
-	public double evalute() throws InterpreterException {
-		int varNum = this.varNumExp_.integerEvalute();
+	public double evaluate() throws InterpreterException {
+		int varNum = this.varNumExp_.integerEvaluate();
 		return InterpreterState.vars_.get(varNum);
 	}
 	

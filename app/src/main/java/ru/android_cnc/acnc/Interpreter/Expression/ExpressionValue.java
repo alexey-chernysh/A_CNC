@@ -14,7 +14,7 @@ public class ExpressionValue extends ExpressionGeneral {
 	}
 
 	@Override
-	public double evalute(){
+	public double evaluate(){
 		return value_;
 	}
 	

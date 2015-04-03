@@ -88,7 +88,7 @@ public class CNCControlViewActivity
             try {
                 programLoader = new ProgramLoader();
                 spannedText = programLoader.load(sourceText);
-                programLoader.evalute();
+                programLoader.evaluate();
             }
             catch (InterpreterException ie){
                 allFine = false;

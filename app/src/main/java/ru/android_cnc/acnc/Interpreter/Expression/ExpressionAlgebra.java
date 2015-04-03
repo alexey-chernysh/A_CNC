@@ -23,10 +23,10 @@ public class ExpressionAlgebra extends ExpressionGeneral {
 	}
 
 	@Override
-	public double evalute() throws InterpreterException {
-		double x1 = this.arg1.evalute();
-		double x2 = this.arg2.evalute();
-		return oper_.evalute(x1, x2);
+	public double evaluate() throws InterpreterException {
+		double x1 = this.arg1.evaluate();
+		double x2 = this.arg2.evaluate();
+		return oper_.evaluate(x1, x2);
 	}
 	
 }

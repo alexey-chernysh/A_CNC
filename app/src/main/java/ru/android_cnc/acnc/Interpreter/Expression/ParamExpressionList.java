@@ -41,7 +41,7 @@ public class ParamExpressionList {
 			ExpressionGeneral currentExp = this.expressionList[i];
 			if(currentExp != null){
 				try {
-					result += " " + TokenParameter.values()[i].toString() + currentExp.evalute();
+					result += " " + TokenParameter.values()[i].toString() + currentExp.evaluate();
 				} catch (InterpreterException e) {
 					e.printStackTrace();
 				}
@@ -66,13 +66,13 @@ public class ParamExpressionList {
 
 	public double get(TokenParameter word) throws InterpreterException {
 		int i = word.ordinal();
-		if(expressionList[i] != null) return expressionList[i].evalute();
+		if(expressionList[i] != null) return expressionList[i].evaluate();
 		else return 0.0;
 	}
 
 	public int getInt(TokenParameter word) throws InterpreterException {
 		int i = word.ordinal();
-		if(expressionList[i] != null) return expressionList[i].integerEvalute();
+		if(expressionList[i] != null) return expressionList[i].integerEvaluate();
 		else return 0;
 	}
 	

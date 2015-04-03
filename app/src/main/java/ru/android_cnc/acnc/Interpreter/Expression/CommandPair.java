@@ -18,7 +18,7 @@ public class CommandPair { // pair of command indrntifier alfa and associated ex
 	}
 	
 	public double getCurrentValue() throws InterpreterException {
-        return this.commandExpression_.evalute();
+        return this.commandExpression_.evaluate();
 	}
 
 	public ExpressionGeneral getValueExpression() {

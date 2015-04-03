@@ -15,7 +15,7 @@ public enum MCommandSet {
 	M1(1, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Optional program stop
 	M2(2, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){   // Program end
         @Override
-        public void evalute() throws InterpreterException {
+        public void evaluate() throws InterpreterException {
             InterpreterState.modalState.set(modalGroup, this);
             ProgramLoader.command_sequence.prepare();
         };
@@ -27,7 +27,7 @@ public enum MCommandSet {
 	M6(6, MCommandModalGroupSet.M_GROUP6_TOOL_CHANGE){}, // Tool change (by two macros)
 	M7(7, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Mist coolant on
         @Override
-        public void evalute() throws InterpreterException {
+        public void evaluate() throws InterpreterException {
             InterpreterState.modalState.set(modalGroup, this);
             CCommandTorchOn torchOn = new CCommandTorchOn();
             ProgramLoader.command_sequence.add(torchOn);
@@ -35,7 +35,7 @@ public enum MCommandSet {
 	},
 	M8(8, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Flood coolant on
         @Override
-        public void evalute() throws InterpreterException{
+        public void evaluate() throws InterpreterException{
             InterpreterState.modalState.set(modalGroup, this);
             CCommandTorchOff torchOff = new CCommandTorchOff();
             ProgramLoader.command_sequence.add(torchOff);
@@ -47,13 +47,13 @@ public enum MCommandSet {
 	M47(47, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Repeat program from first line
 	M48(48, MCommandModalGroupSet.M_GROUP9_OVERRIDES){ // Enable speed and feed override
 		@Override
-		public void evalute() throws InterpreterException{
+		public void evaluate() throws InterpreterException{
 			InterpreterState.modalState.set(modalGroup, this);		
 		};
 	}, 
 	M49(49, MCommandModalGroupSet.M_GROUP9_OVERRIDES){ // Disable speed and feed override
 		@Override
-		public void evalute() throws InterpreterException{
+		public void evaluate() throws InterpreterException{
 			InterpreterState.modalState.set(modalGroup, this);		
 		};
 	}, 
@@ -61,14 +61,14 @@ public enum MCommandSet {
 	M99(99, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Return from subroutine/repeat
 	MDUMMY(99999, MCommandModalGroupSet.M_GROUP0_NON_MODAL){
 		@Override
-		public void evalute() throws InterpreterException{
+		public void evaluate() throws InterpreterException{
 		};
 	};
 	
 	public int number;
 	public MCommandModalGroupSet modalGroup;
 
-	public void evalute() throws InterpreterException{
+	public void evaluate() throws InterpreterException{
 		InterpreterState.modalState.set(modalGroup, this);
 	};
 	

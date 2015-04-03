@@ -32,10 +32,10 @@ public class ProgramModule {
 		this.endLine_ = el;
 	}
 	
-	public void evalute() throws InterpreterException{
+	public void evaluate() throws InterpreterException{
 		if((this.startLine_ >= 0) && (this.endLine_ >= startLine_)){
 			for(int i=this.startLine_; i<=this.endLine_; i++)
-				programBody_.get(i).evalute();
+				programBody_.get(i).evaluate();
 		} else throw new InterpreterException("Call of not initialized module!");
 	}
 

@@ -59,10 +59,10 @@ public class LineLoader extends CommandLineLoader {
 		int i;
 		for(i=0; i<size; i++){
 			CommandPair currentCommand = this.commandSet_.get(i);
-			ExpressionGeneral commandValueExpressiion = currentCommand.getValueExpression();
+			ExpressionGeneral commandValueExpression = currentCommand.getValueExpression();
 			switch(currentCommand.getType()){
 			case F:
-				this.feedRate_ = commandValueExpressiion;
+				this.feedRate_ = commandValueExpression;
 				break;
 			case G:
 				GCommandSet g_command = this.GcommandByNumber(currentCommand.getCurrentValue());
@@ -389,13 +389,13 @@ public class LineLoader extends CommandLineLoader {
 			case N: // nothing to do
 				break;
 			case O: 
-				moduleNum_ = commandValueExpressiion.integerEvalute();
+				moduleNum_ = commandValueExpression.integerEvaluate();
 				break;
 			case S:
-				this.spindelSpeed_ = commandValueExpressiion;
+				this.spindelSpeed_ = commandValueExpression;
 				break;
 			case T:
-				this.tool_ = commandValueExpressiion;
+				this.tool_ = commandValueExpression;
 				break;
 			default:
 				throw new InterpreterException("Unsupported command");
@@ -404,7 +404,7 @@ public class LineLoader extends CommandLineLoader {
         Log.d(LOG_TAG, this.toString());
 	}
 	
-	public void evalute() throws InterpreterException{
+	public void evaluate() throws InterpreterException{
 		// evalution sequence strictly in order described by "Mach3 G and M code reference"
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence
@@ -416,80 +416,80 @@ public class LineLoader extends CommandLineLoader {
 
 		// 2 set feed rate mode
         // TODO check needed
-		this.G93_G94_G95.evalute(this.wordList_);
+		this.G93_G94_G95.evaluate(this.wordList_);
 		
 		// 3 set feed rate (F)
 		if(this.feedRate_ != null){
-            InterpreterState.feedRate.setFeedRate(this.feedRate_.evalute());
+            InterpreterState.feedRate.setFeedRate(this.feedRate_.evaluate());
         }
 
 		// 4 set spindel speed (S)
 		if(this.spindelSpeed_ != null){
-            InterpreterState.spindle.setSpeed(this.spindelSpeed_.evalute());
+            InterpreterState.spindle.setSpeed(this.spindelSpeed_.evaluate());
             double newSpindelSpeed = InterpreterState.spindle.getSpeed();
             ProgramLoader.command_sequence.add(new CCommandSpindelSpeed(newSpindelSpeed));
         }
 
 		// 5 select tool (T)
 		if(this.tool_ != null)
-			InterpreterState.toolSet.setCurrentTool((int)this.tool_.evalute());
+			InterpreterState.toolSet.setCurrentTool((int)this.tool_.evaluate());
 		
 		// 6 tool change macro M6
-		this.M6.evalute();
+		this.M6.evaluate();
 		
 		// 7 set spindel rotation
-		this.M3_M4_M5.evalute();
+		this.M3_M4_M5.evaluate();
 		
 		// 8 set coolant state
-		this.M7_M8_M9.evalute();
+		this.M7_M8_M9.evaluate();
 		
 		// 9 set overrides
-		this.M48_M49.evalute();
+		this.M48_M49.evaluate();
 		
 		// 10 dwell
-		this.G4.evalute(this.wordList_);
+		this.G4.evaluate(this.wordList_);
 
 		// 11 set active plane
-		this.G17_G18_G19.evalute(this.wordList_);
+		this.G17_G18_G19.evaluate(this.wordList_);
 		
 		// maybe it should be in another place of this sequence
-		this.G15_G16.evalute(this.wordList_); 
+		this.G15_G16.evaluate(this.wordList_);
 		
 		// 12 set length units
-		this.G20_G21.evalute(this.wordList_);
+		this.G20_G21.evaluate(this.wordList_);
 		
 		// 13 set cutter radius compensation
-		this.G40_G41_G42.evalute(this.wordList_);
+		this.G40_G41_G42.evaluate(this.wordList_);
 		
 		// 14 set tool table offset
-		this.G43_G49.evalute(this.wordList_);
+		this.G43_G49.evaluate(this.wordList_);
 		
 		// 15 fixture table select
-		this.G54___G59.evalute(this.wordList_);
+		this.G54___G59.evaluate(this.wordList_);
 		
 		// 16 set path control mode
-		this.G61_G64.evalute(this.wordList_);
+		this.G61_G64.evaluate(this.wordList_);
 		
 		// 17 set distance mode
-		this.G90_G91.evalute(this.wordList_);
-		this.G53.evalute(this.wordList_);
-		this.G68_G69.evalute(this.wordList_);
+		this.G90_G91.evaluate(this.wordList_);
+		this.G53.evaluate(this.wordList_);
+		this.G68_G69.evaluate(this.wordList_);
 		
 		// 18 set canned cycle return level mode
-		this.G98_G99.evalute(this.wordList_);
+		this.G98_G99.evaluate(this.wordList_);
 		
 		// 19 homing and coordinate system offset non modal commands
-		this.G_NON_MODAL.evalute(this.wordList_);
+		this.G_NON_MODAL.evaluate(this.wordList_);
 		
 		// 20 perform motion
-		this.G_MOTION.evalute(this.wordList_);
+		this.G_MOTION.evaluate(this.wordList_);
 
-        this.M1_M2_M3.evalute();
+        this.M1_M2_M3.evaluate();
 
 		int size = this.varAssignmentSet_.size();
 		for(int i=0; i<size; i++){
 			ExpressionVarAssignment currentVar = this.varAssignmentSet_.get(i);
-			currentVar.evalute();
+			currentVar.evaluate();
 		}
 	}
 

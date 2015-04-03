@@ -31,12 +31,12 @@ public class ExpressionFunction extends ExpressionGeneral {
 	}
 
 	@Override
-	public double evalute() throws InterpreterException {
-		double x = arg1.evalute();
+	public double evaluate() throws InterpreterException {
+		double x = arg1.evaluate();
 		if(arg2 != null){
-			double y = this.arg2.evalute();
-			return this.fun_.evalute(x,y);
-		} else return this.fun_.evalute(x);
+			double y = this.arg2.evaluate();
+			return this.fun_.evaluate(x,y);
+		} else return this.fun_.evaluate(x);
 	}
 	
 }

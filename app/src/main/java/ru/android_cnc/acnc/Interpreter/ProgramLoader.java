@@ -62,10 +62,10 @@ public class ProgramLoader {
         return spannedSource;
     }
 
-	public void evalute() {
+	public void evaluate() {
         command_sequence = new CanonCommandSequence();
 		try {
-			ProgramLoader.moduleArray.getMain().evalute();
+			ProgramLoader.moduleArray.getMain().evaluate();
 		} catch (InterpreterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
