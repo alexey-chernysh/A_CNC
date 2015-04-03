@@ -18,11 +18,6 @@ public class VelocityPlan {
 	private double startVel_;
 	private double endVel_;
 
-    static {
-        Log.i("Max velocity:", "v = " + maxVelocity + " mm/sec");
-        Log.i("Max velocity:", "v = " + (60 * maxVelocity) + " mm/min");
-    }
-
     private double[] x_step_plan = null;
     private int nx = 0;
     private Move x_move = Move.NONE;
