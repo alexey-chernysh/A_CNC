@@ -2,6 +2,8 @@ package ru.android_cnc.acnc.test;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.ArcDirection;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
@@ -12,6 +14,7 @@ import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 public class CNCPointTest extends TestCase {
 
+    @Test
     public void testGetCrossLineNLine() throws Exception {
         VelocityPlan vp = new VelocityPlan(2000.0);
         MotionMode m = MotionMode.FREE;
@@ -27,6 +30,7 @@ public class CNCPointTest extends TestCase {
         assertEquals(crossingPoint,point2);
     }
 
+    @Test
     public void testGetCrossArcNLine() throws Exception {
         VelocityPlan vp = new VelocityPlan(2000.0);
         MotionMode m = MotionMode.FREE;
@@ -49,6 +53,7 @@ public class CNCPointTest extends TestCase {
         assertEquals(crossingPoint,point2);
     }
 
+    @Test
     public void testGetCrossArcNArc() throws Exception {
         VelocityPlan vp = new VelocityPlan(2000.0);
         CutterRadiusCompensation crc = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF,0.0);

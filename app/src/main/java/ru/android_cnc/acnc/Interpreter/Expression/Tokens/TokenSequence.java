@@ -21,11 +21,11 @@ public class TokenSequence {
 		if(frameString.length()>0){
 			if(frameString.charAt(0) == '/') {
 				if ( InterpreterState.IsBlockDelete){
-					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0,frameString.length()-1,frameString);
+					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0, frameString.length()-1, frameString);
 					this.tokenList.addNewToken(comment, 0);
 					return;
 				} else {
-					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0, 0,frameString);
+					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0, 0, frameString);
 					this.tokenList.addNewToken(comment, 0);
 				};
 			};
@@ -42,11 +42,10 @@ public class TokenSequence {
 	}
 
     public void setAllSpan(Spannable s, int pos){
-        tokenList.setAllSpan(s, pos);
+        this.tokenList.setAllSpan(s, pos);
     }
 	
-	private
-	void getAllAlfaTokens(String sourceString) {
+	private	void getAllAlfaTokens(String sourceString) {
 		for(TokenAlgebra tokFun: TokenAlgebra.values()){
 			String sample = tokFun.getAlfa();
 			int curTokenNum = 0;
@@ -100,14 +99,12 @@ public class TokenSequence {
 		}
 	}
 	
-	private 
-	void getAllComments(String sourceString) throws InterpreterException{
+	private void getAllComments(String sourceString) throws InterpreterException{
 		getAllCommentSemicolon(sourceString);
 		getAllCommentParenthesis(sourceString);
 	}
 	
-	private
-	void getAllCommentSemicolon(String sourceString) {
+	private void getAllCommentSemicolon(String sourceString) {
 		int len = sourceString.length(); 
 		int commentStart = -1;
 		TokenComment.CommentKeyWord newKey = TokenComment.CommentKeyWord.PARENTHESIS;
@@ -124,8 +121,7 @@ public class TokenSequence {
 		};
 	}
 	
-	private
-	void getAllCommentParenthesis( String sourceString) throws InterpreterException {
+	private	void getAllCommentParenthesis( String sourceString) throws InterpreterException {
 		int curTokenNum = 0;
 		while(curTokenNum < this.tokenList.size()){
 			Token currentToken = this.tokenList.get(curTokenNum);
@@ -153,8 +149,7 @@ public class TokenSequence {
 		}
 	}
 
-	private
-	void getAllSeparator(String sourceString) {
+	private	void getAllSeparator(String sourceString) {
 		int curTokenNum = 0;
 		while(curTokenNum < this.tokenList.size()){
 			Token currentToken = this.tokenList.get(curTokenNum);
@@ -169,8 +164,7 @@ public class TokenSequence {
 		}
 	}
 	
-	private
-	int getSeparatorPos(String frame, int start, int end){
+	private	int getSeparatorPos(String frame, int start, int end){
 		int result = -1;
 		for(int i = start; i <= end; i++){
 			char currentChar = frame.charAt(i);
@@ -181,8 +175,7 @@ public class TokenSequence {
 		return result;
 	}
 	
-	private
-	void getAllValues(String sourceString) throws InterpreterException {
+	private	void getAllValues(String sourceString) throws InterpreterException {
 		int curTokenNum = 0;
 		while(curTokenNum < this.tokenList.size()){
 			Token currentToken = this.tokenList.get(curTokenNum);
