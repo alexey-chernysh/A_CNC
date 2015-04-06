@@ -4,8 +4,6 @@
 
 package ru.android_cnc.acnc.Interpreter;
 
-import android.util.Log;
-
 public class InterpreterException extends Exception {
 
 	private	String message_ = null;
