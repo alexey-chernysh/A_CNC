@@ -14,18 +14,22 @@ public class DrawableObjectLimits {
     protected float left;
     protected float right;
 
+    public DrawableObjectLimits(){
+        this(Float.MAX_VALUE, -Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE);
+    }
+
     public DrawableObjectLimits(float l, float r, float b, float t){
-        left = l;
-        right = r;
-        top = t;
-        bottom = b;
+        this.left = l;
+        this.right = r;
+        this.top = t;
+        this.bottom = b;
     }
 
     public DrawableObjectLimits(CNCPoint point){
-        top = (float)point.getY();
-        bottom = (float)point.getY();
-        left = (float)point.getX();
-        right = (float)point.getX();
+        this.top = (float)point.getY();
+        this.bottom = (float)point.getY();
+        this.left = (float)point.getX();
+        this.right = (float)point.getX();
     }
 
     public static DrawableObjectLimits combine(DrawableObjectLimits limits1,
@@ -35,9 +39,6 @@ public class DrawableObjectLimits {
                 DrawableObjectLimits result = new DrawableObjectLimits(limits1.left, limits1.right, limits1.bottom, limits1.top);
                 result = combine(result, new CNCPoint(limits2.left,limits2.bottom));
                 result = combine(result, new CNCPoint(limits2.right,limits2.top));
-//                Log.i("Combine, 1 -", object1.toString());
-//                Log.i("2 -", object2.toString());
-//                Log.i("Result -", result.toString());
                 return result;
             } else return limits1;
         }
@@ -54,8 +55,6 @@ public class DrawableObjectLimits {
                 result.right  = Math.max(result.right,  (float)point.getX());
                 result.bottom = Math.min(result.bottom, (float)point.getY());
                 result.left   = Math.min(result.left,   (float)point.getX());
-//                Log.i("Combine with point", result.toString());
-//                Log.i("Point is ", point.toString());
                 return result;
             } else return limits;
         }
@@ -65,22 +64,23 @@ public class DrawableObjectLimits {
     public float getTop() {
         return top;
     }
-
     public float getBottom() {
         return bottom;
     }
-
     public float getLeft() {
         return left;
     }
-
     public float getRight() {
         return right;
     }
 
     @Override
     public String toString(){
-        return " left = " + left + "; right = " + right + "; botton = " + bottom + "; top = " + top + ";";
+        return "Limits: left = "   + left
+                   + "; right = "  + right
+                   + "; bottom = " + bottom
+                   + "; top = "    + top
+                   + ";";
     }
 
 }

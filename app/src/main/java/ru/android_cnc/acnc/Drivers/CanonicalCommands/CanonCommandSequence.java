@@ -4,7 +4,6 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.util.Log;
 
@@ -26,10 +25,7 @@ public class CanonCommandSequence {
 
 	public CanonCommandSequence(){
 		seq_ = new ArrayList<CanonCommand>();
-        limits = new DrawableObjectLimits(Float.MAX_VALUE,
-                                         -Float.MAX_VALUE,
-                                          Float.MAX_VALUE,
-                                         -Float.MAX_VALUE);
+        limits = new DrawableObjectLimits();
 	}
 	
 	public void add(CanonCommand command) throws InterpreterException {
@@ -106,11 +102,7 @@ public class CanonCommandSequence {
                                         command.getVelocityPlan(),
                                         command.getOffsetMode());
                                 seq_.add(link);
-                            } else {
-                                // smooth line connection
-                                // nothing to do
-//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
-                            }
+                            };
                         }
                         break;
                     case RIGHT:
@@ -131,10 +123,7 @@ public class CanonCommandSequence {
                                 if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
                                 lastMotion.setEnd(connectionPoint);
                                 command.setStart(connectionPoint);
-                            } else {
-                                // smooth line connection
-//                            Log.i("Smooth line connection", " Point distance is " + distance(lastMotion.getEnd(),command.getStart()));
-                            }
+                            };
                         };
                         break;
                     case OFF:
