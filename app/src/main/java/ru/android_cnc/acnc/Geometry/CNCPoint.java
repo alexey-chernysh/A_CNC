@@ -112,7 +112,7 @@ public class CNCPoint {
                 return getCrossLineNArc((CCommandStraightLine)line2, (CCommandArcLine)line1, ConnectionType.STARTEND);
             if(line2 instanceof CCommandArcLine)
                 return getCrossArcNArc((CCommandArcLine)line1, (CCommandArcLine)line2);
-        }
+        };
         return null;
     }
 

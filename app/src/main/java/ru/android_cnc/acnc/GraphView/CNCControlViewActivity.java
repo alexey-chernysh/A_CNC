@@ -141,28 +141,34 @@ public class CNCControlViewActivity
 
     }
     public void onStartButtonClick(View v){
-        Log.i("CNC control fragment ", "Start button clicked");
+//        Log.i("CNC control fragment ", "Start button clicked");
         if(cncViewFrag != null){
             View cncView = ((CNC2DViewFragment)cncViewFrag).getCNCView();
+            CNCPoint tmpPoint = new CNCPoint(555.0,555.0);
+            displayPointCoordinates(tmpPoint);
             if(cncView != null)
                 if(driver != null)
                     driver.startProgram(cncView);
 
-        }
+        };
     }
 
     public void onStopButtonClick(View v){
-        Log.i("CNC control fragment ", "Stop button clicked");
-        if(driver != null)driver.pauseProgram();
+//        Log.i("CNC control fragment ", "Stop button clicked");
+        CNCPoint tmpPoint = new CNCPoint(111.0,111.0);
+        displayPointCoordinates(tmpPoint);
+        if(driver != null)
+            driver.pauseProgram();
     }
 
     public void displayPointCoordinates(CNCPoint point){
-        Double t = point.getX();
+        Double t;
+        t = point.getX();
         TextView fieldX = (TextView)findViewById(R.id.text_value_X);
-        fieldX.setText(t.toString());
+        if(fieldX != null) fieldX.setText(t.toString());
         t = point.getY();
         TextView fieldY = (TextView)findViewById(R.id.text_value_Y);
-        fieldY.setText(t.toString());
+        if(fieldY != null) fieldY.setText(t.toString());
     }
 
 }

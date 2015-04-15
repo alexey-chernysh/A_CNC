@@ -150,6 +150,7 @@ public class CutterDriver implements GeneralDriver {
 
     Thread executionThread = null;
     Handler mHandler = new Handler();
+    boolean paused = false;
 
 	@Override
 	public void startProgram(View v) {
@@ -158,10 +159,8 @@ public class CutterDriver implements GeneralDriver {
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    {
-                        view.postInvalidate();
-                        mHandler.postDelayed(this, 100);
-                    }
+                    view.postInvalidate();
+                    mHandler.postDelayed(this, 100);
                 }
             };
             mHandler.post(runnable);
@@ -174,18 +173,26 @@ public class CutterDriver implements GeneralDriver {
                     view.postInvalidate();
                 }
             });
-        }
+        } else if(paused)this.resumeProgram();
         executionThread.start(); // запускаем
 	}
 
 	@Override
 	public void pauseProgram() {
-        executionThread.interrupt();
-	}
+        try {
+            executionThread.sleep(Long.MAX_VALUE);
+            paused = true;
+        } catch (InterruptedException e) {
+//            e.printStackTrace();
+        }
+    }
 
 	@Override
 	public void resumeProgram() {
-        executionThread.start(); // запускаем
+        if(!executionThread.isInterrupted()) {
+            executionThread.interrupt();
+            paused = false;
+        }
 	}
 
 	@Override
