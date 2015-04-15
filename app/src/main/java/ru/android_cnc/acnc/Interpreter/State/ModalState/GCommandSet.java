@@ -542,7 +542,7 @@ public enum GCommandSet {
 			InterpreterState.modalState.set(modalGroup, this);
 		}
 	}, 
-	G91(91.0, GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE){ // Incremental distance mode
+	G91(91.0, GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE){ // Relative(incremental) distance mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws InterpreterException {
 			InterpreterState.modalState.set(modalGroup, this);

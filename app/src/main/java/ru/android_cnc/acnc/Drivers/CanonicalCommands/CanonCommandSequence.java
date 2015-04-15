@@ -35,6 +35,7 @@ public class CanonCommandSequence {
                 if(motion.isFreeRun()) addFreeMotion(motion);
                 else addCuttingMotion(motion);
             } else seq_.add(command);
+        Log.i("Command ", " add " + command.toString());
 	}
 
     public void prepare() throws InterpreterException {

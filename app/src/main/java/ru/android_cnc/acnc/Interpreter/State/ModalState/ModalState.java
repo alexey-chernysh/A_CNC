@@ -106,11 +106,9 @@ public class ModalState {
 	}
 
 	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
-		CNCPoint result = null;
-        if((!words.hasXYZ())&&(!words.hasXYZ())) return result;
-
-        if(InterpreterState.modalState.isAbsolute()) result = refCNCPoint.clone();
-        else result = new CNCPoint(); // new null point
+		CNCPoint result = refCNCPoint.clone();
+        if((!words.hasXYZ())&&(!words.hasABC())) return result;
+        final boolean relative = !InterpreterState.modalState.isAbsolute();
 
 		if(InterpreterState.modalState.isPolar()){
 			throw new InterpreterException("Polar coordinates mode not realized yet!");
@@ -122,7 +120,7 @@ public class ModalState {
                 double x_param = words.get(TokenParameter.X);
                 x_param = toMM(x_param);
                 x_param *= VariablesSet.getScaleX();
-                if(!InterpreterState.modalState.isAbsolute()) x_param += refCNCPoint.getX();
+                if(relative) x_param += refCNCPoint.getX();
                 result.setX(x_param);
             };
 
@@ -130,7 +128,7 @@ public class ModalState {
 				double y_param = words.get(TokenParameter.Y);
 				y_param = toMM(y_param);
                 y_param *= VariablesSet.getScaleX();
-				if(!InterpreterState.modalState.isAbsolute()) y_param += refCNCPoint.getY();
+				if(relative) y_param += refCNCPoint.getY();
 				result.setY(y_param);
 			};
 
@@ -138,7 +136,7 @@ public class ModalState {
                 double z_param = words.get(TokenParameter.Z);
                 z_param = toMM(z_param);
                 z_param *= VariablesSet.getScaleZ();
-                if(!InterpreterState.modalState.isAbsolute()) z_param += refCNCPoint.getZ();
+                if(relative) z_param += refCNCPoint.getZ();
                 result.setZ(z_param);
             };
 
@@ -146,7 +144,7 @@ public class ModalState {
                 double a_param = words.get(TokenParameter.A);
                 a_param = toMM(a_param);
                 a_param *= VariablesSet.getScaleA();
-                if(!InterpreterState.modalState.isAbsolute()) a_param += refCNCPoint.getA();
+                if(relative) a_param += refCNCPoint.getA();
                 result.setZ(a_param);
             };
 
@@ -154,7 +152,7 @@ public class ModalState {
                 double b_param = words.get(TokenParameter.B);
                 b_param = toMM(b_param);
                 b_param *= VariablesSet.getScaleB();
-                if(!InterpreterState.modalState.isAbsolute()) b_param += refCNCPoint.getB();
+                if(relative) b_param += refCNCPoint.getB();
                 result.setZ(b_param);
             };
 
@@ -162,7 +160,7 @@ public class ModalState {
                 double c_param = words.get(TokenParameter.C);
                 c_param = toMM(c_param);
                 c_param *= VariablesSet.getScaleC();
-                if(!InterpreterState.modalState.isAbsolute()) c_param += refCNCPoint.getC();
+                if(relative) c_param += refCNCPoint.getC();
                 result.setZ(c_param);
             };
 		}
