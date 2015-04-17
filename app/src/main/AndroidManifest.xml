@@ -32,6 +32,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.android_cnc.acnc.MainActivity" />
         </activity>
+
+        <service
+            android:name=".CNCService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".THCService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

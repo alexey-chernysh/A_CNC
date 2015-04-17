@@ -27,8 +27,6 @@
     <string name="no_data">No Data</string>
     <string name="err">Error</string>
     <string name="title_activity_cnccontrol">CNCControlActivity</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_cnccontrol_view">CNCControlViewActivity</string>
 
 </resources>
