@@ -1,7 +1,5 @@
 package ru.android_cnc.acnc.GraphView;
 
-import android.content.Intent;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -11,15 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import ru.android_cnc.acnc.Drivers.Cutter.CutterDriver;
+import ru.android_cnc.acnc.FourButtonsActivity;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
@@ -30,6 +27,8 @@ public class CNCControlViewActivity
         implements
         CNC2DViewFragment.OnGcodeGraphViewFragmentInteractionListener,
         CNCControlFragment.OnCNCControlFragmentInteractionListener{
+
+    private final static String LOG_TAG = " control view ->";
 
     private String fileName = null;
     private String sourceText = null;
@@ -43,6 +42,7 @@ public class CNCControlViewActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cnccontrol_view);
+
         if(prepare()){
             if (savedInstanceState == null) {
                 cncViewFrag = new CNC2DViewFragment();
@@ -61,27 +61,30 @@ public class CNCControlViewActivity
 
     private boolean prepare(){
         boolean allFine = true;
-        Intent intent = getIntent();
-        fileName = intent.getStringExtra(getString(R.string.SOURCE_FILE_NAME));
-        if(fileName == null) allFine = false;
-        else {
-            Log.i("File name:", fileName);
 
-            AssetManager assetManager = getAssets();
-            try {
-                InputStream inputStream = assetManager.open(fileName);
-                int size = inputStream.available();
-                byte[] buffer = new byte[size];
-                inputStream.read(buffer);
+        //open current file for edit
+        try {
+            String title = getSharedPreferences(FourButtonsActivity.pref_name, 0)
+                    .getString(FourButtonsActivity.pref_last_file_tag, "");
+            fileName = FourButtonsActivity.toPathPrefix
+                    + getPackageName()
+                    + "/"
+                    + FourButtonsActivity.g_codeFolderName
+                    + "/"
+                    + title;
+            this.setTitle(title);
+            Log.d(LOG_TAG, "Opening file " + fileName);
+            InputStream in = new FileInputStream(fileName);
+            Log.d(LOG_TAG, "Characters available: " + in.available());
+            if(in != null){
+                byte[] buffer = new byte[in.available()];
+                in.read(buffer);
                 sourceText = new String(buffer);
-                inputStream.close();
-            } catch (FileNotFoundException e) {
-                allFine = false;
-                e.printStackTrace();
-            } catch (IOException eio) {
-                allFine = false;
-                eio.printStackTrace();
+                in.close();
             }
+        } catch (IOException e) {
+            allFine = false;
+            e.printStackTrace();
         }
 
         if(allFine){
@@ -140,6 +143,7 @@ public class CNCControlViewActivity
     public void onGcodeGraphViewFragmentInteraction(Uri uri) {
 
     }
+
     public void onStartButtonClick(View v){
 //        Log.i("CNC control fragment ", "Start button clicked");
         if(cncViewFrag != null){

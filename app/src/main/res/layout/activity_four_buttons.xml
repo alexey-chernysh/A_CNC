@@ -1,0 +1,95 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.android_cnc.acnc.FourButtonsActivity"
+    android:weightSum="1"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:paddingBottom="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:paddingRight="8dp">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_action_replay"
+                android:text="Continue"
+                android:id="@+id/continue_button"
+                android:clickable="true"
+                android:enabled="true"
+                android:textStyle="bold"
+                android:background="#909"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:paddingLeft="8dp">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_action_refresh"
+                android:text="Open"
+                android:id="@+id/open_button"
+                android:clickable="true"
+                android:enabled="true"
+                android:textStyle="bold"
+                android:background="#099"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:paddingTop="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:paddingRight="8dp">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_action_download"
+                android:text="Load"
+                android:id="@+id/load_button"
+                android:clickable="true"
+                android:enabled="true"
+                android:textStyle="bold"
+                android:background="#009"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:paddingLeft="8dp">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_action_edit"
+                android:text="Create"
+                android:id="@+id/create_button"
+                android:clickable="true"
+                android:enabled="true"
+                android:textStyle="bold"
+                android:background="#090"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -190,7 +190,7 @@ public class CCommandArcLine extends CCommandMotion {
         float ang1 = p*ang;
         float ang2 = ang - ang1;
         float A = (float)Math.toDegrees(this.getStartRadialAngle());
-        Log.i("Drawing arc: ", "from angle - " + A + "; arc angle - " + ang + "; phase- " + ang1);
+//        Log.i("Drawing arc: ", "from angle - " + A + "; arc angle - " + ang + "; phase- " + ang1);
         if(p <= 0.0)
             canvas.drawArc(rect, A, ang, false, DrawableAttributes.getPaintBefore(this.getOffsetMode()));
         else
@@ -204,11 +204,7 @@ public class CCommandArcLine extends CCommandMotion {
 
     @Override
     public String toString(){
-        String result = "Arc motion: ";
-
-        result += " from " + start_.toString() + " to " + end_ + ", center " + center_;
-
-        return result;
+        return "Arc motion from " + start_.toString() + " to " + end_ + ", center " + center_;
     }
 
 }
