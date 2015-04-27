@@ -6,7 +6,7 @@ package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandTorchOff;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandTorchOn;
-import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
@@ -15,9 +15,13 @@ public enum MCommandSet {
 	M1(1, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Optional program stop
 	M2(2, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){   // Program end
         @Override
-        public void evaluate() throws InterpreterException {
+        public void evaluate() throws EvolutionException {
             InterpreterState.modalState.set(modalGroup, this);
-            ProgramLoader.command_sequence.prepare();
+            try {
+                ProgramLoader.command_sequence.prepare();
+            } catch (EvolutionException e) {
+                e.printStackTrace();
+            }
         };
     }, // Program end
 	M3(3, MCommandModalGroupSet.M_GROUP7_SPINDLE_TURNING){ // Rotate spindle clockwise
@@ -27,18 +31,26 @@ public enum MCommandSet {
 	M6(6, MCommandModalGroupSet.M_GROUP6_TOOL_CHANGE){}, // Tool change (by two macros)
 	M7(7, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Mist coolant on
         @Override
-        public void evaluate() throws InterpreterException {
+        public void evaluate() throws EvolutionException {
             InterpreterState.modalState.set(modalGroup, this);
             CCommandTorchOn torchOn = new CCommandTorchOn();
-            ProgramLoader.command_sequence.add(torchOn);
+            try {
+                ProgramLoader.command_sequence.add(torchOn);
+            } catch (EvolutionException e) {
+                e.printStackTrace();
+            }
         };
 	},
 	M8(8, MCommandModalGroupSet.M_GROUP8_COOLANT){ // Flood coolant on
         @Override
-        public void evaluate() throws InterpreterException{
+        public void evaluate() throws EvolutionException{
             InterpreterState.modalState.set(modalGroup, this);
             CCommandTorchOff torchOff = new CCommandTorchOff();
-            ProgramLoader.command_sequence.add(torchOff);
+            try {
+                ProgramLoader.command_sequence.add(torchOff);
+            } catch (EvolutionException e) {
+                e.printStackTrace();
+            }
         };
 	},
 	M9(9, MCommandModalGroupSet.M_GROUP8_COOLANT){ // All coolant off
@@ -47,13 +59,13 @@ public enum MCommandSet {
 	M47(47, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Repeat program from first line
 	M48(48, MCommandModalGroupSet.M_GROUP9_OVERRIDES){ // Enable speed and feed override
 		@Override
-		public void evaluate() throws InterpreterException{
+		public void evaluate() throws EvolutionException{
 			InterpreterState.modalState.set(modalGroup, this);		
 		};
 	}, 
 	M49(49, MCommandModalGroupSet.M_GROUP9_OVERRIDES){ // Disable speed and feed override
 		@Override
-		public void evaluate() throws InterpreterException{
+		public void evaluate() throws EvolutionException{
 			InterpreterState.modalState.set(modalGroup, this);		
 		};
 	}, 
@@ -61,14 +73,14 @@ public enum MCommandSet {
 	M99(99, MCommandModalGroupSet.M_GROUP4_PROGRAM_CONTROL){}, // Return from subroutine/repeat
 	MDUMMY(99999, MCommandModalGroupSet.M_GROUP0_NON_MODAL){
 		@Override
-		public void evaluate() throws InterpreterException{
+		public void evaluate() throws EvolutionException{
 		};
 	};
 	
 	public int number;
 	public MCommandModalGroupSet modalGroup;
 
-	public void evaluate() throws InterpreterException{
+	public void evaluate() throws EvolutionException{
 		InterpreterState.modalState.set(modalGroup, this);
 	};
 	

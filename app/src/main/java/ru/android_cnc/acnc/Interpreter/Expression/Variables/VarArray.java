@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
-import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 
 public 	class VarArray {
 	
@@ -23,20 +23,20 @@ public 	class VarArray {
 		return this.assigment_counter_[num];
 	};
 	
-	public double get(int num) throws InterpreterException {
+	public double get(int num) throws EvolutionException {
 		if((num>=0)&(num<arraySize_)){ 
 			if(getAssignmentCounter(num) > 0) return this.variables_[num];
-			else throw new InterpreterException("Reference to non initialized variable");
+			else throw new EvolutionException("Reference to non initialized variable");
 		}
-		else throw new InterpreterException("Illegal parameter number");
+		else throw new EvolutionException("Illegal parameter number");
 	}
 	
-	public void set(int num, double val) throws InterpreterException{
+	public void set(int num, double val) throws EvolutionException{
 		if((num>=0)&(num<arraySize_)){ 
 			this.variables_[num] = val;
 			this.assigment_counter_[num]++;
 		}
-		else throw new InterpreterException("Illegal parameter number");
+		else throw new EvolutionException("Illegal parameter number");
 	}
 	
 }

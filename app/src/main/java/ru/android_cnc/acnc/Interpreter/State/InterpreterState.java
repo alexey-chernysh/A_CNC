@@ -12,16 +12,7 @@ import ru.android_cnc.acnc.Interpreter.State.ModalState.ModalState;
 
 public class InterpreterState {
 
-    public static VariablesSet vars_;
-
-    static {
-        try {
-            vars_ = new VariablesSet();
-        } catch (InterpreterException e) {
-            e.printStackTrace();
-        }
-    }
-
+    public static VariablesSet vars_ = new VariablesSet();
     public static boolean IsBlockDelete = true;
 
 	private static CNCPoint homePosition = new CNCPoint(0.0,0.0);
@@ -38,14 +29,14 @@ public class InterpreterState {
 	public static CutterRadiusCompensation zeroOffsetMode;
     public static ToolHeightCompensation toolHeightCompensation = ToolHeightCompensation.getInstance();
 
-	public InterpreterState() throws InterpreterException {
+	public InterpreterState() {
 		modalState = new ModalState();
+        modalState.initToDefaultState();
 		toolSet = new ToolSet();
 		spindle = new Spindle();
 		feedRate = new FeedRate();
 		offsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 1.5);
 		zeroOffsetMode = new CutterRadiusCompensation(CutterRadiusCompensation.mode.OFF, 0.0);
-		modalState.initToDefaultState();
 	}
 
 	public static double getCurrentFeedRate() {

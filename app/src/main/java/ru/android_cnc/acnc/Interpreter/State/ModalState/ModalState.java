@@ -29,7 +29,7 @@ public class ModalState {
 	public ModalState(){
 	};
 		
-	public void initToDefaultState() throws InterpreterException {
+	public void initToDefaultState() {
 		
 		set(GCommandModalGroupSet.G_GROUP1_MOTION, GCommandSet.G1);
 		set(GCommandModalGroupSet.G_GROUP2_PLANE, GCommandSet.G17);
@@ -55,13 +55,13 @@ public class ModalState {
 		
 	};
 	
-	public static void set(GCommandModalGroupSet group, GCommandSet command) throws InterpreterException{
-		if(group != GCommandModalGroupSet.G_GROUP0_NON_MODAL){
-			if(command.modalGroup == group){
+	public static void set(GCommandModalGroupSet group, GCommandSet command){
+//		if(group != GCommandModalGroupSet.G_GROUP0_NON_MODAL){
+//			if(command.modalGroup == group){
 				g_state_[group.ordinal()] = command;
-			} else throw new InterpreterException("Changing modal state with command from another modal group");
-		} else 
-			throw new InterpreterException("Assiment non modal command to modal state");
+//			} else throw new InterpreterException("Changing modal state with command from another modal group");
+//		} else
+//			throw new InterpreterException("Assiment non modal command to modal state");
 		
 	}
 	
@@ -69,12 +69,12 @@ public class ModalState {
 		return g_state_[group.ordinal()];
 	}
 	
-	public void set(MCommandModalGroupSet group, MCommandSet command) throws InterpreterException{
-		if(group != MCommandModalGroupSet.M_GROUP0_NON_MODAL){
-			if(command.modalGroup == group){
+	public void set(MCommandModalGroupSet group, MCommandSet command) {
+//		if(group != MCommandModalGroupSet.M_GROUP0_NON_MODAL){
+//			if(command.modalGroup == group){
 				m_state_[group.ordinal()] = command;
-			} else throw new InterpreterException("Changing modal state with command from another modal group");
-		} else throw new InterpreterException("Assiment non modal command to modal state");
+//			} else throw new InterpreterException("Changing modal state with command from another modal group");
+//		} else throw new InterpreterException("Assiment non modal command to modal state");
 		
 	}
 	

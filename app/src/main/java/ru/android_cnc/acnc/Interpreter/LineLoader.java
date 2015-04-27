@@ -53,7 +53,7 @@ public class LineLoader extends CommandLineLoader {
 	
 	private int moduleNum_ = -1;
 
-	public LineLoader(String s) throws InterpreterException, EvolutionException {
+	public LineLoader(String s) throws InterpreterException {
 		super(s);
 		int size = this.commandSet_.size();
 		int i;
@@ -388,9 +388,13 @@ public class LineLoader extends CommandLineLoader {
 				break;
 			case N: // nothing to do
 				break;
-			case O: 
-				moduleNum_ = commandValueExpression.integerEvaluate();
-				break;
+			case O:
+                try {
+                    moduleNum_ = commandValueExpression.integerEvaluate();
+                } catch (EvolutionException e) {
+                    e.printStackTrace();
+                }
+                break;
 			case S:
 				this.spindelSpeed_ = commandValueExpression;
 				break;
@@ -405,7 +409,7 @@ public class LineLoader extends CommandLineLoader {
         Log.d(LOG_TAG, this.toString());
 	}
 	
-	public void evaluate() throws InterpreterException, EvolutionException{
+	public void evaluate() throws EvolutionException{
 		// evalution sequence strictly in order described by "Mach3 G and M code reference"
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence

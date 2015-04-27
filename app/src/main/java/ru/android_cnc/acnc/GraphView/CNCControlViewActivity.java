@@ -18,6 +18,7 @@ import java.io.InputStream;
 import ru.android_cnc.acnc.Drivers.Cutter.CutterDriver;
 import ru.android_cnc.acnc.FourButtonsActivity;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.R;
@@ -94,6 +95,9 @@ public class CNCControlViewActivity
                 programLoader.evaluate();
             }
             catch (InterpreterException ie){
+                allFine = false;
+            }
+            catch (EvolutionException ee){
                 allFine = false;
             };
         }

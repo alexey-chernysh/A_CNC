@@ -5,7 +5,7 @@
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
-import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 
 public class VariablesSet {
@@ -26,19 +26,19 @@ public class VariablesSet {
             set(currentWorkOffsetsNumPos_, 1.0);
             for(int i=1; i<=maxToolNumber;i++)
                 setWorkingToolOffset(i, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-        } catch (InterpreterException e) {
+        } catch (EvolutionException e) {
             e.printStackTrace();
         }
     };
 	
-	public VariablesSet() throws InterpreterException {
+	public VariablesSet() {
 	}
 	
-	public static double get(int num) throws InterpreterException{
+	public static double get(int num) throws EvolutionException{
 		return va.get(num);
 	}
 	
-	public static void set(int num, double value) throws InterpreterException{
+	public static void set(int num, double value) throws EvolutionException{
 		va.set(num, value);
 	}
 
@@ -51,57 +51,57 @@ public class VariablesSet {
 	private static final int offset_C = 6;
     private static final int offset_D = 7;
 
-    private static void setBase(int base, double value) throws InterpreterException{
+    private static void setBase(int base, double value) throws EvolutionException{
         va.set(base + offset_base, value);
     }
-	private static void setX(int base, double value) throws InterpreterException{
+	private static void setX(int base, double value) throws EvolutionException{
 		va.set(base + offset_X, value);
 	}
-	private static void setY(int base, double value) throws InterpreterException{
+	private static void setY(int base, double value) throws EvolutionException{
 		va.set(base + offset_Y, value);
 	}
-	private static void setZ(int base, double value) throws InterpreterException{
+	private static void setZ(int base, double value) throws EvolutionException{
 		va.set(base + offset_Z, value);
 	}
-	private static void setA(int base, double value) throws InterpreterException{
+	private static void setA(int base, double value) throws EvolutionException{
 		va.set(base + offset_A, value);
 	}
-	private static void setB(int base, double value) throws InterpreterException{
+	private static void setB(int base, double value) throws EvolutionException{
 		va.set(base + offset_B, value);
 	} 
-	private static void setC(int base, double value) throws InterpreterException{
+	private static void setC(int base, double value) throws EvolutionException{
 		va.set(base + offset_C, value);
 	}
-    private static void setD(int base, double value) throws InterpreterException{
+    private static void setD(int base, double value) throws EvolutionException{
         va.set(base + offset_D, value);
     }
 
-    private static double getBase(int base) throws InterpreterException{
+    private static double getBase(int base) throws EvolutionException{
         return va.get(base + offset_base);
     }
-	private static double getX(int base) throws InterpreterException{
+	private static double getX(int base) throws EvolutionException{
 		return va.get(base + offset_X);
 	}
-	private static double getY(int base) throws InterpreterException{
+	private static double getY(int base) throws EvolutionException{
 		return va.get(base + offset_Y);
 	}
-	private static double getZ(int base) throws InterpreterException{
+	private static double getZ(int base) throws EvolutionException{
 		return va.get(base + offset_Z);
 	}
-	private static double getA(int base) throws InterpreterException{
+	private static double getA(int base) throws EvolutionException{
 		return va.get(base + offset_A);
 	}
-	private static double getB(int base) throws InterpreterException{
+	private static double getB(int base) throws EvolutionException{
 		return va.get(base + offset_B);
 	}
-	private static double getC(int base) throws InterpreterException{
+	private static double getC(int base) throws EvolutionException{
 		return va.get(base + offset_C);
 	}
-    private static double getD(int base) throws InterpreterException{
+    private static double getD(int base) throws EvolutionException{
         return va.get(base + offset_D);
     }
 
-	public void setToolFixtureOffset(int L, TokenParameter tp, double value) throws InterpreterException{
+	public void setToolFixtureOffset(int L, TokenParameter tp, double value) throws EvolutionException{
 		int varPosition = currentWorkOffsetsNumPos_ + (L-1)*shift_;
 		switch(tp){
 		case X:
@@ -123,12 +123,12 @@ public class VariablesSet {
 			this.setC(varPosition, value);
 			break;
 		default:
-			throw new InterpreterException("Illegal alfa word (" + tp.toString() + ") in G10");
+			throw new EvolutionException("Illegal alfa word (" + tp.toString() + ") in G10");
 		}
 	}
 
     // G10 implementation
-	public static void setWorkingToolOffset(int P, double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+	public static void setWorkingToolOffset(int P, double X, double Y, double Z, double A, double B, double C) throws EvolutionException{
 		if((P>0)&(P<=VariablesSet.maxToolNumber)){
 			int varPosition = currentWorkOffsetsNumPos_ + (P-1)*shift_;
 			setX(varPosition, X);
@@ -140,7 +140,7 @@ public class VariablesSet {
 		}
 	}
 	
-	public static void setScale(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+	public static void setScale(double X, double Y, double Z, double A, double B, double C) throws EvolutionException{
 			int varPosition = ScalePos_;
 			setX(varPosition, X);
 			setY(varPosition, Y);
@@ -150,26 +150,26 @@ public class VariablesSet {
 			setC(varPosition, C);
 	}
 	
-	public static double getScaleX() throws InterpreterException{
+	public static double getScaleX() throws EvolutionException{
 		return getX(ScalePos_);
 	}
-	public static double getScaleY() throws InterpreterException{
+	public static double getScaleY() throws EvolutionException{
 		return getY(ScalePos_);
 	}
-	public static double getScaleZ() throws InterpreterException{
+	public static double getScaleZ() throws EvolutionException{
 		return getZ(ScalePos_);
 	}
-    public static double getScaleA() throws InterpreterException{
+    public static double getScaleA() throws EvolutionException{
         return getA(ScalePos_);
     }
-    public static double getScaleB() throws InterpreterException{
+    public static double getScaleB() throws EvolutionException{
         return getB(ScalePos_);
     }
-    public static double getScaleC() throws InterpreterException{
+    public static double getScaleC() throws EvolutionException{
         return getC(ScalePos_);
     }
 
-	public boolean scalesAreEquals() throws InterpreterException{
+	public boolean scalesAreEquals() throws EvolutionException{
 		double sx = getScaleX();
 		double sy = getScaleY();
 		double sz = getScaleZ();
@@ -178,7 +178,7 @@ public class VariablesSet {
                 &&(Math.abs(sx) == Math.abs(sz)));
 	}
 	
-	public void setCoordinateOffset(double X, double Y, double Z, double A, double B, double C) throws InterpreterException{
+	public void setCoordinateOffset(double X, double Y, double Z, double A, double B, double C) throws EvolutionException{
 		this.setX(G92OffsetPos_, X);
 		this.setY(G92OffsetPos_, Y);
 		this.setZ(G92OffsetPos_, Z);
@@ -188,7 +188,7 @@ public class VariablesSet {
         this.setBase(G92OffsetPos_, 1.0);
     }
 
-    public CNCPoint getCoordinateOffset() throws InterpreterException{
+    public CNCPoint getCoordinateOffset() throws EvolutionException{
         CNCPoint result = new CNCPoint();
         if(this.getBase(G92OffsetPos_)>0.0){
             result.setX(this.getX(G92OffsetPos_));
@@ -201,82 +201,82 @@ public class VariablesSet {
         return result;
     }
 
-    public void setCurrentWorkOffsetNum(int P) throws InterpreterException{
+    public void setCurrentWorkOffsetNum(int P) throws EvolutionException{
 		this.va.set(VariablesSet.currentWorkOffsetsNumPos_, P);
 	}
 	
-	private int getCurrentWorkOffsetNum() throws InterpreterException{
+	private int getCurrentWorkOffsetNum() throws EvolutionException{
 		return (int)this.va.get(VariablesSet.currentWorkOffsetsNumPos_);
 	}
 	
-	public double getOffsetX(int i) throws InterpreterException{
+	public double getOffsetX(int i) throws EvolutionException{
 		if(i>0)	return this.getX(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetX() throws InterpreterException{
+	public double getWorkOffsetX() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetX(i);
 	}
 	
-	public double getOffsetY(int i) throws InterpreterException{
+	public double getOffsetY(int i) throws EvolutionException{
 		if(i>0)	return this.getY(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetY() throws InterpreterException{
+	public double getWorkOffsetY() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetY(i);
 	}
 	
-	public double getOffsetZ(int i) throws InterpreterException{
+	public double getOffsetZ(int i) throws EvolutionException{
 		if(i>0)	return this.getZ(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetZ() throws InterpreterException{
+	public double getWorkOffsetZ() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetZ(i);
 	}
 	
-	public double getOffsetA(int i) throws InterpreterException{
+	public double getOffsetA(int i) throws EvolutionException{
 		if(i>0)	return this.getA(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetA() throws InterpreterException{
+	public double getWorkOffsetA() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetA(i);
 	}
 	
-	public double getOffsetB(int i) throws InterpreterException{
+	public double getOffsetB(int i) throws EvolutionException{
 		if(i>0)	return this.getB(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetB() throws InterpreterException{
+	public double getWorkOffsetB() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetB(i);
 	}
 	
-	public double getOffsetC(int i) throws InterpreterException{
+	public double getOffsetC(int i) throws EvolutionException{
 		if(i>0)	return this.getC(currentWorkOffsetsNumPos_ + (i - 1)*shift_);
 		else return 0.0;
 	}
 	
-	public double getWorkOffsetC() throws InterpreterException{
+	public double getWorkOffsetC() throws EvolutionException{
 		int i = getCurrentWorkOffsetNum();
 		return getOffsetC(i);
 	}
 	
-	public boolean IsConstant(int num) throws InterpreterException{
-		if(num <= 0) throw new InterpreterException("Reference to non initialized variable");
+	public boolean IsConstant(int num) throws EvolutionException{
+		if(num <= 0) throw new EvolutionException("Reference to non initialized variable");
 		else
 			if(num == 1) return true;
 			else return false;
 	}
 	
-	public static CNCPoint getHomePointG28() throws InterpreterException {
+	public static CNCPoint getHomePointG28() throws EvolutionException {
 		CNCPoint homeCNCPoint =  new CNCPoint(getX(G28HomePos_),
                                               getY(G28HomePos_),
                                               getZ(G28HomePos_),
@@ -285,7 +285,7 @@ public class VariablesSet {
                                               getC(G28HomePos_));
 		return homeCNCPoint;
 	}
-    public static void setG28HomePos(CNCPoint pos) throws InterpreterException {
+    public static void setG28HomePos(CNCPoint pos) throws EvolutionException {
         setX(G28HomePos_, pos.getX());
         setY(G28HomePos_, pos.getY());
         setZ(G28HomePos_, pos.getY());
@@ -293,7 +293,7 @@ public class VariablesSet {
         setB(G28HomePos_, pos.getB());
         setC(G28HomePos_, pos.getC());
     }
-	public static CNCPoint getHomePointG30() throws InterpreterException {
+	public static CNCPoint getHomePointG30() throws EvolutionException {
 		CNCPoint homeCNCPoint =  new CNCPoint(getX(G30HomePos_),
                                               getY(G30HomePos_),
                                               getZ(G30HomePos_),
@@ -302,7 +302,7 @@ public class VariablesSet {
                                               getC(G30HomePos_));
 		return homeCNCPoint;
 	}
-    public static void setG30HomePos(CNCPoint pos) throws InterpreterException {
+    public static void setG30HomePos(CNCPoint pos) throws EvolutionException {
         setX(G30HomePos_, pos.getX());
         setY(G30HomePos_, pos.getY());
         setZ(G30HomePos_, pos.getY());
@@ -311,10 +311,10 @@ public class VariablesSet {
         setC(G30HomePos_, pos.getC());
     }
 
-    public static double getToolDiameter(int toolNum) throws InterpreterException {
+    public static double getToolDiameter(int toolNum) throws EvolutionException {
         return getD(toolOffsetBase_ + toolNum*shift_);
     }
-    public static double getToolHeight(int toolNum) throws InterpreterException {
+    public static double getToolHeight(int toolNum) throws EvolutionException {
         return getZ(toolOffsetBase_ + toolNum*shift_);
     }
 }
