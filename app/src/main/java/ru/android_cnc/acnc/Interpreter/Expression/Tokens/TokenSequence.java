@@ -6,16 +6,16 @@ package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
 import android.text.Spannable;
 
-import java.util.Iterator;
-
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class TokenSequence {
 	
 	public TokenList tokenList = null;
+    protected final String sourceString;
 		
 	public TokenSequence(String frameString) throws InterpreterException {
+        this.sourceString = frameString;
 		this.tokenList = new TokenList(frameString);
 
 		if(frameString.length()>0){

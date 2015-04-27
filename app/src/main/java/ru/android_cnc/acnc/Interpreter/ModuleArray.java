@@ -6,6 +6,8 @@ package ru.android_cnc.acnc.Interpreter;
 
 import java.util.ArrayList;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
+
 public class ModuleArray {
 
 	private ArrayList<ProgramModule> modules;
@@ -18,7 +20,7 @@ public class ModuleArray {
 		modules.add(nm);
 	}
 	
-	public ProgramModule getByName(String name) throws InterpreterException{
+	public ProgramModule getByName(String name) throws InterpreterException {
 		for(int i=0; i<modules.size(); i++)
 			if(modules.get(i).moduleName.equals(name)) return modules.get(i);
 		throw new InterpreterException("Request for unknown module!");

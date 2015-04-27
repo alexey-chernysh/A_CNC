@@ -5,7 +5,7 @@
 package ru.android_cnc.acnc.Interpreter.Expression;
 
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenCommand;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public class CommandPair { // pair of command indrntifier alfa and associated expression
 	

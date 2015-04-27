@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
@@ -28,7 +28,7 @@ public class CanonCommandSequence {
         limits = new DrawableObjectLimits();
 	}
 	
-	public void add(CanonCommand command) throws InterpreterException {
+	public void add(CanonCommand command) throws EvolutionException {
         if(command != null)
             if(command.getType() == CanonCommand.type.MOTION){
                 CCommandMotion motion = (CCommandMotion)command;
@@ -38,12 +38,12 @@ public class CanonCommandSequence {
         Log.i("Command ", " add " + command.toString());
 	}
 
-    public void prepare() throws InterpreterException {
+    public void prepare() throws EvolutionException {
         checkLimits();
         logIt();
     }
 
-    private void checkLimits() throws InterpreterException {
+    private void checkLimits() throws EvolutionException {
         int seq_length = seq_.size();
         for(int i=0;i<seq_length;i++){
             CanonCommand command = seq_.get(i);
@@ -71,7 +71,7 @@ public class CanonCommandSequence {
 		return seq_.get(i);
 	}
 
-    private void addCuttingMotion(CCommandMotion command) throws InterpreterException {
+    private void addCuttingMotion(CCommandMotion command) throws EvolutionException {
         CNCPoint unOffsetedStart = command.getStart().clone();
         command.applyCutterRadiusCompensation();
         CCommandMotion lastMotion = findLastMotion();
@@ -89,7 +89,7 @@ public class CanonCommandSequence {
                         if(d_alfa > 0.0){ // motion direction turn left
                             // line turn left and left offset
                             CNCPoint connectionPoint = getCrossingPoint(lastMotion, command);
-                            if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
+                            if(connectionPoint == null) throw new EvolutionException("Wrong G-code");
                             lastMotion.setEnd(connectionPoint);
                             command.setStart(connectionPoint);
                         } else {
@@ -121,7 +121,7 @@ public class CanonCommandSequence {
                             if(d_alfa < 0.0){
                                 // line turn right and right offset
                                 CNCPoint connectionPoint = getCrossingPoint(lastMotion, command);
-                                if(connectionPoint == null) throw new InterpreterException("Wrong G-code");
+                                if(connectionPoint == null) throw new EvolutionException("Wrong G-code");
                                 lastMotion.setEnd(connectionPoint);
                                 command.setStart(connectionPoint);
                             };
@@ -136,7 +136,7 @@ public class CanonCommandSequence {
         seq_.add(command);
     }
 
-    private void addFreeMotion(CCommandMotion command) throws InterpreterException {
+    private void addFreeMotion(CCommandMotion command) throws EvolutionException {
 		CCommandMotion lastMotion = findLastMotion();
 		if(lastMotion != null){ 
 			// last motion is straight or arc working run, correction needed
@@ -145,7 +145,7 @@ public class CanonCommandSequence {
 		seq_.add(command);
 	}
 
-	private CCommandMotion findLastMotion() throws InterpreterException {
+	private CCommandMotion findLastMotion() throws EvolutionException {
 		int size = seq_.size();
 		for(int i = (size-1); i>=0; i--){
 			CanonCommand command = seq_.get(i);

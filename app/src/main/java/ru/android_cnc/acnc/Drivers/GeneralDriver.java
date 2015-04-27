@@ -6,11 +6,8 @@ package ru.android_cnc.acnc.Drivers;
 
 import android.view.View;
 
-import java.util.ArrayList;
-
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public interface GeneralDriver {
 	

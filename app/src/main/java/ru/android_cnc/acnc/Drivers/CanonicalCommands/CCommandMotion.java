@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
 import static android.os.SystemClock.sleep;
@@ -31,14 +31,14 @@ public abstract class CCommandMotion extends CanonCommand {
                           CNCPoint e,
                           VelocityPlan vp,
                           MotionMode m,
-                          CutterRadiusCompensation crc) throws InterpreterException {
+                          CutterRadiusCompensation crc) throws EvolutionException {
         super(CanonCommand.type.MOTION);
         motionType = mt;
 
         if(s != null) start_ = s;
-        else throw new InterpreterException("Null start point in motion command");
+        else throw new EvolutionException("Null start point in motion command");
         if(e != null) end_ = e;
-        else throw new InterpreterException("Null end point in motion command");
+        else throw new EvolutionException("Null end point in motion command");
 
         velocityPlan_ = vp;
         mode_ = m;
@@ -55,7 +55,7 @@ public abstract class CCommandMotion extends CanonCommand {
 
 
     public CutterRadiusCompensation getOffsetMode() { return offsetMode_; }
-    public void setOffsetMode(CutterRadiusCompensation om) throws InterpreterException { this.offsetMode_ = new CutterRadiusCompensation(om.getMode(), om.getRadius()); }
+    public void setOffsetMode(CutterRadiusCompensation om) throws EvolutionException { this.offsetMode_ = new CutterRadiusCompensation(om.getMode(), om.getRadius()); }
     public double getOffsetRadius(){
         return offsetMode_.getRadius();
     }
@@ -74,7 +74,7 @@ public abstract class CCommandMotion extends CanonCommand {
     public boolean isWorkingRun(){ return (this.getMode() == MotionMode.WORK); }
     public boolean isFreeRun(){	return (this.getMode() == MotionMode.FREE);	}
 
-    public abstract void checkLimits() throws InterpreterException;
+    public abstract void checkLimits() throws EvolutionException;
     public abstract void applyCutterRadiusCompensation();
     public abstract double length();
     public abstract double getStartTangentAngle();

@@ -4,7 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public 	class VarArray {
 	

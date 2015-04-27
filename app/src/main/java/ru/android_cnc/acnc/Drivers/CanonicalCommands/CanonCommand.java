@@ -6,8 +6,7 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
 
-import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public abstract class CanonCommand {
 	
@@ -20,10 +19,7 @@ public abstract class CanonCommand {
     abstract public void execute();
     abstract public void draw(Canvas canvas);
 
-	public type getType() throws InterpreterException {
-		if(type_ != type.UNDEFINED)	return type_;
-		else throw new InterpreterException("Request to not initialized field");
-	}
+	public type getType() { return this.type_; }
 
 	public void setType(type t) {
 		this.type_ = t;

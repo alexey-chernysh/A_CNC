@@ -5,7 +5,7 @@
 package ru.android_cnc.acnc.Interpreter.Expression.Variables;
 
 import ru.android_cnc.acnc.Interpreter.Expression.ExpressionGeneral;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ExpressionVarAssignment {

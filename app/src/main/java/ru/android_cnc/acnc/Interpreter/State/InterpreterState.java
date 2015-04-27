@@ -6,7 +6,7 @@ package ru.android_cnc.acnc.Interpreter.State;
 
 import ru.android_cnc.acnc.Geometry.CoordinateRotation;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.ModalState.ModalState;
 

@@ -1,6 +1,6 @@
 package ru.android_cnc.acnc.Draw;
 
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 
 /**
@@ -33,7 +33,7 @@ public class DrawableObjectLimits {
     }
 
     public static DrawableObjectLimits combine(DrawableObjectLimits limits1,
-                                               DrawableObjectLimits limits2) throws InterpreterException {
+                                               DrawableObjectLimits limits2) throws EvolutionException {
         if(limits1 != null){
             if(limits2 != null){
                 DrawableObjectLimits result = new DrawableObjectLimits(limits1.left, limits1.right, limits1.bottom, limits1.top);
@@ -44,10 +44,10 @@ public class DrawableObjectLimits {
         }
         else
             if(limits2 != null) return limits2;
-            else throw new InterpreterException("Null limits combine");
+            else throw new EvolutionException("Null limits combine");
     }
 
-    public static DrawableObjectLimits combine(DrawableObjectLimits limits, CNCPoint point) throws InterpreterException {
+    public static DrawableObjectLimits combine(DrawableObjectLimits limits, CNCPoint point) throws EvolutionException {
         if(limits != null){
             if(point != null){
                 DrawableObjectLimits result = new DrawableObjectLimits(limits.left, limits.right, limits.bottom, limits.top);
@@ -58,7 +58,7 @@ public class DrawableObjectLimits {
                 return result;
             } else return limits;
         }
-        else throw new InterpreterException("Null limitss with point combine");
+        else throw new EvolutionException("Null limits with point combine");
     }
 
     public float getTop() {

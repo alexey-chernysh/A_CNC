@@ -19,15 +19,13 @@ package ru.android_cnc.acnc.Drivers.Cutter;
 import android.os.Handler;
 import android.view.View;
 
-import java.util.ArrayList;
-
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
 import ru.android_cnc.acnc.Drivers.GeneralDriver;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Settings.Settings;
 
 public class CutterDriver implements GeneralDriver {
@@ -45,7 +43,7 @@ public class CutterDriver implements GeneralDriver {
 //		buildVelocityProfile();
 	}
 
-	private void buildVelocityProfile() throws InterpreterException {
+	private void buildVelocityProfile() throws EvolutionException {
 
 		int size = this.commands_.size();
 		

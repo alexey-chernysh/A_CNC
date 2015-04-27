@@ -9,7 +9,7 @@ import android.text.Spannable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public class TokenList extends LinkedList<Token> {
 	

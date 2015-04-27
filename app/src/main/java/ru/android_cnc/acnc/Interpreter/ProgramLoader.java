@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
 public class ProgramLoader {
@@ -35,10 +36,12 @@ public class ProgramLoader {
         boolean programEndReached = false;
         int currentStringStart = 0;
         int currentStringLength = 0;
+        int charCounter = 0;
         for(int i=0;i<n_lines;i++){
             currentStringLength = lines[i].length();
             LineLoader currentBlock = new LineLoader(lines[i]);
             lineArray.add(currentBlock);
+//            charCounter += currentBlock
             if(currentBlock.isModuleStart()){
                 ProgramModule newModule = new ProgramModule(currentBlock.getModuleNum(), lineArray);
                 newModule.setStart(i);
@@ -58,7 +61,7 @@ public class ProgramLoader {
             currentBlock.setAllSpan(spannedSource, currentStringStart);
             currentStringStart += currentStringLength + separatorLength;
         }
-        if(!programEndReached) throw new InterpreterException("M2 needed in the end of program!");
+        if(!programEndReached) throw new InterpreterException("M2 needed in the end of program!",0);
         return spannedSource;
     }
 

@@ -8,11 +8,9 @@ import android.graphics.Canvas;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
-
-import static android.os.SystemClock.sleep;
 
 public class CCommandStraightLine extends CCommandMotion {
 
@@ -21,13 +19,13 @@ public class CCommandStraightLine extends CCommandMotion {
                                 CNCPoint e,
                                 VelocityPlan vp,
                                 MotionMode m,
-                                CutterRadiusCompensation crc) throws InterpreterException {
+                                CutterRadiusCompensation crc) throws EvolutionException {
 		// init fields
 		super(MotionType.STRAIGHT, s, e, vp, m, crc);
 	}
 
     @Override
-    public void checkLimits() throws InterpreterException {
+    public void checkLimits() throws EvolutionException {
         this.limits = new DrawableObjectLimits(this.getStart());
         this.limits = DrawableObjectLimits.combine(this.limits, this.getEnd());
     }
@@ -59,7 +57,7 @@ public class CCommandStraightLine extends CCommandMotion {
     @Override
 	public double getEndTangentAngle() { return getStartTangentAngle();	}
 
-	public CCommandStraightLine newSubLine(double lengthStart, double lengthEnd) throws InterpreterException {
+	public CCommandStraightLine newSubLine(double lengthStart, double lengthEnd) throws EvolutionException {
 
 		CNCPoint newStart = start_;
 		CNCPoint newEnd = end_;

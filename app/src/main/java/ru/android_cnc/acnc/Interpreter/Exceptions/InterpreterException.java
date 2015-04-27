@@ -2,19 +2,19 @@
  * @author Alexey Chernysh
  */
 
-package ru.android_cnc.acnc.Interpreter;
+package ru.android_cnc.acnc.Interpreter.Exceptions;
 
 public class InterpreterException extends Exception {
 
 	private	String message_ = null;
 	private int position_ = -1;
-
+/*
 	public InterpreterException(){}
 	
 	public InterpreterException(String msg){
         message_ = msg;
 	}
-
+*/
 	public InterpreterException(String msg, int p){
 		message_ = msg;
 		position_ = p;

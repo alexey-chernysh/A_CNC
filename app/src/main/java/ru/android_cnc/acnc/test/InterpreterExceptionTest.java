@@ -6,10 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ru.android_cnc.acnc.Interpreter.Expression.Tokens.Token;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenSequence;
-import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenUnlexedText;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 /**
  * Created by Sales on 07.04.2015.

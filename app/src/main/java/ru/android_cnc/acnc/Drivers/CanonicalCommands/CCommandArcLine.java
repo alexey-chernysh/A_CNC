@@ -5,18 +5,14 @@
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
-import static android.os.SystemClock.sleep;
-import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -32,7 +28,7 @@ public class CCommandArcLine extends CCommandMotion {
                            CNCPoint centerCNCPoint,
                            ArcDirection arcDirection,
                            VelocityPlan vp,
-                           CutterRadiusCompensation offsetMode) throws InterpreterException {
+                           CutterRadiusCompensation offsetMode) throws EvolutionException {
 		super(MotionType.ARC, startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
 
 		this.center_ = centerCNCPoint;
@@ -59,7 +55,7 @@ public class CCommandArcLine extends CCommandMotion {
     }
 
     @Override
-    public void checkLimits() throws InterpreterException {
+    public void checkLimits() throws EvolutionException {
         // start & end points checked in Straight Line constructor
         // so we need check points on arc only
         this.limits = new DrawableObjectLimits(this.getStart());
@@ -111,9 +107,7 @@ public class CCommandArcLine extends CCommandMotion {
 	}
 
     @Override
-    public void setVelocityProfile(double startVel, double endVel) {
-
-    }
+    public void setVelocityProfile(double startVel, double endVel) {    }
 
     private double Radial2Tangent(double alfa){
 		if(this.getArcDirection() == ArcDirection.CLOCKWISE) return alfa - Math.PI/2.0;
@@ -141,7 +135,7 @@ public class CCommandArcLine extends CCommandMotion {
 		return 2.0 * Math.PI * this.radius() / Math.abs(this.angle());
 	}
 
-	public CCommandArcLine newSubArc(double lengthStart, double lengthEnd) throws InterpreterException {
+	public CCommandArcLine newSubArc(double lengthStart, double lengthEnd) throws EvolutionException {
 		CNCPoint newStart = start_;
 		CNCPoint newEnd = end_;
 		double l = this.length();
@@ -173,11 +167,11 @@ public class CCommandArcLine extends CCommandMotion {
 						   this.getVelocityPlan(),
 						   this.getOffsetMode());
 	}
-    /*
-        @Override
-        public void execute() {
-        }
-    */
+/*
+    @Override
+    public void execute() {
+    }
+*/
     @Override
     public void draw(Canvas canvas) {
         float p = (float)(getMotionPhase()/length());

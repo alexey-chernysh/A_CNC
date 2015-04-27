@@ -6,7 +6,7 @@ package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandTorchOff;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandTorchOn;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 

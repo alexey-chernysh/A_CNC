@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import ru.android_cnc.acnc.FourButtonsActivity;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.R;
 

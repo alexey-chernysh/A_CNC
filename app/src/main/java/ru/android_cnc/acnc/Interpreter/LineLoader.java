@@ -5,11 +5,11 @@
 package ru.android_cnc.acnc.Interpreter;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandMessage;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandSpindelSpeed;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandLineLoader;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandPair;
 import ru.android_cnc.acnc.Interpreter.Expression.ExpressionGeneral;
@@ -53,7 +53,7 @@ public class LineLoader extends CommandLineLoader {
 	
 	private int moduleNum_ = -1;
 
-	public LineLoader(String s) throws InterpreterException{
+	public LineLoader(String s) throws InterpreterException, EvolutionException {
 		super(s);
 		int size = this.commandSet_.size();
 		int i;
@@ -398,13 +398,14 @@ public class LineLoader extends CommandLineLoader {
 				this.tool_ = commandValueExpression;
 				break;
 			default:
+//                int pos = currentCommand.
 				throw new InterpreterException("Unsupported command");
 			}
 		}
         Log.d(LOG_TAG, this.toString());
 	}
 	
-	public void evaluate() throws InterpreterException{
+	public void evaluate() throws InterpreterException, EvolutionException{
 		// evalution sequence strictly in order described by "Mach3 G and M code reference"
 		// every evolution change interpreter's virtual CNC-machine state or generate HAL command
 		// and add it in HAL execution sequence

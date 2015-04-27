@@ -8,7 +8,7 @@ import ru.android_cnc.acnc.Interpreter.Expression.Tokens.Token;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenComment;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenSequence;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenUnlexedText;
-import ru.android_cnc.acnc.Interpreter.InterpreterException;
+import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public class TokenSequenceTest extends TestCase {
 
