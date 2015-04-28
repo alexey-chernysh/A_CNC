@@ -67,7 +67,7 @@ public class ProgramLoader {
                 e.printStackTrace();
             }
         }
-        if(!programEndReached) throw new InterpreterException("M2 needed in the end of program!",0);
+//        if(!programEndReached) throw new InterpreterException("M2 needed in the end of program!",0);
         return spannedSource;
     }
 

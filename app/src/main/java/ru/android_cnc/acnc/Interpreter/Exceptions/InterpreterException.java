@@ -8,13 +8,13 @@ public class InterpreterException extends Exception {
 
 	private	String message_ = null;
 	private int position_ = -1;
-//*
+/*
 	public InterpreterException(){}
 	
 	public InterpreterException(String msg){
         message_ = msg;
 	}
-//*/
+*/
 	public InterpreterException(String msg, int p){
 		message_ = msg;
 		position_ = p;

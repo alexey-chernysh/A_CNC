@@ -8,7 +8,7 @@ import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public class ExpressionGeneral { // general expression used in NGC274 code
-	
+	// TODO remove this stupid field and methods
 	private boolean constant = false;
 
 	public double evaluate() throws EvolutionException {

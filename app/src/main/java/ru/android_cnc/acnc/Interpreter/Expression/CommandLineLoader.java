@@ -40,7 +40,7 @@ public class CommandLineLoader extends TokenSequence {
 				TokenDefaultFields currentWord = ((TokenAlfa)t).getType();
 				switch( currentWord.getGroup() ){
 					case COMMAND:
-						this.commandSet_.addCommand(new CommandPair( (TokenCommand)currentWord, numExp));
+						this.commandSet_.addCommand(new CommandPair((TokenCommand)currentWord, numExp, t.getStart()));
 						break;
 					case PARAMETER:
 						this.wordList_.addWord((TokenParameter)currentWord, numExp);

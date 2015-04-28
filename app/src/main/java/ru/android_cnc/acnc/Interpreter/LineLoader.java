@@ -54,7 +54,11 @@ public class LineLoader extends CommandLineLoader {
 	private int moduleNum_ = -1;
 
 	public LineLoader(String s) throws InterpreterException {
-		super(s);
+        super(s);
+        load();
+    }
+
+    private void load() throws InterpreterException {
 		int size = this.commandSet_.size();
 		int i;
 		for(i=0; i<size; i++){
@@ -65,331 +69,341 @@ public class LineLoader extends CommandLineLoader {
 				this.feedRate_ = commandValueExpression;
 				break;
 			case G:
-				GCommandSet g_command = this.GcommandByNumber(currentCommand.getCurrentValue());
-				switch(g_command){
+                GCommandSet g_command = null;
+                try { // TODO change this smelling code - G
+                    g_command = this.GcommandByNumber(currentCommand.getCurrentValue());
+                } catch (EvolutionException e) {
+                    e.printStackTrace();
+                }
+                switch(g_command){
 				case G0:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G0;
-					else throw new InterpreterException("Twice motion command in same string");
-					break;
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
+                    break;
 				case G1:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G1;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G2:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G2;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G3:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G3;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G4:
 					if(this.G4 == GCommandSet.GDUMMY) this.G4 = GCommandSet.G4;
-					else throw new InterpreterException("Twice dwell command in same string");
+					else throw new InterpreterException("Twice dwell command in same string", currentCommand.getPosInString());
 					break;
 				case G10:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G10;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G12:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G12;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G13:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G13;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G15:
 					if(this.G15_G16 == GCommandSet.GDUMMY) this.G15_G16 = GCommandSet.G15;
-					else throw new InterpreterException("Twice polar coordinate command in same string");
+					else throw new InterpreterException("Twice polar coordinate command in same string", currentCommand.getPosInString());
 					break;
 				case G16:
 					if(this.G15_G16 == GCommandSet.GDUMMY) this.G15_G16 = GCommandSet.G16;
-					else throw new InterpreterException("Twice polar coordinate command in same string");
+					else throw new InterpreterException("Twice polar coordinate command in same string", currentCommand.getPosInString());
 					break;
 				case G17:
 					if(this.G17_G18_G19 == GCommandSet.GDUMMY) this.G17_G18_G19 = GCommandSet.G17;
-					else throw new InterpreterException("Twice plane selection command in same string");
+					else throw new InterpreterException("Twice plane selection command in same string", currentCommand.getPosInString());
 					break;
 				case G18:
 					if(this.G17_G18_G19 == GCommandSet.GDUMMY) this.G17_G18_G19 = GCommandSet.G18;
-					else throw new InterpreterException("Twice plane selection command in same string");
+					else throw new InterpreterException("Twice plane selection command in same string", currentCommand.getPosInString());
 					break;
 				case G19:
 					if(this.G17_G18_G19 == GCommandSet.GDUMMY) this.G17_G18_G19 = GCommandSet.G19;
-					else throw new InterpreterException("Twice plane selection command in same string");
+					else throw new InterpreterException("Twice plane selection command in same string", currentCommand.getPosInString());
 					break;
 				case G20:
 					if(this.G20_G21 == GCommandSet.GDUMMY) this.G20_G21 = GCommandSet.G20;
-					else throw new InterpreterException("Twice units change command in same string");
+					else throw new InterpreterException("Twice units change command in same string", currentCommand.getPosInString());
 					break;
 				case G21:
 					if(this.G20_G21 == GCommandSet.GDUMMY) this.G20_G21 = GCommandSet.G21;
-					else throw new InterpreterException("Twice units change command in same string");
+					else throw new InterpreterException("Twice units change command in same string", currentCommand.getPosInString());
 					break;
 				case G28:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G28;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G28_1:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G28_1;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G30:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G30;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G31:
 					if(this.G_MOTION == GCommandSet.GDUMMY) this.G_MOTION = GCommandSet.G31;
-					else throw new InterpreterException("Twice motion command in same string");
+					else throw new InterpreterException("Twice motion command in same string", currentCommand.getPosInString());
 					break;
 				case G40:
 					if(this.G40_G41_G42 == GCommandSet.GDUMMY) this.G40_G41_G42 = GCommandSet.G40;
-					else throw new InterpreterException("Twice cutter radius compensation change command in same string");
+					else throw new InterpreterException("Twice cutter radius compensation change command in same string", currentCommand.getPosInString());
 					break;
 				case G41:
 					if(this.G40_G41_G42 == GCommandSet.GDUMMY) this.G40_G41_G42 = GCommandSet.G41;
-					else throw new InterpreterException("Twice cutter radius compensation change command in same string");
+					else throw new InterpreterException("Twice cutter radius compensation change command in same string", currentCommand.getPosInString());
 					break;
 				case G42:
 					if(this.G40_G41_G42 == GCommandSet.GDUMMY) this.G40_G41_G42 = GCommandSet.G42;
-					else throw new InterpreterException("Twice cutter radius compensation change command in same string");
+					else throw new InterpreterException("Twice cutter radius compensation change command in same string", currentCommand.getPosInString());
 					break;
 				case G43:
 					if(this.G43_G49 == GCommandSet.GDUMMY) this.G43_G49 = GCommandSet.G43;
-					else throw new InterpreterException("Twice cutter height compensation change command in same string");
+					else throw new InterpreterException("Twice cutter height compensation change command in same string", currentCommand.getPosInString());
 					break;
 				case G49:
 					if(this.G43_G49 == GCommandSet.GDUMMY) this.G43_G49 = GCommandSet.G49;
-					else throw new InterpreterException("Twice cutter height compensation change command in same string");
+					else throw new InterpreterException("Twice cutter height compensation change command in same string", currentCommand.getPosInString());
 					break;
 				case G50:
 					if(this.G50_G51 == GCommandSet.GDUMMY) this.G50_G51 = GCommandSet.G50;
-					else throw new InterpreterException("Twice scale change command in same string");
+					else throw new InterpreterException("Twice scale change command in same string", currentCommand.getPosInString());
 					break;
 				case G51:
 					if(this.G50_G51 == GCommandSet.GDUMMY) this.G50_G51 = GCommandSet.G51;
-					else throw new InterpreterException("Twice scale change command in same string");
+					else throw new InterpreterException("Twice scale change command in same string", currentCommand.getPosInString());
 					break;
 				case G52:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G52;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G53:
 					if(this.G53 == GCommandSet.GDUMMY) this.G53 = GCommandSet.G53;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G54:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G54;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G55:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G55;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G56:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G56;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G57:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G57;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G58:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G58;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G59:
 					if(this.G54___G59 == GCommandSet.GDUMMY) this.G54___G59 = GCommandSet.G59;
-					else throw new InterpreterException("Twice fixture tool offset command in same string");
+					else throw new InterpreterException("Twice fixture tool offset command in same string", currentCommand.getPosInString());
 					break;
 				case G61:
 					if(this.G61_G64 == GCommandSet.GDUMMY) this.G61_G64 = GCommandSet.G61;
-					else throw new InterpreterException("Twice path control mode command in same string");
+					else throw new InterpreterException("Twice path control mode command in same string", currentCommand.getPosInString());
 					break;
 				case G64:
 					if(this.G61_G64 == GCommandSet.GDUMMY) this.G61_G64 = GCommandSet.G64;
-					else throw new InterpreterException("Twice path control mode command in same string");
+					else throw new InterpreterException("Twice path control mode command in same string", currentCommand.getPosInString());
 					break;
 				case G68:
 					if(this.G68_G69 == GCommandSet.GDUMMY) this.G68_G69 = GCommandSet.G68;
-					else throw new InterpreterException("Twice coordinate rotation command in same string");
+					else throw new InterpreterException("Twice coordinate rotation command in same string", currentCommand.getPosInString());
 					break;
 				case G69:
 					if(this.G68_G69 == GCommandSet.GDUMMY) this.G68_G69 = GCommandSet.G69;
-					else throw new InterpreterException("Twice coordinate rotation command in same string");
+					else throw new InterpreterException("Twice coordinate rotation command in same string", currentCommand.getPosInString());
 					break;
 				case G70:
 					if(this.G20_G21 == GCommandSet.GDUMMY) this.G20_G21 = GCommandSet.G70;
-					else throw new InterpreterException("Twice units change command in same string");
+					else throw new InterpreterException("Twice units change command in same string", currentCommand.getPosInString());
 					break;
 				case G71:
 					if(this.G20_G21 == GCommandSet.GDUMMY) this.G20_G21 = GCommandSet.G71;
-					else throw new InterpreterException("Twice units change command in same string");
+					else throw new InterpreterException("Twice units change command in same string", currentCommand.getPosInString());
 					break;
 				case G73:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G73;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G80:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G80;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G81:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G81;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G82:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G82;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G83:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G83;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G84:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G84;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G85:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G85;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G86:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G86;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G87:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G87;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G88:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G88;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G89:
 					if(this.G80_G89 == GCommandSet.GDUMMY) this.G80_G89 = GCommandSet.G89;
-					else throw new InterpreterException("Twice canned cycle command in same string");
+					else throw new InterpreterException("Twice canned cycle command in same string", currentCommand.getPosInString());
 					break;
 				case G90:
 					if(this.G90_G91 == GCommandSet.GDUMMY) this.G90_G91 = GCommandSet.G90;
-					else throw new InterpreterException("Twice distance mode command in same string");
+					else throw new InterpreterException("Twice distance mode command in same string", currentCommand.getPosInString());
 					break;
 				case G90_1:
 					if(this.G90_1_G91_1 == GCommandSet.GDUMMY) this.G90_1_G91_1 = GCommandSet.G90_1;
-					else throw new InterpreterException("Twice arc center distance mode command in same string");
+					else throw new InterpreterException("Twice arc center distance mode command in same string", currentCommand.getPosInString());
 					break;
 				case G91:
 					if(this.G90_G91 == GCommandSet.GDUMMY) this.G90_G91 = GCommandSet.G91;
-					else throw new InterpreterException("Twice distance mode command in same string");
+					else throw new InterpreterException("Twice distance mode command in same string", currentCommand.getPosInString());
 					break;
 				case G91_1:
 					if(this.G90_1_G91_1 == GCommandSet.GDUMMY) this.G90_1_G91_1 = GCommandSet.G91_1;
-					else throw new InterpreterException("Twice arc center distance mode command in same string");
+					else throw new InterpreterException("Twice arc center distance mode command in same string", currentCommand.getPosInString());
 					break;
 				case G92:
 					if(this.G_NON_MODAL == GCommandSet.GDUMMY) this.G_NON_MODAL = GCommandSet.G92;
-					else throw new InterpreterException("Twice homing command in same string");
+					else throw new InterpreterException("Twice homing command in same string", currentCommand.getPosInString());
 					break;
 				case G93:
 					if(this.G93_G94_G95 == GCommandSet.GDUMMY) this.G93_G94_G95 = GCommandSet.G93;
-					else throw new InterpreterException("Twice feed rate mode change command in same string");
+					else throw new InterpreterException("Twice feed rate mode change command in same string", currentCommand.getPosInString());
 					break;
 				case G94:
 					if(this.G93_G94_G95 == GCommandSet.GDUMMY) this.G93_G94_G95 = GCommandSet.G94;
-					else throw new InterpreterException("Twice feed rate mode change command in same string");
+					else throw new InterpreterException("Twice feed rate mode change command in same string", currentCommand.getPosInString());
 					break;
 				case G95:
 					if(this.G93_G94_G95 == GCommandSet.GDUMMY) this.G93_G94_G95 = GCommandSet.G95;
-					else throw new InterpreterException("Twice feed rate mode change command in same string");
+					else throw new InterpreterException("Twice feed rate mode change command in same string", currentCommand.getPosInString());
 					break;
 				case G98:
 					if(this.G98_G99 == GCommandSet.GDUMMY) this.G98_G99 = GCommandSet.G98;
-					else throw new InterpreterException("Twice cycle return mode command in same string");
+					else throw new InterpreterException("Twice cycle return mode command in same string", currentCommand.getPosInString());
 					break;
 				case G99:
 					if(this.G98_G99 == GCommandSet.GDUMMY) this.G98_G99 = GCommandSet.G99;
-					else throw new InterpreterException("Twice cycle return mode command in same string");
+					else throw new InterpreterException("Twice cycle return mode command in same string", currentCommand.getPosInString());
 					break;
 				default:
-					throw new InterpreterException("Unsupported G code num");
+					throw new InterpreterException("Unsupported G code num", currentCommand.getPosInString());
 				}
 				break;
 			case M:
-				MCommandSet m_command = this.McommandByNumber(currentCommand.getCurrentValue());
-				switch(m_command){
+                MCommandSet m_command = null;
+                try { // TODO change this smelling code - M
+                    m_command = this.McommandByNumber(currentCommand.getCurrentValue());
+                } catch (EvolutionException e) {
+                    e.printStackTrace();
+                }
+                switch(m_command){
 				case M0:
 					if(this.M1_M2_M3 == MCommandSet.MDUMMY) this.M1_M2_M3 = MCommandSet.M0;
-					else throw new InterpreterException("Twice stopping command in same string");
+					else throw new InterpreterException("Twice stopping command in same string", currentCommand.getPosInString());
 					break;
 				case M1:
 					if(this.M1_M2_M3 == MCommandSet.MDUMMY) this.M1_M2_M3 = MCommandSet.M1;
-					else throw new InterpreterException("Twice stopping command in same string");
+					else throw new InterpreterException("Twice stopping command in same string", currentCommand.getPosInString());
 					break;
 				case M2:
 					if(this.M1_M2_M3 == MCommandSet.MDUMMY) this.M1_M2_M3 = MCommandSet.M2;
-					else throw new InterpreterException("Twice stopping command in same string");
+					else throw new InterpreterException("Twice stopping command in same string", currentCommand.getPosInString());
 					break;
 				case M3:
 					if(this.M3_M4_M5 == MCommandSet.MDUMMY) this.M3_M4_M5 = MCommandSet.M3;
-					else throw new InterpreterException("Twice spindle rotation command in same string");
+					else throw new InterpreterException("Twice spindle rotation command in same string", currentCommand.getPosInString());
 					break;
 				case M4:
 					if(this.M3_M4_M5 == MCommandSet.MDUMMY) this.M3_M4_M5 = MCommandSet.M4;
-					else throw new InterpreterException("Twice spindle rotation command in same string");
+					else throw new InterpreterException("Twice spindle rotation command in same string", currentCommand.getPosInString());
 					break;
 				case M5:
 					if(this.M3_M4_M5 == MCommandSet.MDUMMY) this.M3_M4_M5 = MCommandSet.M5;
-					else throw new InterpreterException("Twice spindle rotation command in same string");
+					else throw new InterpreterException("Twice spindle rotation command in same string", currentCommand.getPosInString());
 					break;
 				case M6:
 					if(this.M6 == MCommandSet.MDUMMY) this.M6 = MCommandSet.M5;
-					else throw new InterpreterException("Twice change tool command in same string");
+					else throw new InterpreterException("Twice change tool command in same string", currentCommand.getPosInString());
 					break;
 				case M7:
 					if(this.M7_M8_M9 == MCommandSet.MDUMMY) this.M7_M8_M9 = MCommandSet.M7;
-					else throw new InterpreterException("Twice coolant mode command in same string");
+					else throw new InterpreterException("Twice coolant mode command in same string", currentCommand.getPosInString());
 					break;
 				case M8:
 					if(this.M7_M8_M9 == MCommandSet.MDUMMY) this.M7_M8_M9 = MCommandSet.M8;
-					else throw new InterpreterException("Twice coolant mode command in same string");
+					else throw new InterpreterException("Twice coolant mode command in same string", currentCommand.getPosInString());
 					break;
 				case M9:
 					if(this.M7_M8_M9 == MCommandSet.MDUMMY) this.M7_M8_M9 = MCommandSet.M9;
-					else throw new InterpreterException("Twice coolant mode command in same string");
+					else throw new InterpreterException("Twice coolant mode command in same string", currentCommand.getPosInString());
 					break;
 				case M30:
 					if(this.M1_M2_M3 == MCommandSet.MDUMMY) this.M1_M2_M3 = MCommandSet.M30;
-					else throw new InterpreterException("Twice stopping command in same string");
+					else throw new InterpreterException("Twice stopping command in same string", currentCommand.getPosInString());
 					break;
 				case M47:
 					if(this.M47_M98_M99 == MCommandSet.MDUMMY) this.M47_M98_M99 = MCommandSet.M47;
-					else throw new InterpreterException("Twice execution control command in same string");
+					else throw new InterpreterException("Twice execution control command in same string", currentCommand.getPosInString());
 					break;
 				case M48:
 					if(this.M48_M49 == MCommandSet.MDUMMY) this.M48_M49 = MCommandSet.M48;
-					else throw new InterpreterException("Twice override command in same string");
+					else throw new InterpreterException("Twice override command in same string", currentCommand.getPosInString());
 					break;
 				case M49:
 					if(this.M48_M49 == MCommandSet.MDUMMY) this.M48_M49 = MCommandSet.M49;
-					else throw new InterpreterException("Twice override command in same string");
+					else throw new InterpreterException("Twice override command in same string", currentCommand.getPosInString());
 					break;
 				case M98:
 					if(this.M47_M98_M99 == MCommandSet.MDUMMY) this.M47_M98_M99 = MCommandSet.M98;
-					else throw new InterpreterException("Twice execution control command in same string");
+					else throw new InterpreterException("Twice execution control command in same string", currentCommand.getPosInString());
 					break;
 				case M99:
 					if(this.M47_M98_M99 == MCommandSet.MDUMMY) this.M47_M98_M99 = MCommandSet.M99;
-					else throw new InterpreterException("Twice execution control command in same string");
+					else throw new InterpreterException("Twice execution control command in same string", currentCommand.getPosInString());
 					break;
 				default:
-					throw new InterpreterException("Unsupported M code num");
+					throw new InterpreterException("Unsupported M code num", currentCommand.getPosInString());
 				};
 				break;
 			case N: // nothing to do
 				break;
 			case O:
-                try {
+                try { // TODO change this smelling code - O
                     moduleNum_ = commandValueExpression.integerEvaluate();
                 } catch (EvolutionException e) {
                     e.printStackTrace();
@@ -402,11 +416,10 @@ public class LineLoader extends CommandLineLoader {
 				this.tool_ = commandValueExpression;
 				break;
 			default:
-//                int pos = currentCommand.
-				throw new InterpreterException("Unsupported command");
+				throw new InterpreterException("Unsupported command", currentCommand.getPosInString());
 			}
 		}
-        Log.d(LOG_TAG, this.toString());
+//        Log.d(LOG_TAG, this.toString());
 	}
 	
 	public void evaluate() throws EvolutionException{

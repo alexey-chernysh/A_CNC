@@ -6,10 +6,10 @@ package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
 public interface TokenDefaultFields {
 
-	public String getAlfa(); // string format token difinition
+	public String getAlfa(); // string format token definition
 
-	public TokenGroup getGroup(); 
+	public TokenGroup getGroup();
 
-    int getPrecedence(); // precedence for expresion evolution
+    public int getPrecedence(); // precedence for expression evolution
 
 }
