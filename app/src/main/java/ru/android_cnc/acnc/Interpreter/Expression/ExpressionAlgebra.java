@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenAlgebra;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
@@ -23,7 +24,7 @@ public class ExpressionAlgebra extends ExpressionGeneral {
 	}
 
 	@Override
-	public double evaluate() throws InterpreterException {
+	public double evaluate() throws EvolutionException {
 		double x1 = this.arg1.evaluate();
 		double x2 = this.arg2.evaluate();
 		return oper_.evaluate(x1, x2);

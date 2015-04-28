@@ -67,12 +67,8 @@ public class GcodeTextEditActivity extends ActionBarActivity {
 
         int cursorPos = 0;
 
-        try {
-            programLoader = new ProgramLoader();
-            spannedText = programLoader.load(sourceText);
-        }
-        catch (InterpreterException ie){
-        };
+        programLoader = new ProgramLoader();
+        spannedText = programLoader.load(sourceText);
 
         EditText te = (EditText)findViewById(R.id.edit_text);
         te.setText(spannedText);

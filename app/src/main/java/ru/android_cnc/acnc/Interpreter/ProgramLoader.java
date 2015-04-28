@@ -75,7 +75,7 @@ public class ProgramLoader {
         command_sequence = new CanonCommandSequence();
 		try {
 			ProgramLoader.moduleArray.getMain().evaluate();
-		} catch (InterpreterException e) {
+		} catch (EvolutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

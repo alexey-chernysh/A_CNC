@@ -18,7 +18,6 @@ import java.io.InputStream;
 import ru.android_cnc.acnc.Drivers.Cutter.CutterDriver;
 import ru.android_cnc.acnc.FourButtonsActivity;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
-import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
 import ru.android_cnc.acnc.R;
@@ -89,23 +88,15 @@ public class CNCControlViewActivity
         }
 
         if(allFine){
-            try {
-                programLoader = new ProgramLoader();
-                spannedText = programLoader.load(sourceText);
-                programLoader.evaluate();
-            }
-            catch (InterpreterException ie){
-                allFine = false;
-            }
-            catch (EvolutionException ee){
-                allFine = false;
-            };
+            programLoader = new ProgramLoader();
+            spannedText = programLoader.load(sourceText);
+            programLoader.evaluate();
         }
 
         if(allFine){
             try {
                 driver = new CutterDriver();
-                driver.loadProgram(programLoader.command_sequence);
+                driver.load(programLoader.command_sequence);
             }
             catch (InterpreterException ie){
                 allFine = false;
@@ -156,7 +147,7 @@ public class CNCControlViewActivity
             displayPointCoordinates(tmpPoint);
             if(cncView != null)
                 if(driver != null)
-                    driver.startProgram(cncView);
+                    driver.start(cncView);
 
         };
     }
@@ -166,7 +157,7 @@ public class CNCControlViewActivity
         CNCPoint tmpPoint = new CNCPoint(111.0,111.0);
         displayPointCoordinates(tmpPoint);
         if(driver != null)
-            driver.pauseProgram();
+            driver.pause();
     }
 
     public void displayPointCoordinates(CNCPoint point){

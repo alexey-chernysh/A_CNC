@@ -6,6 +6,7 @@ package ru.android_cnc.acnc.Interpreter;
 
 import java.util.ArrayList;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public class ProgramModule {
@@ -34,11 +35,11 @@ public class ProgramModule {
 		this.endLine_ = el;
 	}
 	
-	public void evaluate() throws InterpreterException {
+	public void evaluate() throws EvolutionException {
 		if((this.startLine_ >= 0) && (this.endLine_ >= startLine_)){
 			for(int i=this.startLine_; i<=this.endLine_; i++)
 				programBody_.get(i).evaluate();
-		} else throw new InterpreterException("Call of not initialized module!");
+		} else throw new EvolutionException("Call of not initialized module!");
 	}
 
 }

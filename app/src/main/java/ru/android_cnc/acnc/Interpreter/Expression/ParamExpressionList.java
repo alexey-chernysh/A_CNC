@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
@@ -19,10 +20,10 @@ public class ParamExpressionList {
 		}
 	};
 
-	public void addWord(TokenParameter w, ExpressionGeneral e) throws InterpreterException {
+	public void addWord(TokenParameter w, ExpressionGeneral e, int pos) throws InterpreterException {
 		int n = w.ordinal();
 		if(expressionList[n] == null) expressionList[n] = e;
-		else throw new InterpreterException("Twice parameter " + w.toString() + ";");
+		else throw new InterpreterException("Twice parameter " + w.toString() + ";", pos);
 	}
 
 	public int getLength() {
@@ -42,7 +43,7 @@ public class ParamExpressionList {
 			if(currentExp != null){
 				try {
 					result += " " + TokenParameter.values()[i].toString() + currentExp.evaluate();
-				} catch (InterpreterException e) {
+				} catch (EvolutionException e) {
 					e.printStackTrace();
 				}
 			};
@@ -64,19 +65,19 @@ public class ParamExpressionList {
         return (has(TokenParameter.A)||has(TokenParameter.B)||has(TokenParameter.C));
     }
 
-	public double get(TokenParameter word) throws InterpreterException {
+	public double get(TokenParameter word) throws EvolutionException {
 		int i = word.ordinal();
 		if(expressionList[i] != null) return expressionList[i].evaluate();
 		else return 0.0;
 	}
 
-	public int getInt(TokenParameter word) throws InterpreterException {
+	public int getInt(TokenParameter word) throws EvolutionException {
 		int i = word.ordinal();
 		if(expressionList[i] != null) return expressionList[i].integerEvaluate();
 		else return 0;
 	}
 	
-	public CNCPoint getPoint() throws InterpreterException{
+	public CNCPoint getPoint() throws EvolutionException{
 		if(this.hasXYZ()) return new CNCPoint(this.get(TokenParameter.X), this.get(TokenParameter.Y));
 		else return null;
 	}

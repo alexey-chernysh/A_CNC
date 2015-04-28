@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public enum TokenAlgebra implements TokenDefaultFields {
@@ -80,8 +81,8 @@ public enum TokenAlgebra implements TokenDefaultFields {
 	
 	SQRT("SQRT", TokenGroup.FUNCTION, -1){
 		@Override
-		public double evaluate(double x) throws InterpreterException{
-			if(x<0.0) throw new InterpreterException("Square root from negative number");
+		public double evaluate(double x) throws EvolutionException{
+			if(x<0.0) throw new EvolutionException("Square root from negative number");
 			return Math.sqrt(x);
 		};
 	},
@@ -95,8 +96,8 @@ public enum TokenAlgebra implements TokenDefaultFields {
 	
 	LN("LN", TokenGroup.FUNCTION, -1){
 		@Override
-		public double evaluate(double x) throws InterpreterException{
-			if(x<0.0) throw new InterpreterException("Log from negative number");
+		public double evaluate(double x) throws EvolutionException{
+			if(x<0.0) throw new EvolutionException("Log from negative number");
 			return Math.log(x);
 		};
 	},	
@@ -162,8 +163,8 @@ public enum TokenAlgebra implements TokenDefaultFields {
 	
 	DIVIDE("/", TokenGroup.ALGEBRA, 3){
 		@Override
-		public double evaluate(double x, double y) throws InterpreterException{
-			if(y == 0.0) throw new InterpreterException("Divide by zero");
+		public double evaluate(double x, double y) throws EvolutionException{
+			if(y == 0.0) throw new EvolutionException("Divide by zero");
 			return (x/y);
 		};
 	},
@@ -186,12 +187,12 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		precedence_ = p;
 	}
 	
-	public double evaluate(double x) throws InterpreterException{
-		throw new InterpreterException("Token interpretation error");
+	public double evaluate(double x) throws EvolutionException{
+		throw new EvolutionException("Token interpretation error");
 	}	
 
-	public double evaluate(double x, double y) throws InterpreterException{
-		throw new InterpreterException("Token interpretation error");
+	public double evaluate(double x, double y) throws EvolutionException{
+		throw new EvolutionException("Token interpretation error");
 	}
 
 	@Override

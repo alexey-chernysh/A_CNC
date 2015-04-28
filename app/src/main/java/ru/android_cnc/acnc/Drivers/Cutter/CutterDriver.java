@@ -37,7 +37,7 @@ public class CutterDriver implements GeneralDriver {
 	
 	
 	@Override
-	public void loadProgram(CanonCommandSequence sourceCommands) throws InterpreterException {
+	public void load(CanonCommandSequence sourceCommands) throws InterpreterException {
 		
 		commands_ = sourceCommands;
 //		buildVelocityProfile();
@@ -151,7 +151,7 @@ public class CutterDriver implements GeneralDriver {
     boolean paused = false;
 
 	@Override
-	public void startProgram(View v) {
+	public void start(View v) {
         final View view = v;
         if(executionThread == null){
             final Runnable runnable = new Runnable() {
@@ -171,12 +171,12 @@ public class CutterDriver implements GeneralDriver {
                     view.postInvalidate();
                 }
             });
-        } else if(paused)this.resumeProgram();
+        } else if(paused)this.resume();
         executionThread.start(); // запускаем
 	}
 
 	@Override
-	public void pauseProgram() {
+	public void pause() {
         try {
             executionThread.sleep(Long.MAX_VALUE);
             paused = true;
@@ -186,7 +186,7 @@ public class CutterDriver implements GeneralDriver {
     }
 
 	@Override
-	public void resumeProgram() {
+	public void resume() {
         if(!executionThread.isInterrupted()) {
             executionThread.interrupt();
             paused = false;
@@ -194,13 +194,13 @@ public class CutterDriver implements GeneralDriver {
 	}
 
 	@Override
-	public void rewindProgram() {
+	public void rewind() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void forewindProgram() {
+	public void forewind() {
 		// TODO Auto-generated method stub
 		
 	}

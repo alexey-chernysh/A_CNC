@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
@@ -105,13 +106,13 @@ public class ModalState {
 		return (getGModalState(GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE) == GCommandSet.G91_1);
 	}
 
-	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
+	public CNCPoint getTargetPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws EvolutionException {
 		CNCPoint result = refCNCPoint.clone();
         if((!words.hasXYZ())&&(!words.hasABC())) return result;
         final boolean relative = !InterpreterState.modalState.isAbsolute();
 
 		if(InterpreterState.modalState.isPolar()){
-			throw new InterpreterException("Polar coordinates mode not realized yet!");
+			throw new EvolutionException("Polar coordinates mode not realized yet!");
             // TODO polar coordinates mode should be implemented
 		} else {
 			// TODO axis rotation needed
@@ -167,10 +168,10 @@ public class ModalState {
 		return result;
 	}
 
-	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws InterpreterException {
+	public CNCPoint getCenterPoint(CNCPoint refCNCPoint, ParamExpressionList words) throws EvolutionException {
 		CNCPoint resultCNCPoint = refCNCPoint.clone();
 		if(InterpreterState.modalState.isPolar()){
-			throw new InterpreterException("Arc motion incompatible with polar coorfimates mode!");
+			throw new EvolutionException("Arc motion incompatible with polar coorfimates mode!");
 		} else {
 			// TODO axis rotation needed
 			if(words.has(TokenParameter.I)){
@@ -191,7 +192,7 @@ public class ModalState {
 		return resultCNCPoint;
 	}
 
-    public double getR(ParamExpressionList words) throws InterpreterException {
+    public double getR(ParamExpressionList words) throws EvolutionException {
         if(words.has(TokenParameter.R)){
             return toMM(words.get(TokenParameter.R));
         } else return 0;

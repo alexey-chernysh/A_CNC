@@ -43,7 +43,7 @@ public class CommandLineLoader extends TokenSequence {
 						this.commandSet_.addCommand(new CommandPair((TokenCommand)currentWord, numExp, t.getStart()));
 						break;
 					case PARAMETER:
-						this.wordList_.addWord((TokenParameter)currentWord, numExp);
+						this.wordList_.addWord((TokenParameter)currentWord, numExp, t.getStart());
 						break;
 					case MISC:
 						switch( (TokenAlgebra)currentWord ){

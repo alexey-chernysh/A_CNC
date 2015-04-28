@@ -11,16 +11,16 @@ import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public interface GeneralDriver {
 	
-	void loadProgram(CanonCommandSequence sourceCommands) throws InterpreterException;
+	void load(CanonCommandSequence sourceCommands) throws InterpreterException;
 	
-	void startProgram(View v);
+	void start(View v);
 	
-	void pauseProgram();
+	void pause();
 	
-	void resumeProgram();
+	void resume();
 	
-	void rewindProgram();
+	void rewind();
 	
-	void forewindProgram();
+	void forewind();
 
 }

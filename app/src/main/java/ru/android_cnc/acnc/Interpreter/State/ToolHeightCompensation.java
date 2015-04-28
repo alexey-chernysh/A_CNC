@@ -4,6 +4,7 @@
 
 package ru.android_cnc.acnc.Interpreter.State;
 
+import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
@@ -20,7 +21,7 @@ public class ToolHeightCompensation {
     }
 
     public ToolHeightCompensation(double h){ this.height = h; }
-    public void setHeight(int toolNum) throws InterpreterException {
+    public void setHeight(int toolNum) throws EvolutionException {
         this.height = VariablesSet.getToolHeight(toolNum);
     }
     public void setOn(){this.on = true;}
