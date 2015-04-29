@@ -19,8 +19,10 @@ import static ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine
 import static ru.android_cnc.acnc.Geometry.CNCPoint.getCrossingPoint;
 
 public class CanonCommandSequence {
-	
-	private ArrayList<CanonCommand> seq_;
+
+    private final static String LOG_TAG = " command sequence ->";
+
+    private ArrayList<CanonCommand> seq_;
     private DrawableObjectLimits limits;
 
 	public CanonCommandSequence(){
@@ -35,7 +37,7 @@ public class CanonCommandSequence {
                 if(motion.isFreeRun()) addFreeMotion(motion);
                 else addCuttingMotion(motion);
             } else seq_.add(command);
-        Log.i("Command ", " add " + command.toString());
+//        Log.i(LOG_TAG, " add " + command.toString());
 	}
 
     public void prepare() throws EvolutionException {

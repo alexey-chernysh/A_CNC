@@ -52,9 +52,8 @@ public class GcodeTextEditActivity extends ActionBarActivity {
                     + "/"
                     + title;
             this.setTitle(title);
-            Log.d(LOG_TAG, "Opening file " + fileName);
+//            Log.d(LOG_TAG, "Opening file " + fileName);
             InputStream in = new FileInputStream(fileName);
-            Log.d(LOG_TAG, "Characters available: " + in.available());
             if(in != null){
                 byte[] buffer = new byte[in.available()];
                 in.read(buffer);
