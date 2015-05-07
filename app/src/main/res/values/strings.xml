@@ -7,6 +7,7 @@
     <string name="CURRENT_FILE">current_file</string>
     <string name="TEXT_FILE_2_EDIT">text_file_to_edit</string>
     <string name="TEXT_FILE_2_EDIT_POSITION">text_file_to_edit_position</string>
+    <string name="PREFS">prefs</string>
     <string name="PREF_FIRST_RUN_TAG">first_run</string>
     <string name="PREF_LAST_FILE_TAG">last_file_opened</string>
     <string name="SOURCE_FILE_NAME">source_file_name</string>

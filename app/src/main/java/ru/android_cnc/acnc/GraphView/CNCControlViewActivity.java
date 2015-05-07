@@ -64,8 +64,8 @@ public class CNCControlViewActivity
 
         //open current file for edit
         try {
-            fileName = getSharedPreferences(FourButtonsActivity.pref_name, 0)
-                          .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
+            fileName = getSharedPreferences(getString(R.string.PREFS), 0)
+                      .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
             this.setTitle(fileName);
             Log.d(LOG_TAG, "Opening file " + fileName);
             InputStream in = new FileInputStream(fileName);

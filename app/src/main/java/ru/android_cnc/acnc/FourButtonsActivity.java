@@ -27,7 +27,6 @@ public class FourButtonsActivity extends Activity {
 
     private final static String g_codeFolderName = "samples";
     private String toPathPrefix;
-    public final static String pref_name = "prefs";
     private String pref_last_file_value;
 
     @Override
@@ -43,7 +42,7 @@ public class FourButtonsActivity extends Activity {
                              + g_codeFolderName
                              + "/"
                              + "plast.cnc";
-        SharedPreferences settings = getSharedPreferences(pref_name, 0);
+        SharedPreferences settings = getSharedPreferences(getString(R.string.PREFS), 0);
 //        Log.d(LOG_TAG, "Preferences: " + settings);
 
         //check for first time run
@@ -79,8 +78,8 @@ public class FourButtonsActivity extends Activity {
         final Button createButton = (Button) findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            String fileName = getSharedPreferences(pref_name, 0)
-                             .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
+            String fileName = getSharedPreferences(getString(R.string.PREFS), 0)
+                    .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
             startTextEdit(fileName, 0);
             }
         });
@@ -163,7 +162,7 @@ public class FourButtonsActivity extends Activity {
         if (data == null) return;
         String new_current_file = data.getStringExtra(getString(R.string.CURRENT_FILE));
 //        Log.d(LOG_TAG, "fileName returned - " + new_current_file);
-        getSharedPreferences(pref_name, 0)
+        getSharedPreferences(getString(R.string.PREFS), 0)
                 .edit()
                 .putString(getString(R.string.PREF_LAST_FILE_TAG), new_current_file)
                 .commit();
