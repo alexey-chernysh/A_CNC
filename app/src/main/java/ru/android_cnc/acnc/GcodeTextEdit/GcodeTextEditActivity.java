@@ -26,7 +26,7 @@ public class GcodeTextEditActivity extends ActionBarActivity {
     private final static String LOG_TAG = " edit text ->";
 
     private String fileName = null;
-    private String title = null;
+    private int filePosition = 0;
     private String sourceText = null;
     private Spannable spannedText = null;
     private ProgramLoader programLoader = null;
@@ -35,6 +35,11 @@ public class GcodeTextEditActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gcode_text_edit);
+
+        Bundle bundle = getIntent().getExtras();
+        fileName = bundle.getString(getString(R.string.TEXT_FILE_2_EDIT));
+        filePosition = bundle.getInt(getString(R.string.TEXT_FILE_2_EDIT_POSITION, 0));
+        this.setTitle(fileName);
     }
 
     @Override
@@ -43,15 +48,6 @@ public class GcodeTextEditActivity extends ActionBarActivity {
 
         //open current file for edit
         try {
-            title = getSharedPreferences(FourButtonsActivity.pref_name, 0)
-                   .getString(FourButtonsActivity.pref_last_file_tag, "");
-            fileName = FourButtonsActivity.toPathPrefix
-                    + getPackageName()
-                    + "/"
-                    + FourButtonsActivity.g_codeFolderName
-                    + "/"
-                    + title;
-            this.setTitle(title);
 //            Log.d(LOG_TAG, "Opening file " + fileName);
             InputStream in = new FileInputStream(fileName);
             if(in != null){

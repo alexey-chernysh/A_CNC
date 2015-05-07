@@ -3,6 +3,10 @@
 
     <string name="app_name">A CNC</string>
     <string name="empty_string"></string>
+    <string name="APP_FOLDER">application_folder</string>
+    <string name="CURRENT_FILE">current_file</string>
+    <string name="TEXT_FILE_2_EDIT">text_file_to_edit</string>
+    <string name="TEXT_FILE_2_EDIT_POSITION">text_file_to_edit_position</string>
     <string name="SOURCE_FILE_NAME">source_file_name</string>
     <string name="edit_text">Edit G-code text</string>
     <string name="view_graph">View G-code</string>

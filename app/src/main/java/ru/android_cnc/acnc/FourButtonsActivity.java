@@ -1,6 +1,7 @@
 package ru.android_cnc.acnc;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -22,16 +23,17 @@ import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;
 
 public class FourButtonsActivity extends Activity {
 
+    private final static String LOG_TAG = " main activity ->";
+
+    public final static String g_codeFolderName = "samples";
+    public final static String toPathPrefix = "/data/data/";
+
     public final static String pref_name = "prefs";
 
     private final static String pref_first_run_tag = "first_run";
 
     public final static String pref_last_file_tag = "last_file_opened";
-    private final static String pref_last_file_value = "plast.cnc";
-
-    public final static String g_codeFolderName = "samples";
-    public final static String toPathPrefix = "/data/data/";
-    private final static String LOG_TAG = " main activity ->";
+    private String pref_last_file_value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,13 @@ public class FourButtonsActivity extends Activity {
         setContentView(R.layout.activity_four_buttons);
 
         Log.d(LOG_TAG, "Activity created!!!");
+//        toPathPrefix = Context.getFiles().getPath();
+        pref_last_file_value = toPathPrefix
+                + this.getPackageName()
+                + "/"
+                + g_codeFolderName
+                + "/"
+                + "plast.cnc";
         SharedPreferences settings = getSharedPreferences(pref_name, 0);
 //        Log.d(LOG_TAG, "Preferences: " + settings);
 
@@ -55,41 +64,48 @@ public class FourButtonsActivity extends Activity {
         final Button continueButton = (Button) findViewById(R.id.continue_button);
         continueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(FourButtonsActivity.this, CNCControlViewActivity.class);
-//                intent.putExtra(getString(R.string.SOURCE_FILE_NAME), fileName);
-                startActivity(intent);
+                startControlView();
             }
         });
         final Button openButton = (Button) findViewById(R.id.open_button);
         openButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(FourButtonsActivity.this, FileSelectActivity.class);
-//                intent.putExtra(getString(R.string.SOURCE_FILE_NAME), fileName);
-                startActivityForResult(intent, 1);
+            Intent intent = new Intent(FourButtonsActivity.this, FileSelectActivity.class);
+            String toPath = toPathPrefix + getPackageName() ;  // application data folder path
+            intent.putExtra(getString(R.string.APP_FOLDER), toPath);
+            startActivityForResult(intent, 1);
             }
         });
         final Button loadButton = (Button) findViewById(R.id.load_button);
         loadButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Load button pressed!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Load button pressed!", Toast.LENGTH_LONG).show();
             }
         });
         final Button createButton = (Button) findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startTextEdit();
+                String fileName = getSharedPreferences(pref_name, 0).getString(pref_last_file_tag, "");
+                startTextEdit(fileName, 0);
             }
         });
     }
 
-    private void startTextEdit(){
-        Intent intent = new Intent(this, GcodeTextEditActivity.class);
+    private void startControlView(){
+        Intent intent = new Intent(FourButtonsActivity.this, CNCControlViewActivity.class);
+        startActivity(intent);
+    }
+
+    private void startTextEdit(String fileName, int pos){
+        Intent intent = new Intent(FourButtonsActivity.this, GcodeTextEditActivity.class);
+        intent.putExtra(getString(R.string.TEXT_FILE_2_EDIT), fileName);
+        intent.putExtra(getString(R.string.TEXT_FILE_2_EDIT_POSITION), pos);
         startActivity(intent);
     }
 
     private void copyAssetsToDataFolder(){
         final String toPath = toPathPrefix + getPackageName() + "/" + g_codeFolderName;  // application data folder path
-        Log.d(LOG_TAG, "Application data folder path:" + toPath);
+//        Log.d(LOG_TAG, "Application data folder path:" + toPath);
         AssetManager assetManager = getAssets();
         if(copyAssetFolder(assetManager, g_codeFolderName, toPath)){
             Toast.makeText(getApplicationContext(),"Files successfully copied!", Toast.LENGTH_LONG).show();
@@ -100,7 +116,7 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAssetFolder(AssetManager assetManager,
                                            String fromAssetPath, String toPath) {
-        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
+//        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
         try {
             String[] file_names_list = assetManager.list(fromAssetPath);
             new File(toPath).mkdirs();
@@ -116,7 +132,7 @@ public class FourButtonsActivity extends Activity {
                 else
                     res &= copyAssetFolder(assetManager, fromAssetPath + "/" + file_name,
                             toPath + "/" + file_name);
-            Log.d(LOG_TAG, "Result - " + res);
+//            Log.d(LOG_TAG, "Result - " + res);
             return res;
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,7 +142,7 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAsset(AssetManager assetManager,
                                      String fromAssetPath, String toPath) {
-        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
+//        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
         try {
             InputStream in = assetManager.open(fromAssetPath);
             int size = in.available();
@@ -148,5 +164,9 @@ public class FourButtonsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) return;
+        String new_current_file = data.getStringExtra(getString(R.string.CURRENT_FILE));
+//        Log.d(LOG_TAG, "fileName returned - " + new_current_file);
+        getSharedPreferences(pref_name, 0).edit().putString(pref_last_file_tag, new_current_file).commit();
+        startControlView();
     }
 }

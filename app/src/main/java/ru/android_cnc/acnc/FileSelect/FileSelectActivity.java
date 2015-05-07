@@ -33,8 +33,9 @@ public class FileSelectActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_grid_view);
 
-//      currentPath = "/data/data/" + getApplicationContext().getPackageName();
-        currentPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        Bundle bundle = getIntent().getExtras();
+        currentPath = bundle.getString(getString(R.string.APP_FOLDER));
+//        currentPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         prepareGridView();
     }
 
@@ -66,8 +67,10 @@ public class FileSelectActivity
         if(item != null){
             FileItem selectedItem = item[position];
             if(selectedItem.isFile()){ // file selected  - task done
+                File current_file = item[position].getFile();
+                String result = current_file.getAbsolutePath();
                 Intent intent = new Intent();
-                intent.putExtra("name", item[position].getFileName());
+                intent.putExtra(getString(R.string.CURRENT_FILE), result);
                 setResult(RESULT_OK, intent);
                 finish();
             } else { // folder selected - open selected folder
@@ -95,7 +98,6 @@ public class FileSelectActivity
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
             View grid;
-
             if (convertView == null) {
                 grid = new View(mContext);
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -103,19 +105,13 @@ public class FileSelectActivity
             } else {
                 grid = (View) convertView;
             }
-
             if(item != null){
                 ImageView imageView = (ImageView) grid.findViewById(R.id.item_image);
                 imageView.setImageResource(item[position].getResourceId());
-
                 TextView textView = (TextView) grid.findViewById(R.id.item_text);
                 textView.setText(item[position].getFileName());
             }
-
             return grid;
         }
-
     }
-
-
 }

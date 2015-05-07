@@ -64,15 +64,9 @@ public class CNCControlViewActivity
 
         //open current file for edit
         try {
-            String title = getSharedPreferences(FourButtonsActivity.pref_name, 0)
-                    .getString(FourButtonsActivity.pref_last_file_tag, "");
-            fileName = FourButtonsActivity.toPathPrefix
-                    + getPackageName()
-                    + "/"
-                    + FourButtonsActivity.g_codeFolderName
-                    + "/"
-                    + title;
-            this.setTitle(title);
+            fileName = getSharedPreferences(FourButtonsActivity.pref_name, 0)
+                          .getString(FourButtonsActivity.pref_last_file_tag, "");
+            this.setTitle(fileName);
             Log.d(LOG_TAG, "Opening file " + fileName);
             InputStream in = new FileInputStream(fileName);
             Log.d(LOG_TAG, "Characters available: " + in.available());
