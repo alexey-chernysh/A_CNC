@@ -25,14 +25,9 @@ public class FourButtonsActivity extends Activity {
 
     private final static String LOG_TAG = " main activity ->";
 
-    public final static String g_codeFolderName = "samples";
-    public final static String toPathPrefix = "/data/data/";
-
+    private final static String g_codeFolderName = "samples";
+    private String toPathPrefix;
     public final static String pref_name = "prefs";
-
-    private final static String pref_first_run_tag = "first_run";
-
-    public final static String pref_last_file_tag = "last_file_opened";
     private String pref_last_file_value;
 
     @Override
@@ -41,23 +36,23 @@ public class FourButtonsActivity extends Activity {
         setContentView(R.layout.activity_four_buttons);
 
         Log.d(LOG_TAG, "Activity created!!!");
-//        toPathPrefix = Context.getFiles().getPath();
+        toPathPrefix = getApplicationContext().getFilesDir().getPath();
+        Log.d(LOG_TAG, "Application data folder path:" + toPathPrefix);
         pref_last_file_value = toPathPrefix
-                + this.getPackageName()
-                + "/"
-                + g_codeFolderName
-                + "/"
-                + "plast.cnc";
+                             + "/"
+                             + g_codeFolderName
+                             + "/"
+                             + "plast.cnc";
         SharedPreferences settings = getSharedPreferences(pref_name, 0);
 //        Log.d(LOG_TAG, "Preferences: " + settings);
 
         //check for first time run
-        boolean firstRun = settings.getBoolean(pref_first_run_tag, true);
+        boolean firstRun = settings.getBoolean(getString(R.string.PREF_FIRST_RUN_TAG), true);
         Log.d(LOG_TAG, "First run - " + firstRun);
 //        firstRun = true; // at debug only
         if ( firstRun ) {
-            settings.edit().putBoolean(pref_first_run_tag, false).commit(); //set flag to false
-            settings.edit().putString(pref_last_file_tag, pref_last_file_value).commit();
+            settings.edit().putBoolean(getString(R.string.PREF_FIRST_RUN_TAG), false).commit(); //set flag to false
+            settings.edit().putString(getString(R.string.PREF_LAST_FILE_TAG), pref_last_file_value).commit();
             copyAssetsToDataFolder();
         }
 
@@ -71,8 +66,7 @@ public class FourButtonsActivity extends Activity {
         openButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             Intent intent = new Intent(FourButtonsActivity.this, FileSelectActivity.class);
-            String toPath = toPathPrefix + getPackageName() ;  // application data folder path
-            intent.putExtra(getString(R.string.APP_FOLDER), toPath);
+            intent.putExtra(getString(R.string.APP_FOLDER), toPathPrefix);
             startActivityForResult(intent, 1);
             }
         });
@@ -85,8 +79,9 @@ public class FourButtonsActivity extends Activity {
         final Button createButton = (Button) findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String fileName = getSharedPreferences(pref_name, 0).getString(pref_last_file_tag, "");
-                startTextEdit(fileName, 0);
+            String fileName = getSharedPreferences(pref_name, 0)
+                             .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
+            startTextEdit(fileName, 0);
             }
         });
     }
@@ -104,8 +99,10 @@ public class FourButtonsActivity extends Activity {
     }
 
     private void copyAssetsToDataFolder(){
-        final String toPath = toPathPrefix + getPackageName() + "/" + g_codeFolderName;  // application data folder path
-//        Log.d(LOG_TAG, "Application data folder path:" + toPath);
+        final String toPath = toPathPrefix
+                            + "/"
+                            + g_codeFolderName;  // application g-code files folder path
+        Log.d(LOG_TAG, "Application data folder path:" + toPath);
         AssetManager assetManager = getAssets();
         if(copyAssetFolder(assetManager, g_codeFolderName, toPath)){
             Toast.makeText(getApplicationContext(),"Files successfully copied!", Toast.LENGTH_LONG).show();
@@ -116,7 +113,7 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAssetFolder(AssetManager assetManager,
                                            String fromAssetPath, String toPath) {
-//        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
+        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
         try {
             String[] file_names_list = assetManager.list(fromAssetPath);
             new File(toPath).mkdirs();
@@ -132,7 +129,7 @@ public class FourButtonsActivity extends Activity {
                 else
                     res &= copyAssetFolder(assetManager, fromAssetPath + "/" + file_name,
                             toPath + "/" + file_name);
-//            Log.d(LOG_TAG, "Result - " + res);
+            Log.d(LOG_TAG, "Result - " + res);
             return res;
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +139,7 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAsset(AssetManager assetManager,
                                      String fromAssetPath, String toPath) {
-//        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
+        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
         try {
             InputStream in = assetManager.open(fromAssetPath);
             int size = in.available();
@@ -166,7 +163,10 @@ public class FourButtonsActivity extends Activity {
         if (data == null) return;
         String new_current_file = data.getStringExtra(getString(R.string.CURRENT_FILE));
 //        Log.d(LOG_TAG, "fileName returned - " + new_current_file);
-        getSharedPreferences(pref_name, 0).edit().putString(pref_last_file_tag, new_current_file).commit();
+        getSharedPreferences(pref_name, 0)
+                .edit()
+                .putString(getString(R.string.PREF_LAST_FILE_TAG), new_current_file)
+                .commit();
         startControlView();
     }
 }

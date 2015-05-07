@@ -67,7 +67,7 @@ public class GcodeTextEditActivity extends ActionBarActivity {
 
         EditText te = (EditText)findViewById(R.id.edit_text);
         te.setText(spannedText);
-
+        te.setSelection(filePosition, filePosition);
     }
 
 
