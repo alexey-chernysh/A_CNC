@@ -17,16 +17,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FileDialog"
-            android:label="@string/title_activity_file_dialog" >
-        </activity>
-        <activity
             android:name=".GraphView.CNCControlViewActivity"
             android:label="@string/title_activity_cnccontrol_view"
             android:parentActivityName=".FourButtonsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.android_cnc.acnc.FourButtonsActivity" />
+        </activity>
+        <activity
+            android:name=".FileSelect.FileSelectActivity"
+            android:label="@string/title_file_select" >
+        </activity>
+        <activity
+            android:name=".GcodeTextEdit.GcodeTextEditActivity"
+            android:label="@string/title_activity_gcode_text_edit" >
         </activity>
 
         <service
@@ -38,10 +42,6 @@
             android:name=".THCService"
             android:exported="false" >
         </service>
-        <activity
-            android:name=".GcodeTextEdit.GcodeTextEditActivity"
-            android:label="@string/title_activity_gcode_text_edit" >
-        </activity>
     </application>
 
 </manifest>

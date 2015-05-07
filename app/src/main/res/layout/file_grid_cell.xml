@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Alexey Chernysh? Krasnoyarsk, Russia
+  ~ e-mail: ALEXEY DOT CHERNYSH AT GMAIL DOT COM.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="140dp"
+    android:layout_height="105dp"
+    android:padding="5dp"
+    android:background="#ffffffff">
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="false">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#ff000000"
+        android:background="@color/transparent_light_gray"
+        android:gravity="center_vertical|center_horizontal"
+        android:singleLine="false"
+        android:layout_alignBottom="@+id/item_image">
+    </TextView>
+</RelativeLayout>

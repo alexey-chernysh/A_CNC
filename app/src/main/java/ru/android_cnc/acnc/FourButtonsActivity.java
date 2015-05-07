@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import ru.android_cnc.acnc.FileSelect.FileSelectActivity;
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextEditActivity;
 import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;
 
@@ -61,7 +63,9 @@ public class FourButtonsActivity extends Activity {
         final Button openButton = (Button) findViewById(R.id.open_button);
         openButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Open button pressed!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(FourButtonsActivity.this, FileSelectActivity.class);
+//                intent.putExtra(getString(R.string.SOURCE_FILE_NAME), fileName);
+                startActivityForResult(intent, 1);
             }
         });
         final Button loadButton = (Button) findViewById(R.id.load_button);
@@ -141,4 +145,8 @@ public class FourButtonsActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) return;
+    }
 }

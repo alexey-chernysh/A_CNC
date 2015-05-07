@@ -29,6 +29,7 @@
     <string name="title_activity_cnccontrol">CNCControlActivity</string>
     <string name="title_activity_cnccontrol_view">CNCControlViewActivity</string>
     <string name="title_activity_four_buttons">FourButtonsActivity</string>
+    <string name="title_file_select">FileSelectActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_gcode_text_edit">GcodeTextEditActivity</string>
