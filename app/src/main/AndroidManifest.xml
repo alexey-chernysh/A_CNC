@@ -34,12 +34,12 @@
         </activity>
 
         <service
-            android:name=".CNCService"
+            android:name=".HAL.MotionController.MotionControllerService"
             android:enabled="true"
             android:exported="false" >
         </service>
         <service
-            android:name=".THCService"
+            android:name=".HAL.TorchHeightController.THCService"
             android:exported="false" >
         </service>
     </application>

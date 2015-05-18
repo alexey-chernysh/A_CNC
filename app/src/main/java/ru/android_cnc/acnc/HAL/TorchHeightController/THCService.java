@@ -1,4 +1,4 @@
-package ru.android_cnc.acnc;
+package ru.android_cnc.acnc.HAL.TorchHeightController;
 
 import android.app.IntentService;
 import android.content.Intent;

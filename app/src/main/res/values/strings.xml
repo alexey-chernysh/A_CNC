@@ -40,5 +40,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_gcode_text_edit">GcodeTextEditActivity</string>
+    <string name="PREF_LAST_POSITION_X">last_position_x</string>
+    <string name="PREF_LAST_POSITION_Y">last_position_y</string>
 
 </resources>
