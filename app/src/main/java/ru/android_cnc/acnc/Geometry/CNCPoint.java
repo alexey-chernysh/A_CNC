@@ -5,7 +5,7 @@
 package ru.android_cnc.acnc.Geometry;
 
 import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
-import ru.android_cnc.acnc.HAL.MotionController.CCommandMotion;
+import ru.android_cnc.acnc.HAL.MotionController.MotionControllerCommand;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 
 import static java.lang.Math.sqrt;
@@ -98,7 +98,7 @@ public class CNCPoint {
         return " X = " + x_ + "; Y = " + y_ + "; Z = " + z_ + ";";
     }
 
-    public static CNCPoint getCrossingPoint(CCommandMotion line1, CCommandMotion line2){
+    public static CNCPoint getCrossingPoint(MotionControllerCommand line1, MotionControllerCommand line2){
         if(line1 instanceof CCommandStraightLine){
             if(line2 instanceof CCommandStraightLine)
                 return getCrossLineNLine((CCommandStraightLine)line1, (CCommandStraightLine)line2);

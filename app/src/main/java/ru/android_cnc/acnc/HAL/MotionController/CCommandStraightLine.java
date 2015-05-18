@@ -12,7 +12,7 @@ import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
-public class CCommandStraightLine extends CCommandMotion {
+public class CCommandStraightLine extends MotionControllerCommand {
 
 
 	public CCommandStraightLine(CNCPoint s,

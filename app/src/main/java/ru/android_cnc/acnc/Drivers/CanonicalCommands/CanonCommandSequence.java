@@ -13,7 +13,7 @@ import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.HAL.MotionController.ArcDirection;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
-import ru.android_cnc.acnc.HAL.MotionController.CCommandMotion;
+import ru.android_cnc.acnc.HAL.MotionController.MotionControllerCommand;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
@@ -36,7 +36,7 @@ public class CanonCommandSequence {
 	public void add(CanonCommand command) throws EvolutionException {
         if(command != null)
             if(command.getType() == CanonCommand.type.MOTION){
-                CCommandMotion motion = (CCommandMotion)command;
+                MotionControllerCommand motion = (MotionControllerCommand)command;
                 if(motion.isFreeRun()) addFreeMotion(motion);
                 else addCuttingMotion(motion);
             } else seq_.add(command);
@@ -53,7 +53,7 @@ public class CanonCommandSequence {
         for(int i=0;i<seq_length;i++){
             CanonCommand command = seq_.get(i);
             if(command.getType() == CanonCommand.type.MOTION){
-                CCommandMotion motion = (CCommandMotion)command;
+                MotionControllerCommand motion = (MotionControllerCommand)command;
                 motion.checkLimits();
                 limits = DrawableObjectLimits.combine(limits, motion.limits);
             }
@@ -76,10 +76,10 @@ public class CanonCommandSequence {
 		return seq_.get(i);
 	}
 
-    private void addCuttingMotion(CCommandMotion command) throws EvolutionException {
+    private void addCuttingMotion(MotionControllerCommand command) throws EvolutionException {
         CNCPoint unOffsetedStart = command.getStart().clone();
         command.applyCutterRadiusCompensation();
-        CCommandMotion lastMotion = findLastMotion();
+        MotionControllerCommand lastMotion = findLastMotion();
         if(lastMotion != null){ // its no first move
             if(lastMotion.isFreeRun()) {
                 // free run line should be connected to start of new motion
@@ -141,8 +141,8 @@ public class CanonCommandSequence {
         seq_.add(command);
     }
 
-    private void addFreeMotion(CCommandMotion command) throws EvolutionException {
-		CCommandMotion lastMotion = findLastMotion();
+    private void addFreeMotion(MotionControllerCommand command) throws EvolutionException {
+		MotionControllerCommand lastMotion = findLastMotion();
 		if(lastMotion != null){ 
 			// last motion is straight or arc working run, correction needed
             command.setStart(lastMotion.getEnd());
@@ -150,11 +150,11 @@ public class CanonCommandSequence {
 		seq_.add(command);
 	}
 
-	private CCommandMotion findLastMotion() throws EvolutionException {
+	private MotionControllerCommand findLastMotion() throws EvolutionException {
 		int size = seq_.size();
 		for(int i = (size-1); i>=0; i--){
 			CanonCommand command = seq_.get(i);
-            if(command.getType() == CanonCommand.type.MOTION) return (CCommandMotion)command;
+            if(command.getType() == CanonCommand.type.MOTION) return (MotionControllerCommand)command;
 		}
 		return null;
 	}

@@ -4,17 +4,9 @@
 
 package ru.android_cnc.acnc.HAL.MotionController;
 
-import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
-import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
-
 public class VelocityPlan {
 
     public static final VelocityPlanMode mode = VelocityPlanMode.CONSTANT_VELOCITY;
-    public static final double maxVelocity = 10000.0/60.0; // mm/sec
-    public static final double maxFirstDerivative = 40.0; // dv/dt - mm/sec/sec
-    public static final double maxSecondDerivative = 10.0; // dv/dt/dt - mm/sec/sec/sec
-    public static final double x_mm_in_step = 0.007048;
-    public static final double y_mm_in_step = 0.007048;
 
 	private double startVel_;
 	private double endVel_;
@@ -29,24 +21,24 @@ public class VelocityPlan {
     private Move y_move = Move.NONE;
     private double min_y_step = 0.0;
 
+    public VelocityPlan(double v){
+        setStartVel(v);
+        setEndVel(v);
+    }
+
     public VelocityPlan(double sv, double ev){
 		setStartVel(sv);
 		setEndVel(ev);
 	}
 
-	public VelocityPlan(double v){
-		setStartVel(v);
-		setEndVel(v);
-	}
-
     public void buildSteps(CCommandStraightLine line){
         double length = line.length();
         double dx = line.getDX();
-        if(Math.abs(dx) > x_mm_in_step) {
-            if(dx > 0.0) x_move = Move.FOWARD;
+        if(Math.abs(dx) > MotionControllerService.getX_mm_in_step()) {
+            if(dx > 0.0) x_move = Move.FORWARD;
             else x_move = Move.BACKWARD;
 
-            nx = (int)Math.round(dx/x_mm_in_step);
+            nx = (int)Math.round(dx/MotionControllerService.getX_mm_in_step());
             double x_step = length/nx;
             x_step_plan = new double[nx];
             x_step_plan[0] = x_step/2.0;
@@ -56,11 +48,11 @@ public class VelocityPlan {
         };
 
         double dy = line.getDY();
-        if(Math.abs(dy) > y_mm_in_step) {
-            if(dy > 0.0) y_move = Move.FOWARD;
+        if(Math.abs(dy) > MotionControllerService.getY_mm_in_step()) {
+            if(dy > 0.0) y_move = Move.FORWARD;
             else y_move = Move.BACKWARD;
 
-            ny = (int)Math.round(dy/y_mm_in_step);
+            ny = (int)Math.round(dy/MotionControllerService.getY_mm_in_step());
             double y_step = length/ny;
             y_step_plan = new double[ny];
             y_step_plan[0] = y_step/2.0;
@@ -78,14 +70,14 @@ public class VelocityPlan {
         double alfaEnd = arc.getEndRadialAngle();
 
         double dx = arc.getDX();
-        if(Math.abs(dx) > x_mm_in_step) {
-            if(dx > 0.0) x_move = Move.FOWARD;
+        if(Math.abs(dx) > MotionControllerService.getX_mm_in_step()) {
+            if(dx > 0.0) x_move = Move.FORWARD;
             else x_move = Move.BACKWARD;
 
-            nx = (int)(dx/x_mm_in_step);
+            nx = (int)(dx/MotionControllerService.getX_mm_in_step());
             x_step_plan = new double[nx];
             // find x coordinate of step points
-            double x_step = x_mm_in_step;
+            double x_step = MotionControllerService.getX_mm_in_step();
             if(x_move == Move.BACKWARD) x_step = - x_step;
             x_step_plan[0] = arc.getStart().getX() - arc.getCenter().getX() + x_step/2.0;
             for (int i=1; i<nx; i++)
@@ -104,14 +96,14 @@ public class VelocityPlan {
         };
 
         double dy = arc.getDY();
-        if(Math.abs(dy) > y_mm_in_step) {
-            if(dy > 0.0) y_move = Move.FOWARD;
+        if(Math.abs(dy) > MotionControllerService.getY_mm_in_step()) {
+            if(dy > 0.0) y_move = Move.FORWARD;
             else y_move = Move.BACKWARD;
 
-            ny = (int)(dy/y_mm_in_step);
+            ny = (int)(dy/MotionControllerService.getY_mm_in_step());
             y_step_plan = new double[ny];
             // find y coordinate of step points
-            double y_step = y_mm_in_step;
+            double y_step = MotionControllerService.getY_mm_in_step();
             if(y_move == Move.BACKWARD) y_step = - y_step;
             y_step_plan[0] = arc.getStart().getX() - arc.getCenter().getY() + y_step/2.0;
             for (int i=1; i<ny; i++)
@@ -147,7 +139,7 @@ public class VelocityPlan {
 
     public enum Move{
         NONE,
-        FOWARD,
+        FORWARD,
         BACKWARD
     }
 }

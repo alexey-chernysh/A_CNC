@@ -15,6 +15,12 @@ public class MotionControllerService extends Service {
 
     private CNCPoint currentPosition = null;
 
+    private static double maxVelocity = 0.0;          // v        - mm/sec
+    private static double maxFirstDerivative = 0.0;   // dv/dt    - mm/sec/sec
+    private static double maxSecondDerivative = 0.0;  // dv/dt/dt - mm/sec/sec/sec
+    private static double x_mm_in_step = 0.0;  // mm in step
+    private static double y_mm_in_step = 0.0;  // mm in step
+
     public MotionControllerService() {
     }
 
@@ -28,6 +34,11 @@ public class MotionControllerService extends Service {
         double cp_X = settings.getFloat(getString(R.string.PREF_LAST_POSITION_X), 0.0f);
         double cp_Y = settings.getFloat(getString(R.string.PREF_LAST_POSITION_Y), 0.0f);
         currentPosition = new CNCPoint(cp_X,cp_Y);
+        maxVelocity = settings.getFloat(getString(R.string.PREF_MAX_VELOCITY), 10000.0f/60.0f);
+        maxFirstDerivative = settings.getFloat(getString(R.string.PREF_MAX_FIRST_DERIVATIVE), 40.0f);
+        maxSecondDerivative = settings.getFloat(getString(R.string.PREF_MAX_SECOND_DERIVATIVE), 10.0f);
+        x_mm_in_step = settings.getFloat(getString(R.string.PREF_MM_IN_STEP_X),  0.007048f);
+        y_mm_in_step = settings.getFloat(getString(R.string.PREF_MM_IN_STEP_Y),  0.007048f);
     }
 
     @Override
@@ -36,8 +47,13 @@ public class MotionControllerService extends Service {
         Log.d(LOG_TAG, "Destroyed!");
 
         SharedPreferences settings = getSharedPreferences(getString(R.string.PREFS), 0);
-        settings.edit().putFloat(getString(R.string.PREF_LAST_POSITION_X), (float)currentPosition.getX()).commit();
+        settings.edit().putFloat(getString(R.string.PREF_LAST_POSITION_X), (float) currentPosition.getX()).commit();
         settings.edit().putFloat(getString(R.string.PREF_LAST_POSITION_Y), (float) currentPosition.getY()).commit();
+        settings.edit().putFloat(getString(R.string.PREF_MAX_VELOCITY), (float) maxVelocity).commit();
+        settings.edit().putFloat(getString(R.string.PREF_MAX_FIRST_DERIVATIVE), (float) maxFirstDerivative).commit();
+        settings.edit().putFloat(getString(R.string.PREF_MAX_SECOND_DERIVATIVE), (float) maxSecondDerivative).commit();
+        settings.edit().putFloat(getString(R.string.PREF_MM_IN_STEP_X), (float) x_mm_in_step).commit();
+        settings.edit().putFloat(getString(R.string.PREF_MM_IN_STEP_Y), (float) y_mm_in_step).commit();
     }
 
     @Override
@@ -48,6 +64,18 @@ public class MotionControllerService extends Service {
 
     public CNCPoint getCurrentPosition() {
         return currentPosition;
+    }
+
+    public double getMaxVelocity() {
+        return maxVelocity;
+    }
+
+    public static double getX_mm_in_step() {
+        return x_mm_in_step;
+    }
+
+    public static double getY_mm_in_step() {
+        return y_mm_in_step;
     }
 
 }

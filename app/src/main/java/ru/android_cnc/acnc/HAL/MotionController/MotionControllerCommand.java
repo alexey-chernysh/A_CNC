@@ -13,7 +13,7 @@ import static android.os.SystemClock.sleep;
 /**
  * Created by Sales on 05.03.2015.
  */
-public abstract class CCommandMotion extends CanonCommand {
+public abstract class MotionControllerCommand extends CanonCommand {
 
     // straight line & arc common fields
     protected CNCPoint start_;
@@ -27,12 +27,12 @@ public abstract class CCommandMotion extends CanonCommand {
     private double MotionPhase = 0.0; // from 0 to length
     public DrawableObjectLimits limits = null;
 
-    public CCommandMotion(MotionType mt,
-                          CNCPoint s,
-                          CNCPoint e,
-                          VelocityPlan vp,
-                          MotionMode m,
-                          CutterRadiusCompensation crc) throws EvolutionException {
+    public MotionControllerCommand(MotionType mt,
+                                   CNCPoint s,
+                                   CNCPoint e,
+                                   VelocityPlan vp,
+                                   MotionMode m,
+                                   CutterRadiusCompensation crc) throws EvolutionException {
         super(CanonCommand.type.MOTION);
         motionType = mt;
 

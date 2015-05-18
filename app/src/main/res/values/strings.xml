@@ -42,5 +42,10 @@
     <string name="title_activity_gcode_text_edit">GcodeTextEditActivity</string>
     <string name="PREF_LAST_POSITION_X">last_position_x</string>
     <string name="PREF_LAST_POSITION_Y">last_position_y</string>
+    <string name="PREF_MAX_VELOCITY">max_velocity</string>
+    <string name="PREF_MAX_FIRST_DERIVATIVE">max_first_derivative</string>
+    <string name="PREF_MAX_SECOND_DERIVATIVE">max_second_derivatives</string>
+    <string name="PREF_MM_IN_STEP_X">mm_in_step_x</string>
+    <string name="PREF_MM_IN_STEP_Y">mm_in_step_y</string>
 
 </resources>

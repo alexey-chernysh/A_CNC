@@ -16,7 +16,7 @@ import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class CCommandArcLine extends CCommandMotion {
+public class CCommandArcLine extends MotionControllerCommand {
 	
 	// arc specific fields
 	protected CNCPoint center_;
