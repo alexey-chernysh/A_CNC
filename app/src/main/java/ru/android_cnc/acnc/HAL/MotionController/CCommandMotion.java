@@ -1,8 +1,9 @@
-package ru.android_cnc.acnc.Drivers.CanonicalCommands;
+package ru.android_cnc.acnc.HAL.MotionController;
 
 import android.graphics.Canvas;
 
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;

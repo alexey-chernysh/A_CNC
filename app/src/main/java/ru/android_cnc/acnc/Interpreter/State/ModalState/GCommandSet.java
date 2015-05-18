@@ -4,12 +4,12 @@
 
 package ru.android_cnc.acnc.Interpreter.State.ModalState;
 
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.ArcDirection;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.ArcDirection;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandDwell;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.VelocityPlan;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
+import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
+import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;

@@ -2,9 +2,10 @@
  * @author Alexey Chernysh
  */
 
-package ru.android_cnc.acnc.Drivers.CanonicalCommands;
+package ru.android_cnc.acnc.HAL.MotionController;
 
-import android.util.Log;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 
 public class VelocityPlan {
 

@@ -11,11 +11,14 @@ import java.util.ArrayList;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
+import ru.android_cnc.acnc.HAL.MotionController.ArcDirection;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandMotion;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.InterpreterState;
 
-import static ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine.normalizeInRadian;
+import static ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine.normalizeInRadian;
 import static ru.android_cnc.acnc.Geometry.CNCPoint.getCrossingPoint;
 
 public class CanonCommandSequence {

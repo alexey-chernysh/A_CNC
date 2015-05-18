@@ -6,8 +6,6 @@ package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
 
-import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
-
 public abstract class CanonCommand {
 	
 	private type type_ = type.UNDEFINED;
@@ -28,6 +26,7 @@ public abstract class CanonCommand {
 	public enum type{
 		UNDEFINED,
 		MOTION,
+		CHANGE_STATE,
 		WAIT_STATE_CHANGE,
         MESSAGE
 	}

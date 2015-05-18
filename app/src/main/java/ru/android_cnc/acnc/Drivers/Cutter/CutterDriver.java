@@ -19,10 +19,10 @@ package ru.android_cnc.acnc.Drivers.Cutter;
 import android.os.Handler;
 import android.view.View;
 
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommandSequence;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
+import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
 import ru.android_cnc.acnc.Drivers.GeneralDriver;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;

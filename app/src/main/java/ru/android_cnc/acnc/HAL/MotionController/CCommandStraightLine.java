@@ -2,7 +2,7 @@
   * @author Alexey Chernysh
  */
 
-package ru.android_cnc.acnc.Drivers.CanonicalCommands;
+package ru.android_cnc.acnc.HAL.MotionController;
 
 import android.graphics.Canvas;
 

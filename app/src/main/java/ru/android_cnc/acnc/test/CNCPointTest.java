@@ -4,11 +4,11 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.ArcDirection;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.MotionMode;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.VelocityPlan;
+import ru.android_cnc.acnc.HAL.MotionController.ArcDirection;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
+import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
+import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 

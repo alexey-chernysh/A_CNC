@@ -4,11 +4,9 @@
 
 package ru.android_cnc.acnc.Geometry;
 
-import android.util.Log;
-
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandArcLine;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandMotion;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandStraightLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandMotion;
+import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 
 import static java.lang.Math.sqrt;
 
