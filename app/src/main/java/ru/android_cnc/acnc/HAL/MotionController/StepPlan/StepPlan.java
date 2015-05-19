@@ -32,16 +32,13 @@ public class StepPlan {
         final double dx = command.getDX();
         final double dy = command.getDY();
 
-        int n_x = 0;
-        int n_y = 0;
-
         if (command instanceof CCommandStraightLine) {
 
             Step sx = new Step(true, (dx >= 0.0));
             Step sy = new Step(true, (dy >= 0.0));
 
             // generate x steps positions
-            n_x = (int) Math.abs(dx / step_x);
+            int n_x = (int) Math.abs(dx / step_x);
             if (n_x > 0) {
                 final double dl = length / (n_x + 1.0);
                 planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
@@ -53,7 +50,7 @@ public class StepPlan {
             }
 
             // generate y steps positions
-            n_y = (int) Math.abs(dy / step_y);
+            int n_y = (int) Math.abs(dy / step_y);
             if (n_y > 0) {
                 final double dl = length / (n_y + 1.0);
                 planY.add(new StepPlanRecord(0, null, new Step(false, (dy >= 0.0))));
@@ -90,7 +87,7 @@ public class StepPlan {
         }
         ;
 
-        // merge arrays
+        // merge x & y arrays
         Iterator<StepPlanRecord> iteratorX = planX.iterator();
         StepPlanRecord nextX = null;
         if (iteratorX.hasNext()) nextX = iteratorX.next();
