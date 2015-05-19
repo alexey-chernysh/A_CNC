@@ -29,13 +29,13 @@ public class StepPlan {
 
         final double length = command.length();
 
+        final double dx = command.getDX();
+        final double dy = command.getDY();
+
         int n_x = 0;
         int n_y = 0;
 
         if (command instanceof CCommandStraightLine) {
-
-            final double dx = command.getDX();
-            final double dy = command.getDY();
 
             Step sx = new Step(true, (dx >= 0.0));
             Step sy = new Step(true, (dy >= 0.0));
@@ -49,6 +49,7 @@ public class StepPlan {
                     double step_pos = dl / 2.0 + i * dl;
                     planX.add(new StepPlanRecord(step_pos, sx, null));
                 }
+                planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
             }
 
             // generate y steps positions
@@ -60,6 +61,7 @@ public class StepPlan {
                     double step_pos = dl / 2.0 + i * dl;
                     planY.add(new StepPlanRecord(step_pos, null, sy));
                 }
+                planY.add(new StepPlanRecord(length, null, new Step(false, (dy >= 0.0))));
             }
         }
         ;
@@ -68,17 +70,23 @@ public class StepPlan {
 
             CCommandArcLine arcCommand = (CCommandArcLine) command;
             ArcDirection arcDirection = arcCommand.getArcDirection();
+            double radius = arcCommand.radius();
             double angle = arcCommand.angle();
+            double startAngle = arcCommand.getStartRadialAngle();
+            double endAngle = arcCommand.getEndRadialAngle();
 
-            // split arc into segments
-            // max - 4 segments
-            int n_segments = (int)Math.ceil(Math.abs(angle/(Math.PI)));// - TODO - хуйня, надо убрать
+            if(arcDirection == ArcDirection.COUNTERCLOCKWISE){
+                // generate x steps positions
+                double a = startAngle;
+                while(a < endAngle){
+                    double tmp = Math.cos(a) - (step_x/radius);
+                    double d = Math.acos(tmp) - a;
+                    double dl = d*radius;
+                }
 
-            double[] start_angle = new double[n_segments];
-            double[] end_angle  = new double[n_segments];
-            start_angle[0] = arcCommand.getStartRadialAngle();
-            end_angle[n_segments-1] = arcCommand.getEndRadialAngle();
+            } else {
 
+            }
         }
         ;
 
@@ -86,15 +94,19 @@ public class StepPlan {
         Iterator<StepPlanRecord> iteratorX = planX.iterator();
         StepPlanRecord nextX = null;
         if (iteratorX.hasNext()) nextX = iteratorX.next();
+
         Iterator<StepPlanRecord> iteratorY = planY.iterator();
         StepPlanRecord nextY = null;
         if (iteratorY.hasNext()) nextY = iteratorY.next();
 
         while ((nextX != null) | (nextY != null)) {
+
             double posX = Double.MAX_VALUE;
             if (nextX != null) posX = nextX.getPosition();
+
             double posY = Double.MAX_VALUE;
             if (nextY != null) posY = nextY.getPosition();
+
             if (posX < posY) {
                 // x pulse first
                 plan.add(nextX);
