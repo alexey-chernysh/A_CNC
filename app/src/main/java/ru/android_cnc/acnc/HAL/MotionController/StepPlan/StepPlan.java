@@ -72,18 +72,22 @@ public class StepPlan {
             double startAngle = arcCommand.getStartRadialAngle();
             double endAngle = arcCommand.getEndRadialAngle();
 
+            planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
             if(arcDirection == ArcDirection.COUNTERCLOCKWISE){
                 // generate x steps positions
                 double a = startAngle;
+                double x = arcCommand.getStart().getX() - arcCommand.getCenter().getX();
                 while(a < endAngle){
-                    double tmp = Math.cos(a) - (step_x/radius);
-                    double d = Math.acos(tmp) - a;
-                    double dl = d*radius;
+                    double shift = step_x;
+                    if(a > 0.0) shift = - step_x;
+                    double next_x = x + shift;
+                    if()
                 }
 
             } else {
 
             }
+            planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
         }
         ;
 
