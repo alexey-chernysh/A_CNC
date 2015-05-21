@@ -37,59 +37,125 @@ public class StepPlan {
             Step sx = new Step(true, (dx >= 0.0));
             Step sy = new Step(true, (dy >= 0.0));
 
-            // generate x steps positions
-            int n_x = (int) Math.abs(dx / step_x);
-            if (n_x > 0) {
-                final double dl = length / (n_x + 1.0);
-                planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
-                for (int i = 0; i < n_x; i++) {
-                    double step_pos = dl / 2.0 + i * dl;
-                    planX.add(new StepPlanRecord(step_pos, sx, null));
-                }
-                planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
-            }
+            double angle = command.getStartTangentAngle();
 
-            // generate y steps positions
-            int n_y = (int) Math.abs(dy / step_y);
-            if (n_y > 0) {
-                final double dl = length / (n_y + 1.0);
-                planY.add(new StepPlanRecord(0, null, new Step(false, (dy >= 0.0))));
-                for (int i = 0; i < n_y; i++) {
-                    double step_pos = dl / 2.0 + i * dl;
-                    planY.add(new StepPlanRecord(step_pos, null, sy));
+            planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
+            if (Math.abs(dx) > 0) {
+                // generate x steps positions
+                double dl = Math.abs(step_x/Math.cos(angle));
+                double pos = 0;
+                while (pos < length) {
+                    planX.add(new StepPlanRecord(pos + dl/2, sx, null));
+                    pos += dl;
                 }
-                planY.add(new StepPlanRecord(length, null, new Step(false, (dy >= 0.0))));
             }
-        }
-        ;
+            planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
+
+            planY.add(new StepPlanRecord(0, null, new Step(false, (dy >= 0.0))));
+            if (Math.abs(dy) > 0) {
+                // generate y steps positions
+                double dl = Math.abs(step_x/Math.sin(angle));
+                double pos = 0;
+                while (pos < length) {
+                    planY.add(new StepPlanRecord(pos + dl/2, null, sy));
+                    pos += dl;
+                }
+            }
+            planY.add(new StepPlanRecord(length, null, new Step(false, (dy >= 0.0))));
+        };
 
         if (command instanceof CCommandArcLine) {
 
             CCommandArcLine arcCommand = (CCommandArcLine) command;
             ArcDirection arcDirection = arcCommand.getArcDirection();
             double radius = arcCommand.radius();
-            double angle = arcCommand.angle();
             double startAngle = arcCommand.getStartRadialAngle();
             double endAngle = arcCommand.getEndRadialAngle();
+            boolean counterClockWise = (arcDirection == ArcDirection.COUNTERCLOCKWISE);
 
-            planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
-            if(arcDirection == ArcDirection.COUNTERCLOCKWISE){
-                // generate x steps positions
-                double a = startAngle;
-                double x = arcCommand.getStart().getX() - arcCommand.getCenter().getX();
-                while(a < endAngle){
-                    double shift = step_x;
-                    if(a > 0.0) shift = - step_x;
-                    double next_x = x + shift;
-                    if()
+            // generate x steps positions
+            double a = startAngle;
+            double x = arcCommand.getStart().getX() - arcCommand.getCenter().getX();
+            double shift;
+            if(counterClockWise) shift = -step_x;
+            else shift = step_x;
+            if(Math.sin(a) < 0.0) shift = -shift;
+            planX.add(new StepPlanRecord(0, new Step(false, (shift>0.0)), null));
+            while(a < endAngle){
+                double next_x = x + shift;
+                if(Math.abs(x) <= radius){
+                    double new_a = Math.acos(next_x/radius);
+                    if(a >  Math.PI) new_a = 2.0*Math.PI - new_a;
+                    else
+                        if(a < -Math.PI) new_a =   new_a - 2.0*Math.PI;
+                        else if(a < 0.0) new_a = - new_a;
+                    double l = ((new_a - a)/2 - startAngle)*radius;
+                    a = new_a;
+                    planX.add(new StepPlanRecord(l, new Step(true,  (shift>0.0)), null));
+                } else {
+                    // insert dir change pulse
+                    shift = -shift;
+                    if(Math.cos(a) > 0.0){
+                        // pass through the 0 or 2*PI or -2*PI angle
+                        if(counterClockWise) {
+                            if(a >  Math.PI) a =  2.0*Math.PI;
+                            else a = 0.0;
+                        }  else {
+                            if(a < -Math.PI) a = -2.0*Math.PI;
+                            else a = 0.0;
+                        };
+                    } else {
+                        // pass through the PI or -PI angle
+                        if(a > 0) a = Math.PI;
+                        else a = -Math.PI;
+                    }
+                    double l = radius*(a - startAngle);
+                    planX.add(new StepPlanRecord(l, new Step(false, (shift>0.0)), null));
                 }
-
-            } else {
-
             }
             planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
-        }
-        ;
+
+            // generate y steps positions
+            a = startAngle;
+            double y = arcCommand.getStart().getY() - arcCommand.getCenter().getY();
+            if(counterClockWise) shift = step_y;
+            else shift = -step_y;
+            if(Math.cos(a) < 0.0) shift = -shift;
+            planY.add(new StepPlanRecord(0, new Step(false, (shift>0.0)), null));
+            while(a < endAngle){
+                double next_y = y + shift;
+                if(Math.abs(y) <= radius){
+                    double new_a = Math.asin(next_y / radius);
+                    if(a >  Math.PI) new_a = 2.0*Math.PI - new_a;
+                    else
+                        if(a < -Math.PI) new_a = new_a - 2.0*Math.PI;
+                        else if(a < 0.0)new_a = - new_a;
+                    double l = ((new_a - a)/2 - startAngle)*radius;
+                    a = new_a;
+                    planX.add(new StepPlanRecord(l, new Step(true,  (shift>0.0)), null));
+                } else {
+                    // insert dir change pulse
+                    shift = -shift;
+                    if(Math.cos(a) > 0.0){
+                        // pass through the 0 or 2*PI or -2*PI angle
+                        if(counterClockWise) {
+                            if(a >  Math.PI) a =  2.0*Math.PI;
+                            else a = 0.0;
+                        }  else {
+                            if(a < -Math.PI) a = -2.0*Math.PI;
+                            else a = 0.0;
+                        };
+                    } else {
+                        // pass through the PI or -PI angle
+                        if(a > 0) a = Math.PI;
+                        else a = -Math.PI;
+                    }
+                    double l = radius*(a - startAngle);
+                    planX.add(new StepPlanRecord(l, new Step(false, (shift>0.0)), null));
+                }
+            }
+            planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
+        };
 
         // merge x & y arrays
         Iterator<StepPlanRecord> iteratorX = planX.iterator();
