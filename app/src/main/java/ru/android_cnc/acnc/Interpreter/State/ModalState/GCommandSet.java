@@ -9,7 +9,7 @@ import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandDwell;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
-import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan;
+import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;

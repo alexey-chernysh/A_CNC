@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CanonCommand;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
+import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
@@ -62,7 +63,6 @@ public abstract class MotionControllerCommand extends CanonCommand {
     }
 
     public VelocityPlan getVelocityPlan() {	return velocityPlan_; }
-    private void setVelocityPlan(VelocityPlan vp) {	this.velocityPlan_ = new VelocityPlan(vp.getStartVel(),vp.getEndVel()); }
 
     public MotionType getMotionType() {
         return motionType;

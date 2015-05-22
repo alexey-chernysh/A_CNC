@@ -8,7 +8,7 @@ import ru.android_cnc.acnc.HAL.MotionController.ArcDirection;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
-import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan;
+import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
 
