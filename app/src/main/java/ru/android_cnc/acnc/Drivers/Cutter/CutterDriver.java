@@ -63,7 +63,7 @@ public class CutterDriver implements GeneralDriver {
 				// working with cutting lines and arc only
 				Object prevCuttingCommand = PreviousCutting(i);
 				Object nextCuttingCommand = NextCutting(i);
-				double neededVelocity = ((CCommandStraightLine)currentCommand).getVelocityPlan().getStartVel();
+//				double neededVelocity = ((CCommandStraightLine)currentCommand).getVelocityPlan().getStartVel();
 				if(prevCuttingCommand == null){ 
 					// first cutting after perforation - inserting slow perforation phase 
 					if(itsCuttingLine){
@@ -71,15 +71,15 @@ public class CutterDriver implements GeneralDriver {
 						double currentLength = currentLine.length();
 						if((perfLength < currentLength)&&(perfLength > 0.0)){
 							CCommandStraightLine newLine1 = currentLine.newSubLine(0, perfLength);
-							newLine1.setVelocityProfile(perforationVel,startVel);
+//							newLine1.setVelocityProfile(perforationVel,startVel);
 							CCommandStraightLine newLine2 = currentLine.newSubLine(perfLength, currentLength);
-							newLine1.setVelocityProfile(startVel, neededVelocity);
+//							newLine1.setVelocityProfile(startVel, neededVelocity);
 							this.commands_.remove(i);
 							this.commands_.add(i, newLine2);
 							this.commands_.add(i, newLine1);
 							i++;
 						} else {
-							currentLine.setVelocityProfile(startVel, neededVelocity);
+//							currentLine.setVelocityProfile(startVel, neededVelocity);
 						}
 					} else {
 						if(itsCuttingArc){
@@ -87,15 +87,15 @@ public class CutterDriver implements GeneralDriver {
 							double currentLength = currentArc.length();
 							if((perfLength < currentLength)&&(perfLength > 0.0)){
 								CCommandArcLine newArc1 = currentArc.newSubArc(0, perfLength);
-								newArc1.setVelocityProfile(perforationVel,startVel);
+//								newArc1.setVelocityProfile(perforationVel,startVel);
 								CCommandArcLine newArc2 = currentArc.newSubArc(perfLength, currentLength);
-								newArc1.setVelocityProfile(startVel, neededVelocity);
+//								newArc1.setVelocityProfile(startVel, neededVelocity);
 								this.commands_.remove(i);
 								this.commands_.add(i, newArc2);
 								this.commands_.add(i, newArc1);
 								i++;
 							} else {
-								currentArc.setVelocityProfile(startVel, neededVelocity);
+//								currentArc.setVelocityProfile(startVel, neededVelocity);
 							}
 						}				
 					}
@@ -103,28 +103,28 @@ public class CutterDriver implements GeneralDriver {
 					// its no first cutting line - adjustment needed
 					CCommandStraightLine beforeLine = (CCommandStraightLine)prevCuttingCommand;
 					double angleBeforeStart = beforeLine.getEndTangentAngle();
-					double velBeforeStart = beforeLine.getVelocityPlan().getEndVel();
+//					double velBeforeStart = beforeLine.getVelocityPlan().getEndVel();
 					CCommandStraightLine currentLine = (CCommandStraightLine)currentCommand;
 					double angleStart = currentLine.getStartTangentAngle();
 					if(Math.abs(angleStart - angleBeforeStart) < Settings.angleTol){
 						// fine case of smooth line angle adjustment.
 						// adjust velocity now
-						if(velBeforeStart == neededVelocity){
+//						if(velBeforeStart == neededVelocity){
 							// velocity is equal
-							currentLine.setVelocityProfile(neededVelocity, neededVelocity);
-						} else {
-							currentLine.setVelocityProfile(velBeforeStart, neededVelocity);
-						}
+//							currentLine.setVelocityProfile(neededVelocity, neededVelocity);
+//						} else {
+//							currentLine.setVelocityProfile(velBeforeStart, neededVelocity);
+//						}
 					} else {
-						currentLine.setVelocityProfile(startVel, neededVelocity);
-						((CCommandStraightLine)prevCuttingCommand).getVelocityPlan().setEndVel(startVel);
+//						currentLine.setVelocityProfile(startVel, neededVelocity);
+//						((CCommandStraightLine)prevCuttingCommand).getVelocityPlan().setEndVel(startVel);
 					} 
 				}
 				if(nextCuttingCommand == null){
-					((CCommandStraightLine)this.commands_.get(i)).getVelocityPlan().setEndVel(startVel);
+//					((CCommandStraightLine)this.commands_.get(i)).getVelocityPlan().setEndVel(startVel);
 				}
 
-			};
+			}
 		}
 	}
 

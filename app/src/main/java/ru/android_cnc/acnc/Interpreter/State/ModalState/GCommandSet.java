@@ -9,7 +9,6 @@ import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandDwell;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 import ru.android_cnc.acnc.HAL.MotionController.MotionMode;
-import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Expression.ParamExpressionList;
 import ru.android_cnc.acnc.Interpreter.Expression.Tokens.TokenParameter;
 import ru.android_cnc.acnc.Interpreter.Expression.Variables.VariablesSet;
@@ -23,15 +22,14 @@ public enum GCommandSet {
 	G0(0.0, GCommandModalGroupSet.G_GROUP1_MOTION){ // Rapid positioning
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			CCommandStraightLine newG0 = new CCommandStraightLine(startCNCPoint,
-                                        endCNCPoint,
-										vp, 
-										MotionMode.FREE,
-										InterpreterState.zeroOffsetMode);
+																	endCNCPoint,
+																	InterpreterState.feedRate.getRapidFeedRate(),
+																	MotionMode.FREE,
+																	InterpreterState.zeroOffsetMode);
 			ProgramLoader.command_sequence.add(newG0);
 			InterpreterState.setLastPosition(endCNCPoint);
 		}
@@ -39,15 +37,14 @@ public enum GCommandSet {
 	G1(1.0, GCommandModalGroupSet.G_GROUP1_MOTION){ // Linear interpolation
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 			CCommandStraightLine newG1 = new CCommandStraightLine(startCNCPoint,
-                                        endCNCPoint,
-										vp, 
-										MotionMode.WORK, 
-										InterpreterState.offsetMode);
+																endCNCPoint,
+																InterpreterState.feedRate.getWorkFeedRate(),
+																MotionMode.WORK,
+																InterpreterState.offsetMode);
 			ProgramLoader.command_sequence.add(newG1);
 			InterpreterState.setLastPosition(endCNCPoint);
 		}
@@ -55,7 +52,7 @@ public enum GCommandSet {
 	G2(2.0, GCommandModalGroupSet.G_GROUP1_MOTION){ // Clockwise circular/helical interpolation
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
 			double R = InterpreterState.modalState.getR(words);
@@ -67,7 +64,7 @@ public enum GCommandSet {
                 R = Math.abs(R);
                 double dx = Math.abs(startCNCPoint.getX() - endCNCPoint.getX());
                 double dy = Math.abs(startCNCPoint.getY() - endCNCPoint.getY());
-                if((dx == 0)&&(dy == 00)) throw new EvolutionException("At least one coordinate fo R-style arc needed");
+                if((dx == 0.0)&&(dy == 0.0)) throw new EvolutionException("At least one coordinate fo R-style arc needed");
                 else {
                     double catet1 = Math.sqrt(dx*dx+dy*dy)/2.0;
                     double catet2 = Math.sqrt(R*R - catet1*catet1);
@@ -78,13 +75,12 @@ public enum GCommandSet {
                     centerCNCPoint = new CNCPoint(startCNCPoint.getX() + R*Math.cos(alfa),
                                                   startCNCPoint.getY() + R*Math.sin(alfa));
                 }
-            };
-            VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
+            }
             CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
                                                         endCNCPoint,
                                                         centerCNCPoint,
                                                         ArcDirection.CLOCKWISE,
-                                                        vp,
+														InterpreterState.feedRate.getWorkFeedRate(),
                                                         InterpreterState.offsetMode);
             ProgramLoader.command_sequence.add(newG2);
 			InterpreterState.setLastPosition(endCNCPoint);
@@ -94,7 +90,7 @@ public enum GCommandSet {
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
 			checkThatScalesAreEquals();
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			CNCPoint startCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint endCNCPoint = InterpreterState.modalState.getTargetPoint(startCNCPoint, words);
             double R = InterpreterState.modalState.getR(words);
@@ -106,7 +102,7 @@ public enum GCommandSet {
                 R = Math.abs(R);
                 double dx = Math.abs(startCNCPoint.getX() - endCNCPoint.getX());
                 double dy = Math.abs(startCNCPoint.getY() - endCNCPoint.getY());
-                if((dx == 0)&&(dy == 00)) throw new EvolutionException("At least one coordinate fo R-style arc needed");
+                if((dx == 0.0)&&(dy == 0.0)) throw new EvolutionException("At least one coordinate fo R-style arc needed");
                 else {
                     double catet1 = Math.sqrt(dx*dx+dy*dy)/2.0;
                     double catet2 = Math.sqrt(R*R - catet1*catet1);
@@ -117,14 +113,13 @@ public enum GCommandSet {
                     centerCNCPoint = new CNCPoint(startCNCPoint.getX() + R*Math.cos(alfa),
                             startCNCPoint.getY() + R*Math.sin(alfa));
                 }
-            };
-            VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
+            }
             CCommandArcLine newG2 = new CCommandArcLine(startCNCPoint,
-                    endCNCPoint,
-                    centerCNCPoint,
-                    ArcDirection.COUNTERCLOCKWISE,
-                    vp,
-                    InterpreterState.offsetMode);
+														endCNCPoint,
+														centerCNCPoint,
+														ArcDirection.COUNTERCLOCKWISE,
+														InterpreterState.feedRate.getWorkFeedRate(),
+														InterpreterState.offsetMode);
             ProgramLoader.command_sequence.add(newG2);
             InterpreterState.setLastPosition(endCNCPoint);
 		}
@@ -133,7 +128,7 @@ public enum GCommandSet {
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
 			checkThatScalesAreEquals();
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			double p = words.get(TokenParameter.P);
 			if(p >= 0.0){
 				CCommandDwell newG4 = new CCommandDwell(p);
@@ -185,26 +180,25 @@ public enum GCommandSet {
 			if(radius > 0.0){
 				CNCPoint centerCNCPoint = InterpreterState.getLastPosition();
 				CNCPoint circleStartCNCPoint = centerCNCPoint.clone();
-				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 				circleStartCNCPoint.shift(radius, 0.0);
 				CCommandStraightLine G1_in = new CCommandStraightLine(centerCNCPoint,
-                                            circleStartCNCPoint,
-											vp, 
-											MotionMode.WORK, 
-											InterpreterState.offsetMode);
+																		circleStartCNCPoint,
+																		InterpreterState.feedRate.getWorkFeedRate(),
+																		MotionMode.WORK,
+																		InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
 				CCommandArcLine newG2 = new CCommandArcLine(circleStartCNCPoint,
-                                            circleStartCNCPoint,
-                                            centerCNCPoint,
-											ArcDirection.CLOCKWISE,
-											vp, 
-											InterpreterState.offsetMode);
+															circleStartCNCPoint,
+															centerCNCPoint,
+															ArcDirection.CLOCKWISE,
+															InterpreterState.feedRate.getWorkFeedRate(),
+															InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
 				CCommandStraightLine G1_out = new CCommandStraightLine(circleStartCNCPoint,
-                                             centerCNCPoint,
-											 vp, 
-											 MotionMode.WORK, 
-											 InterpreterState.offsetMode);
+																	 centerCNCPoint,
+																	 InterpreterState.feedRate.getWorkFeedRate(),
+																	 MotionMode.WORK,
+																	 InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_out);
 			} else new EvolutionException("For G12 pocket positive I parameter needed");
 		}
@@ -217,24 +211,23 @@ public enum GCommandSet {
 			if(radius > 0.0){
 				CNCPoint centerCNCPoint = InterpreterState.getLastPosition();
 				CNCPoint circleStartCNCPoint = centerCNCPoint.clone();
-				VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getWorkFeedRate());
 				circleStartCNCPoint.shift(radius, 0.0);
 				CCommandStraightLine G1_in = new CCommandStraightLine(centerCNCPoint,
-                                            circleStartCNCPoint,
-											vp, 
-											MotionMode.WORK, 
-											InterpreterState.offsetMode);
+																	circleStartCNCPoint,
+																	InterpreterState.feedRate.getWorkFeedRate(),
+																	MotionMode.WORK,
+																	InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_in);
 				CCommandArcLine newG2 = new CCommandArcLine(circleStartCNCPoint,
                                             circleStartCNCPoint,
                                             centerCNCPoint,
 											ArcDirection.COUNTERCLOCKWISE,
-											vp, 
+											InterpreterState.feedRate.getWorkFeedRate(),
 											InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(newG2);
 				CCommandStraightLine G1_out = new CCommandStraightLine(circleStartCNCPoint,
                                              centerCNCPoint,
-											 vp, 
+											 InterpreterState.feedRate.getWorkFeedRate(),
 											 MotionMode.WORK, 
 											 InterpreterState.offsetMode);
 				ProgramLoader.command_sequence.add(G1_out);
@@ -244,45 +237,45 @@ public enum GCommandSet {
 	G15(15.0, GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES){ // Polar coordinate moves in G0 and G1
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G16(16.0, GCommandModalGroupSet.G_GROUP17_POLAR_COORDINATES){ // Cancel polar coordinate moves
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G17(17.0, GCommandModalGroupSet.G_GROUP2_PLANE){ // XY Plane select
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G18(18.0, GCommandModalGroupSet.G_GROUP2_PLANE){ // XZ plane select
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
-			InterpreterState.modalState.set(modalGroup, this);
+			checkThatCutterRadiusCompensationIsOff();
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G19(19.0, GCommandModalGroupSet.G_GROUP2_PLANE){ // YZ plane select
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			checkThatCutterRadiusCompebsationIsOff();
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			checkThatCutterRadiusCompensationIsOff();
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	G20(20.0, GCommandModalGroupSet.G_GROUP6_UNITS){  // Inch unit
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	},
 	G21(21.0, GCommandModalGroupSet.G_GROUP6_UNITS){ // Millimeter unit
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G28(28.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // Return home
@@ -290,21 +283,20 @@ public enum GCommandSet {
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
 			CNCPoint currentCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint intermediateCNCPoint = words.getPoint();
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			if(intermediateCNCPoint != null){
 				CCommandStraightLine motion1 = new CCommandStraightLine(currentCNCPoint,
                                               intermediateCNCPoint,
-						  					  vp, 
+						                      InterpreterState.feedRate.getRapidFeedRate(),
 						  					  MotionMode.FREE, 
 						  					  null);
 				ProgramLoader.command_sequence.add(motion1);
 				InterpreterState.setLastPosition(intermediateCNCPoint);
 				currentCNCPoint = intermediateCNCPoint;
-			};
-			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG28();
+			}
+			CNCPoint homeCNCPoint = VariablesSet.getHomePointG28();
 			CCommandStraightLine motion2 = new CCommandStraightLine(currentCNCPoint,
                                           homeCNCPoint,
-										  vp, 
+										  InterpreterState.feedRate.getRapidFeedRate(),
 										  MotionMode.FREE, 
 										  null);
 			ProgramLoader.command_sequence.add(motion2);
@@ -315,29 +307,28 @@ public enum GCommandSet {
         @Override
         public void evaluate(ParamExpressionList words) throws EvolutionException{
             CNCPoint position = words.getPoint();
-            InterpreterState.vars_.setG28HomePos(position);
-        };
+            VariablesSet.setG28HomePos(position);
+        }
     },
 	G30(30.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // Return home
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
 			CNCPoint currentCNCPoint = InterpreterState.getLastPosition();
 			CNCPoint intermediateCNCPoint = words.getPoint();
-			VelocityPlan vp = new VelocityPlan(InterpreterState.feedRate.getRapidFeedRate());
 			if(intermediateCNCPoint != null){
 				CCommandStraightLine motion1 = new CCommandStraightLine(currentCNCPoint,
                                               intermediateCNCPoint,
-						  					  vp, 
+											  InterpreterState.feedRate.getRapidFeedRate(),
 						  					  MotionMode.FREE, 
 						  					  null);
 				ProgramLoader.command_sequence.add(motion1);
 				InterpreterState.setLastPosition(intermediateCNCPoint);
 				currentCNCPoint = intermediateCNCPoint;
-			};
-			CNCPoint homeCNCPoint = InterpreterState.vars_.getHomePointG30();
+			}
+			CNCPoint homeCNCPoint = VariablesSet.getHomePointG30();
 			CCommandStraightLine motion2 = new CCommandStraightLine(currentCNCPoint,
                                           homeCNCPoint,
-										  vp, 
+										  InterpreterState.feedRate.getRapidFeedRate(),
 										  MotionMode.FREE, 
 										  null);
 			ProgramLoader.command_sequence.add(motion2);
@@ -348,48 +339,48 @@ public enum GCommandSet {
         @Override
         public void evaluate(ParamExpressionList words) throws EvolutionException{
             CNCPoint position = words.getPoint();
-            InterpreterState.vars_.setG30HomePos(position);
-        };
+            VariablesSet.setG30HomePos(position);
+        }
     },
 	G31(31.0, GCommandModalGroupSet.G_GROUP1_MOTION), // Straight probe
 	G40(40.0, GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION){ // Cancel cutter radius compensation
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			InterpreterState.offsetMode.setMode(CutterRadiusCompensation.mode.OFF);
-		};
+		}
 	}, 
 	G41(41.0, GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION){ // Start cutter radius compensation left
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
 			checkThatPlaneIsXY();
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			InterpreterState.offsetMode.setMode(CutterRadiusCompensation.mode.LEFT);
-			double offset = -1.0;
+			double offset;
 			int d = (int)words.get(TokenParameter.D);
 			if(d > 0){
 				offset = InterpreterState.toolSet.getToolRadius(d);
 			} else {
 				offset = words.get(TokenParameter.P);
-			};
+			}
 			if(offset > 0.0) InterpreterState.offsetMode.setRadius(offset);
-		};
+		}
 	}, // Start cutter radius compensation left
 	G42(42.0, GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION){ // Start cutter radius compensation right
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
 			checkThatPlaneIsXY();
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			InterpreterState.offsetMode.setMode(CutterRadiusCompensation.mode.RIGHT);
-			double offset = -1.0;
+			double offset;
 			int d = (int)words.get(TokenParameter.D);
 			if(d > 0){
 				offset = InterpreterState.toolSet.getToolRadius(d);
 			} else {
 				offset = words.get(TokenParameter.P);
-			};
+			}
 			if(offset > 0.0)InterpreterState.offsetMode.setRadius(offset);
-		};
+		}
 	}, 
 	G43(43.0, GCommandModalGroupSet.G_GROUP8_TOOL_LENGHT_OFFSET){ // Apply tool length offset (plus)
         @Override
@@ -412,14 +403,14 @@ public enum GCommandSet {
 	G50(50.0, GCommandModalGroupSet.G_GROUP18_SCALING){ // Reset all scale factors to 1.0
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
-			InterpreterState.vars_.setScale(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+			ModalState.set(modalGroup, this);
+			VariablesSet.setScale(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
 		}
 	}, 
 	G51(51.0, GCommandModalGroupSet.G_GROUP18_SCALING){ // Set axis data input scale factors
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 			double X = 1.0;
 			double Y = 1.0;
 			double Z = 1.0;
@@ -432,7 +423,7 @@ public enum GCommandSet {
 			if(words.has(TokenParameter.A)) X = words.get(TokenParameter.A);
 			if(words.has(TokenParameter.B)) X = words.get(TokenParameter.B);
 			if(words.has(TokenParameter.C)) X = words.get(TokenParameter.C);
-			InterpreterState.vars_.setScale(X, Y, Z, A, B, C);
+			VariablesSet.setScale(X, Y, Z, A, B, C);
 		}
 	}, 
 	G52(52.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){// Temporary coordinate system offsets
@@ -445,42 +436,42 @@ public enum GCommandSet {
 	G54(54.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 1
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			InterpreterState.vars_.setCurrentWorkOffsetNum(1);
 		}
 	}, 
 	G55(55.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 2
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			InterpreterState.vars_.setCurrentWorkOffsetNum(2);
 		}
 	}, 
 	G56(56.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 3
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			InterpreterState.vars_.setCurrentWorkOffsetNum(3);
 		}
 	}, 
 	G57(57.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 4
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			InterpreterState.vars_.setCurrentWorkOffsetNum(4);
 		}
 	}, 
 	G58(58.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 5
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			InterpreterState.vars_.setCurrentWorkOffsetNum(5);
 		}
 	}, 
 	G59(59.0, GCommandModalGroupSet.G_GROUP12_OFFSET_SELECTION){ // Use fixture offset 6 / use general fixture number
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			checkThatCutterRadiusCompebsationIsOff();
+			checkThatCutterRadiusCompensationIsOff();
 			if(words.has(TokenParameter.P)){
 				int P = words.getInt(TokenParameter.P);
 				InterpreterState.vars_.setCurrentWorkOffsetNum(P);
@@ -533,25 +524,25 @@ public enum GCommandSet {
 	G90(90.0, GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE){ // Absolute distance mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, // Absolute distance mode
 	G90_1(90.1, GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE){ // Arc absolute distance mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G91(91.0, GCommandModalGroupSet.G_GROUP3_DISTANCE_MODE){ // Relative(incremental) distance mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G91_1(91.1, GCommandModalGroupSet.G_GROUP4_ARC_DISTANCE_MODE){ // Arc incremental distance mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException {
-			InterpreterState.modalState.set(modalGroup, this);
+			ModalState.set(modalGroup, this);
 		}
 	}, 
 	G92(92.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){// Offset coordinates and set parameters
@@ -566,72 +557,72 @@ public enum GCommandSet {
                                               words.get(TokenParameter.C));
             else throw new EvolutionException("G92 without arguments");
 
-        };
+        }
 	}, 
 	G92_1(92.1, GCommandModalGroupSet.G_GROUP0_NON_MODAL), // Cancel G92 etc.
 	G92_2(92.2, GCommandModalGroupSet.G_GROUP0_NON_MODAL){ // G92 X0 Y0
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
 			InterpreterState.setHomePoint(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		};
+		}
 	}, 
 	G92_3(92.3, GCommandModalGroupSet.G_GROUP0_NON_MODAL), //
 	G93(93.0, GCommandModalGroupSet.G_GROUP5_FEED_RATE_MODE){ // Inverse time feed mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	G94(94.0, GCommandModalGroupSet.G_GROUP5_FEED_RATE_MODE){ // Feed per minute mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	G95(95.0, GCommandModalGroupSet.G_GROUP5_FEED_RATE_MODE){ // Feed per revolution mode
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	G98(98.0, GCommandModalGroupSet.G_GROUP10_CANNED_CYCLES_RETURN_MODE){ // Initial level return after canned cycles
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	G99(99.0, GCommandModalGroupSet.G_GROUP10_CANNED_CYCLES_RETURN_MODE){ // R-point level return after canned cycles
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-			InterpreterState.modalState.set(modalGroup, this);
-		};
+			ModalState.set(modalGroup, this);
+		}
 	}, 
 	GDUMMY(-1.0, GCommandModalGroupSet.G_GROUP0_NON_MODAL){
 		@Override
 		public void evaluate(ParamExpressionList words) throws EvolutionException{
-		};
+		}
 	}; // dummy command for initial assignment
 	
 	public int number;
 	public GCommandModalGroupSet modalGroup;
 	
 	public void evaluate(ParamExpressionList words) throws EvolutionException{
-		InterpreterState.modalState.set(modalGroup, this);
-	};
+		ModalState.set(modalGroup, this);
+	}
 	
 	
-	private GCommandSet(double n, GCommandModalGroupSet g){
+	GCommandSet(double n, GCommandModalGroupSet g){
 		this.number = (int)(10*n);
 		this.modalGroup = g;
-	};
+	}
 	
-	private static void checkThatCutterRadiusCompebsationIsOff() throws EvolutionException{
-		if(InterpreterState.modalState.getGModalState(GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION) != G40)
-			throw new EvolutionException("Command available only while cutter raius compensation is off");
+	private static void checkThatCutterRadiusCompensationIsOff() throws EvolutionException{
+		if(ModalState.getGModalState(GCommandModalGroupSet.G_GROUP7_CUTTER_RADIUS_COMPENSATION) != G40)
+			throw new EvolutionException("Command available only while cutter radius compensation is off");
 	}
 
 	private static void checkThatPlaneIsXY() throws EvolutionException{
-		if(InterpreterState.modalState.getGModalState(GCommandModalGroupSet.G_GROUP2_PLANE) != G17)
+		if(ModalState.getGModalState(GCommandModalGroupSet.G_GROUP2_PLANE) != G17)
 			throw new EvolutionException("Command available for XY plane only");
 	}
 	

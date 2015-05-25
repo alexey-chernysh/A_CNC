@@ -21,7 +21,10 @@ public abstract class MotionControllerCommand extends CanonCommand {
     protected CNCPoint end_;
 
     private MotionMode mode_;
-    private VelocityPlan velocityPlan_;
+
+    private VelocityPlan velocityPlan_ = null;
+    double feedRate_;
+
     private CutterRadiusCompensation offsetMode_;
     private MotionType motionType;
 
@@ -31,7 +34,7 @@ public abstract class MotionControllerCommand extends CanonCommand {
     public MotionControllerCommand(MotionType mt,
                                    CNCPoint s,
                                    CNCPoint e,
-                                   VelocityPlan vp,
+                                   double vel,
                                    MotionMode m,
                                    CutterRadiusCompensation crc) throws EvolutionException {
         super(CanonCommand.type.MOTION);
@@ -42,7 +45,7 @@ public abstract class MotionControllerCommand extends CanonCommand {
         if(e != null) end_ = e;
         else throw new EvolutionException("Null end point in motion command");
 
-        velocityPlan_ = vp;
+        feedRate_ = vel;
         mode_ = m;
         offsetMode_ = crc.clone();
     }
@@ -57,19 +60,22 @@ public abstract class MotionControllerCommand extends CanonCommand {
 
 
     public CutterRadiusCompensation getOffsetMode() { return offsetMode_; }
-    public void setOffsetMode(CutterRadiusCompensation om) throws EvolutionException { this.offsetMode_ = new CutterRadiusCompensation(om.getMode(), om.getRadius()); }
     public double getOffsetRadius(){
         return offsetMode_.getRadius();
     }
 
     public VelocityPlan getVelocityPlan() {	return velocityPlan_; }
+    public void setVelocityPlan(VelocityPlan vPlan_) {
+        this.velocityPlan_ = vPlan_;
+    }
+    public double getFeedRate() {
+        return feedRate_;
+    }
+    public void setFeedRate(double fr) {
+        this.feedRate_ = fr;
+    }
 
-    public MotionType getMotionType() {
-        return motionType;
-    }
-    public void setMotionType(MotionType motionType) {
-        this.motionType = motionType;
-    }
+
 
     public MotionMode getMode() { return mode_; }
     public boolean isWorkingRun(){ return (this.getMode() == MotionMode.WORK); }
@@ -80,7 +86,6 @@ public abstract class MotionControllerCommand extends CanonCommand {
     public abstract double length();
     public abstract double getStartTangentAngle();
     public abstract double getEndTangentAngle();
-    public abstract void setVelocityProfile(double startVel, double endVel);
 
     @Override
     public void execute() {
@@ -95,7 +100,6 @@ public abstract class MotionControllerCommand extends CanonCommand {
 
     @Override
     public void draw(Canvas canvas) {
-
     }
 
     public static double normalizeInRadian(double angle){

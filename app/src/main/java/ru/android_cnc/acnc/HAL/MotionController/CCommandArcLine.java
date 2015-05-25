@@ -9,7 +9,6 @@ import android.graphics.RectF;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -22,15 +21,14 @@ public class CCommandArcLine extends MotionControllerCommand {
 	// arc specific fields
 	protected CNCPoint center_;
 	private ArcDirection arcDirection_;
-	public static final double arcTol = 0.000001;
 
     public CCommandArcLine(CNCPoint startCNCPoint,
                            CNCPoint endCNCPoint,
                            CNCPoint centerCNCPoint,
                            ArcDirection arcDirection,
-                           VelocityPlan vp,
+                           double fr,
                            CutterRadiusCompensation offsetMode) throws EvolutionException {
-		super(MotionType.ARC, startCNCPoint, endCNCPoint, vp, MotionMode.WORK, offsetMode);
+		super(MotionType.ARC, startCNCPoint, endCNCPoint, fr, MotionMode.WORK, offsetMode);
 
 		this.center_ = centerCNCPoint;
 		this.arcDirection_ = arcDirection;
@@ -46,7 +44,7 @@ public class CCommandArcLine extends MotionControllerCommand {
         } else {
             if(this.arcDirection_ == ArcDirection.CLOCKWISE) R -= dR;
             else R += dR;
-        };
+        }
         double startAngle = this.getStartRadialAngle();
         double endAngle = this.getEndRadialAngle();
         double cx = getCenter().getX();
@@ -107,9 +105,6 @@ public class CCommandArcLine extends MotionControllerCommand {
 		return normalizeInRadian(Radial2Tangent(alfa));
 	}
 
-    @Override
-    public void setVelocityProfile(double startVel, double endVel) {    }
-
     private double Radial2Tangent(double alfa){
 		if(this.getArcDirection() == ArcDirection.CLOCKWISE) return alfa - Math.PI/2.0;
 		else return alfa + Math.PI/2.0;
@@ -165,7 +160,7 @@ public class CCommandArcLine extends MotionControllerCommand {
 						   newEnd,
 						   this.getCenter(),
 						   this.getArcDirection(),
-						   this.getVelocityPlan(),
+						   this.getFeedRate(),
 						   this.getOffsetMode());
 	}
 /*

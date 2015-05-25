@@ -102,13 +102,13 @@ public class CanonCommandSequence {
                                 // line turn right and left offset
                                 // linking arc with cutter's radius needed
                                 CCommandArcLine link = new CCommandArcLine(lastMotion.getEnd(),
-                                        command.getStart(),
-                                        unOffsetedStart,
-                                        ArcDirection.CLOCKWISE,
-                                        command.getVelocityPlan(),
-                                        command.getOffsetMode());
+                                                                            command.getStart(),
+                                                                            unOffsetedStart,
+                                                                            ArcDirection.CLOCKWISE,
+                                                                            command.getFeedRate(),
+                                                                            command.getOffsetMode());
                                 seq_.add(link);
-                            };
+                            }
                         }
                         break;
                     case RIGHT:
@@ -116,11 +116,11 @@ public class CanonCommandSequence {
                             // line turn left and right offset
                             // linking arc with cutter's radius needed
                             CCommandArcLine newArc = new CCommandArcLine(lastMotion.getEnd(),
-                                    command.getStart(),
-                                    unOffsetedStart,
-                                    ArcDirection.COUNTERCLOCKWISE,
-                                    command.getVelocityPlan(),
-                                    command.getOffsetMode());
+                                                                        command.getStart(),
+                                                                        unOffsetedStart,
+                                                                        ArcDirection.COUNTERCLOCKWISE,
+                                                                        command.getFeedRate(),
+                                                                        command.getOffsetMode());
                             seq_.add(newArc);
                         } else {
                             if(d_alfa < 0.0){
@@ -129,8 +129,8 @@ public class CanonCommandSequence {
                                 if(connectionPoint == null) throw new EvolutionException("Wrong G-code");
                                 lastMotion.setEnd(connectionPoint);
                                 command.setStart(connectionPoint);
-                            };
-                        };
+                            }
+                        }
                         break;
                     case OFF:
                     default:

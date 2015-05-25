@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 
 import ru.android_cnc.acnc.Draw.DrawableAttributes;
 import ru.android_cnc.acnc.Draw.DrawableObjectLimits;
-import ru.android_cnc.acnc.HAL.MotionController.VelocityPlan.VelocityPlan;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
@@ -18,11 +17,11 @@ public class CCommandStraightLine extends MotionControllerCommand {
 
 	public CCommandStraightLine(CNCPoint s,
                                 CNCPoint e,
-                                VelocityPlan vp,
+                                double vel,
                                 MotionMode m,
                                 CutterRadiusCompensation crc) throws EvolutionException {
 		// init fields
-		super(MotionType.STRAIGHT, s, e, vp, m, crc);
+		super(MotionType.STRAIGHT, s, e, vel, m, crc);
 	}
 
     @Override
@@ -81,19 +80,9 @@ public class CCommandStraightLine extends MotionControllerCommand {
 			y += (l-lengthEnd)*Math.cos(a);
 			newEnd = new CNCPoint(x,y);
 		}
-		return new CCommandStraightLine(newStart, newEnd, getVelocityPlan(), getMode(), getOffsetMode());
+		return new CCommandStraightLine(newStart, newEnd, getFeedRate(), getMode(), getOffsetMode());
 	}
 
-    @Override
-    public void setVelocityProfile(double startVel, double endVel) {
-		getVelocityPlan().setStartVel(startVel);
-        getVelocityPlan().setEndVel(endVel);
-	}
-/*
-    @Override
-    public void execute() {
-    }
-*/
     @Override
     public void draw(Canvas canvas){
         double p = getMotionPhase();
@@ -126,7 +115,7 @@ public class CCommandStraightLine extends MotionControllerCommand {
                                 (float)this.getEnd().getY(),
                                 DrawableAttributes.getPaintBefore(this.getOffsetMode()));
             }
-    };
+    }
 
     @Override
     public String toString(){
