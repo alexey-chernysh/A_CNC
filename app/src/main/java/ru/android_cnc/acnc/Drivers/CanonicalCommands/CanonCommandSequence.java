@@ -77,7 +77,7 @@ public class CanonCommandSequence {
 	}
 
     private void addCuttingMotion(MotionControllerCommand command) throws EvolutionException {
-        CNCPoint unOffsetedStart = command.getStart().clone();
+        CNCPoint unOffsetStart = command.getStart().clone();
         command.applyCutterRadiusCompensation();
         MotionControllerCommand lastMotion = findLastMotion();
         if(lastMotion != null){ // its no first move
@@ -103,7 +103,7 @@ public class CanonCommandSequence {
                                 // linking arc with cutter's radius needed
                                 CCommandArcLine link = new CCommandArcLine(lastMotion.getEnd(),
                                                                             command.getStart(),
-                                                                            unOffsetedStart,
+                                                                            unOffsetStart,
                                                                             ArcDirection.CLOCKWISE,
                                                                             command.getFeedRate(),
                                                                             command.getOffsetMode());
@@ -117,7 +117,7 @@ public class CanonCommandSequence {
                             // linking arc with cutter's radius needed
                             CCommandArcLine newArc = new CCommandArcLine(lastMotion.getEnd(),
                                                                         command.getStart(),
-                                                                        unOffsetedStart,
+                                                                        unOffsetStart,
                                                                         ArcDirection.COUNTERCLOCKWISE,
                                                                         command.getFeedRate(),
                                                                         command.getOffsetMode());
