@@ -5,40 +5,41 @@
 package ru.android_cnc.acnc.HAL.MotionController.VelocityPlan;
 
 import ru.android_cnc.acnc.HAL.MotionController.MotionControllerCommand;
+import ru.android_cnc.acnc.HAL.MotionController.MotionControllerService;
+import ru.android_cnc.acnc.HAL.MotionController.StepPlan.StepPlan;
+import ru.android_cnc.acnc.Interpreter.Exceptions.ExecutionException;
 
 public class VelocityPlan {
 
-    public static final VelocityPlanMode mode = VelocityPlanMode.CONSTANT_VELOCITY;
+    public static final double velocityTol = 0.01;
 
-    private double requiredVel_;
 
-    public VelocityPlan(double v){
-        requiredVel_ = v;
+
+    public VelocityPlan(MotionControllerCommand command) throws ExecutionException {
+        double l = command.length();
+        double feedRate = command.getFeedRate();
+
+        final double step_x = MotionControllerService.getX_mm_in_step();
+        final double step_y = MotionControllerService.getY_mm_in_step();
+        final double timeScale = MotionControllerService.getTikInMM();
+
+        StepPlan stepPlan = new StepPlan(command);
+
+
     }
 
-    public double getValue(double phase){ return requiredVel_; }
-
-    public enum VelocityPlanMode{
-        CONSTANT_VELOCITY,
-        TRAPEZOIDAL,
-        S_CURVE
-    }
-
-    public static boolean conform(MotionControllerCommand command1, MotionControllerCommand command2){
+    public static double conform(MotionControllerCommand command1, MotionControllerCommand command2) throws ExecutionException {
         if(command1 == null){
             // command2 is first motion in sequence
-            command2.setVelocityPlan(getInitialPlan(command2));
-            return true;
+            command2.setVelocityPlan(new VelocityPlan(command2));
+            return 1.0;
         } else {
             if(command1 == null){
                 // command1 is last motion in sequence
             } else {
             }
         }
-        return false;
+        return 1.0;
     }
 
-    private static VelocityPlan getInitialPlan(MotionControllerCommand command){
-        return null;
-    };
 }

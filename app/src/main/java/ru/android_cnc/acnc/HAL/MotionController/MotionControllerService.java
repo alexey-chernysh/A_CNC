@@ -20,6 +20,7 @@ public class MotionControllerService extends Service {
     private static double maxSecondDerivative = 0.0;  // dv/dt/dt - mm/sec/sec/sec
     private static double x_mm_in_step = 0.0;  // mm in step
     private static double y_mm_in_step = 0.0;  // mm in step
+    private static double TikInMM = 1.0/x_mm_in_step/y_mm_in_step;
 
     public MotionControllerService() {
     }
@@ -76,6 +77,10 @@ public class MotionControllerService extends Service {
 
     public static double getY_mm_in_step() {
         return y_mm_in_step;
+    }
+
+    public static double getTikInMM() {
+        return TikInMM;
     }
 
 }
