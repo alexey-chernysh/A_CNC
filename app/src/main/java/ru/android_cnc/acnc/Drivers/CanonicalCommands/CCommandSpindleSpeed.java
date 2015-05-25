@@ -6,22 +6,22 @@ import android.graphics.Canvas;
 /**
  * Created by Sales on 27.02.2015.
  */
-public class CCommandSpindelSpeed extends CanonCommand {
+public class CCommandSpindleSpeed extends CanonCommand {
 
     double speed_;
 
-    public CCommandSpindelSpeed(double s) {
+    public CCommandSpindleSpeed(double s) {
         super(CanonCommand.type.WAIT_STATE_CHANGE);
         speed_ = s;
     }
 
     @Override
     public void execute() {
-        // TODO impementation needed
+        // TODO implementation needed
     }
 
     @Override
     public void draw(Canvas canvas) {
-        // TODO change spindel speed on dosplay needed
+        // TODO change spindle speed on display needed
     }
 }

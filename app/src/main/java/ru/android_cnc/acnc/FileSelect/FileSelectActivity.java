@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +75,7 @@ public class FileSelectActivity
             } else { // folder selected - open selected folder
                 currentPath = item[position].getFile().getAbsolutePath();
                 prepareGridView();
-            };
+            }
         }
     }
 
@@ -99,11 +98,10 @@ public class FileSelectActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             View grid;
             if (convertView == null) {
-                grid = new View(mContext);
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
                 grid = inflater.inflate(R.layout.file_grid_cell, parent, false);
             } else {
-                grid = (View) convertView;
+                grid = convertView;
             }
             if(item != null){
                 ImageView imageView = (ImageView) grid.findViewById(R.id.item_image);

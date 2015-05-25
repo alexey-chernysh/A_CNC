@@ -4,10 +4,8 @@
 
 package ru.android_cnc.acnc.Interpreter;
 
-import android.util.Log;
-
 import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandMessage;
-import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandSpindelSpeed;
+import ru.android_cnc.acnc.Drivers.CanonicalCommands.CCommandSpindleSpeed;
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.Expression.CommandLineLoader;
@@ -25,7 +23,7 @@ public class LineLoader extends CommandLineLoader {
 	private String message_ = null;
 	private ExpressionGeneral feedRate_     = null;
 	private ExpressionGeneral tool_         = null;
-	private ExpressionGeneral spindelSpeed_ = null;
+	private ExpressionGeneral spindleSpeed_ = null;
 	private MCommandSet M1_M2_M3    = MCommandSet.MDUMMY;
 	private MCommandSet M3_M4_M5    = MCommandSet.MDUMMY;
 	private MCommandSet M6          = MCommandSet.MDUMMY;
@@ -398,7 +396,7 @@ public class LineLoader extends CommandLineLoader {
 					break;
 				default:
 					throw new InterpreterException("Unsupported M code num", currentCommand.getPosInString());
-				};
+				}
 				break;
 			case N: // nothing to do
 				break;
@@ -410,7 +408,7 @@ public class LineLoader extends CommandLineLoader {
                 }
                 break;
 			case S:
-				this.spindelSpeed_ = commandValueExpression;
+				this.spindleSpeed_ = commandValueExpression;
 				break;
 			case T:
 				this.tool_ = commandValueExpression;
@@ -442,10 +440,10 @@ public class LineLoader extends CommandLineLoader {
         }
 
 		// 4 set spindel speed (S)
-		if(this.spindelSpeed_ != null){
-            InterpreterState.spindle.setSpeed(this.spindelSpeed_.evaluate());
+		if(this.spindleSpeed_ != null){
+            InterpreterState.spindle.setSpeed(this.spindleSpeed_.evaluate());
             double newSpindelSpeed = InterpreterState.spindle.getSpeed();
-            ProgramLoader.command_sequence.add(new CCommandSpindelSpeed(newSpindelSpeed));
+            ProgramLoader.command_sequence.add(new CCommandSpindleSpeed(newSpindelSpeed));
         }
 
 		// 5 select tool (T)
@@ -515,7 +513,7 @@ public class LineLoader extends CommandLineLoader {
 		int tmp = (int)(10*x);
 		for(int i=0; i< GCommandSet.GDUMMY.ordinal(); i++){
 			if(GCommandSet.values()[i].number == tmp) return GCommandSet.values()[i];
-		};
+		}
 		return GCommandSet.GDUMMY;
 	}
 
@@ -523,7 +521,7 @@ public class LineLoader extends CommandLineLoader {
 		int tmp = (int)(x);
 		for(int i=0; i< MCommandSet.MDUMMY.ordinal(); i++){
 			if(MCommandSet.values()[i].number == tmp) return MCommandSet.values()[i];
-		};
+		}
 		return MCommandSet.MDUMMY;
 	}
 
@@ -533,7 +531,7 @@ public class LineLoader extends CommandLineLoader {
 		if(message_  != null) result += "MSG = " + this.message_ + "; ";
 		if(feedRate_ != null) result += "FeedRate = " + feedRate_.toString() + "; ";
 		if(tool_ != null)     result += "Tool = " + tool_.toString() + "; ";
-		if(spindelSpeed_ != null) result += "Spindle speed = " + spindelSpeed_.toString() + "; ";
+		if(spindleSpeed_ != null) result += "Spindle speed = " + spindleSpeed_.toString() + "; ";
         result += super.toString();
 		return result;
 	}
