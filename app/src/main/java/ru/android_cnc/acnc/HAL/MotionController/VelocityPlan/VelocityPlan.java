@@ -13,8 +13,6 @@ public class VelocityPlan {
 
     public static final double velocityTol = 0.01;
 
-
-
     public VelocityPlan(MotionControllerCommand command) throws ExecutionException {
         double l = command.length();
         double feedRate = command.getFeedRate();
