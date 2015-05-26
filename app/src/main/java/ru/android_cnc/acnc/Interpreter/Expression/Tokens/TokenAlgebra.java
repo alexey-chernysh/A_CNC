@@ -5,7 +5,6 @@
 package ru.android_cnc.acnc.Interpreter.Expression.Tokens;
 
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
-import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 
 public enum TokenAlgebra implements TokenDefaultFields {
 	
@@ -13,70 +12,70 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		@Override
 		public double evaluate(double x){
 			return Math.abs(x);
-		};
+		}
 	},
 	
 	ACOS("ACOS", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.acos(x)*180.0/Math.PI;
-		};
+		}
 	},
 	
 	ASIN("ASIN", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.asin(x)*180.0/Math.PI;
-		};
+		}
 	},
 	
 	ATAN("ATAN", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x, double y){
 			return Math.atan2(x, y)*180.0/Math.PI;
-		};
+		}
 	},
 	
 	COS("COS", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.cos(Math.PI*x/180.0);
-		};
+		}
 	},
 	
 	FIX("FIX", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.floor(x);
-		};
+		}
 	},
 	
 	FUP("FUP", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return (Math.floor(x)+1.0);
-		};
+		}
 	},
 	
 	ROUND("ROUND", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.round(x);
-		};
+		}
 	},
 	
 	SIN("SIN", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.sin(Math.PI*x/180.0);
-		};
+		}
 	},
 	
 	TAN("TAN", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.tan(Math.PI*x/180.0);
-		};
+		}
 	},
 	
 	SQRT("SQRT", TokenGroup.FUNCTION, -1){
@@ -84,14 +83,14 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x) throws EvolutionException{
 			if(x<0.0) throw new EvolutionException("Square root from negative number");
 			return Math.sqrt(x);
-		};
+		}
 	},
 	
 	EXP("EXP", TokenGroup.FUNCTION, -1){
 		@Override
 		public double evaluate(double x){
 			return Math.exp(x);
-		};
+		}
 	},
 	
 	LN("LN", TokenGroup.FUNCTION, -1){
@@ -99,7 +98,7 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x) throws EvolutionException{
 			if(x<0.0) throw new EvolutionException("Log from negative number");
 			return Math.log(x);
-		};
+		}
 	},	
 	
 	XOR ("XOR", TokenGroup.ALGEBRA,	9){
@@ -107,7 +106,7 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x, double y){
 			if((x != 0.0)^(y != 0.0)) return 1.0;
 			else return 0.0;
-		};
+		}
 	},
 	
 	OR ("OR", TokenGroup.ALGEBRA, 10){
@@ -115,7 +114,7 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x, double y){
 			if((x != 0.0)||(y != 0.0)) return 1.0;
 			else return 0.0;
-		};
+		}
 	},
 	
 	AND ("AND", TokenGroup.ALGEBRA,	8){
@@ -123,42 +122,42 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x, double y){
 			if((x != 0.0)&&(y != 0.0)) return 1.0;
 			else return 0.0;
-		};
+		}
 	},
 	
 	MOD ("MOD", TokenGroup.ALGEBRA,	3){
 		@Override
 		public double evaluate(double x, double y){
 			return x % y;
-		};
+		}
 	},
 	
 	POW("**", TokenGroup.ALGEBRA, 1){
 		@Override
 		public double evaluate(double x, double y){
 			return Math.pow(x, y);
-		};
+		}
 	},
 	
 	PLUS("+", TokenGroup.ALGEBRA, 4){
 		@Override
 		public double evaluate(double x, double y){
 			return (x+y);
-		};
+		}
 	},
 	
 	MINUS("-", TokenGroup.ALGEBRA, 4){
 		@Override
 		public double evaluate(double x, double y){
 			return (x-y);
-		};
+		}
 	},
 	
 	MULTIPLY("*", TokenGroup.ALGEBRA, 3){
 		@Override
 		public double evaluate(double x, double y){
 			return (x*y);
-		};
+		}
 	},
 	
 	DIVIDE("/", TokenGroup.ALGEBRA, 3){
@@ -166,7 +165,7 @@ public enum TokenAlgebra implements TokenDefaultFields {
 		public double evaluate(double x, double y) throws EvolutionException{
 			if(y == 0.0) throw new EvolutionException("Divide by zero");
 			return (x/y);
-		};
+		}
 	},
 	
 	VAR("#", TokenGroup.MISC, -1),

@@ -21,7 +21,7 @@ public class TokenComment extends Token {
 		int msgPos = tmp.indexOf(msgString);
 		if( msgPos >= 0 ) {
 			this.message_ = tmp.substring(msgPos + msgString.length());
-		};
+		}
 	}
 
 	public String getCommentText(String source) {
@@ -50,7 +50,7 @@ public class TokenComment extends Token {
 		
 		public String key;
 		
-		private CommentKeyWord(String k){
+		CommentKeyWord(String k){
 			this.key = k;
 		}
 	}

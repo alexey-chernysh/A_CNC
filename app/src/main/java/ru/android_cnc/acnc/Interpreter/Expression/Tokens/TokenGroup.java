@@ -9,5 +9,5 @@ public enum TokenGroup {
 	ALGEBRA,
 	PARAMETER,
 	COMMAND,
-	MISC;
+	MISC
 }

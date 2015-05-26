@@ -17,7 +17,6 @@ public class Token {
     protected final int iColor_;
     protected final boolean bBold;
 
-    private boolean unlexed_ = true;
     private boolean parsed_ = false;
 
 	public 	Token(String s, int columnStart, int columnEnd, int sColor, boolean b){
@@ -67,15 +66,6 @@ public class Token {
 		return this;
 	}
 
-    public boolean isUnlexed_() {
-        return unlexed_;
-    }
-
-    public Token setLexed_() {
-        this.unlexed_ = false;
-        return this;
-    }
-
     public void setColorSpan(Spannable s, int pos){
         s.setSpan(new ForegroundColorSpan(this.iColor_),
                 pos + this.getStart(),
@@ -87,6 +77,6 @@ public class Token {
                     pos + this.getEnd() + 1,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-    };
+    }
 
 }

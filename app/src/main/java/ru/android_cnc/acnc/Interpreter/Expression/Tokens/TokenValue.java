@@ -18,9 +18,4 @@ public class TokenValue extends Token {
 	public	double getValue(){ 
 		return value_;
 	}
-	
-	public	TokenValue setValue(double v){ 
-		value_ = v; 
-		return this;
-	}
 }

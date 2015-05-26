@@ -27,8 +27,8 @@ public class TokenSequence {
 				} else {
 					TokenComment comment = new TokenComment(this.tokenList.getSourceLine(), TokenComment.CommentKeyWord.BLOCK_DELETE_SLASH, 0, 0, frameString);
 					this.tokenList.addNewToken(comment, 0);
-				};
-			};
+				}
+			}
 			try {
 				getAllComments(this.tokenList.getSourceLine());
 				getAllSeparator(this.tokenList.getSourceLineUpperCase());
@@ -37,8 +37,7 @@ public class TokenSequence {
 			} catch (InterpreterException le) {
 				System.out.println("Lexer exception: " + le.getMessage() + " at position "+ le.getPosition() + " => "+frameString);
 			} 
-		};
-		return;
+		}
 	}
 
     public void setAllSpan(Spannable s, int pos){
@@ -58,8 +57,8 @@ public class TokenSequence {
 					if(funPos >= 0){
 						TokenAlfa newFun = new TokenAlfa(sourceString, tokFun, startPos+funPos,startPos+funPos+sample.length()-1);
 						curTokenNum = this.tokenList.addNewToken(newFun, curTokenNum);
-					};
-				};
+					}
+				}
 				curTokenNum++;
 			}
 		}
@@ -75,8 +74,8 @@ public class TokenSequence {
 					if(funPos >= 0){
 						TokenAlfa newFun = new TokenAlfa(sourceString, tokComm, startPos+funPos,startPos+funPos+sample.length()-1);
 						curTokenNum = this.tokenList.addNewToken(newFun, curTokenNum);
-					};
-				};
+					}
+				}
 				curTokenNum++;
 			}
 		}
@@ -92,8 +91,8 @@ public class TokenSequence {
 					if(funPos >= 0){
 						TokenAlfa newFun = new TokenAlfa(sourceString, tokParam, startPos+funPos,startPos+funPos+sample.length()-1);
 						curTokenNum = this.tokenList.addNewToken(newFun, curTokenNum);
-					};
-				};
+					}
+				}
 				curTokenNum++;
 			}
 		}
@@ -114,11 +113,11 @@ public class TokenSequence {
 				commentStart = i;
 				newKey = k;
 			}
-		};
+		}
 		if( commentStart >= 0 ){
 			TokenComment newComment = new TokenComment(sourceString, newKey, commentStart, len-1,sourceString);
 			this.tokenList.addNewToken(newComment, 0);
-		};
+		}
 	}
 	
 	private	void getAllCommentParenthesis( String sourceString) throws InterpreterException {
@@ -143,7 +142,7 @@ public class TokenSequence {
 						TokenComment newComment = new TokenComment(sourceString, TokenComment.CommentKeyWord.PARENTHESIS, commentStart, commentEnd,sourceString);
 						curTokenNum = this.tokenList.addNewToken(newComment, curTokenNum);
 					} else throw new InterpreterException("Unexpexted end of line! Symbol ) omitted",commentEnd);
-				};
+				}
 			}
 			curTokenNum++;
 		}
@@ -158,8 +157,8 @@ public class TokenSequence {
 				if((separatorPos = getSeparatorPos(sourceString, currentToken.getStart(), currentToken.getEnd()))>=0){
 					TokenSeparator newSeparator = new TokenSeparator(sourceString, separatorPos,separatorPos);
 					curTokenNum = this.tokenList.addNewToken(newSeparator, curTokenNum);
-				};
-			};
+				}
+			}
 			curTokenNum++;
 		}
 	}
@@ -192,7 +191,7 @@ public class TokenSequence {
 //					this.tokenList.printAllTokens();
 					throw new InterpreterException("Illegal value or symbol", startPos);
 				}
-			};
+			}
 			curTokenNum++;
 		}
 	}

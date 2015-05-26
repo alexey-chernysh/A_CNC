@@ -44,9 +44,8 @@ public enum TokenParameter implements TokenDefaultFields {
 
 	private String alfa_;
 	private TokenGroup group_ = TokenGroup.PARAMETER;
-	private int precedence_ = -1;
-	
-	private TokenParameter(String a){
+
+	TokenParameter(String a){
 		alfa_ = a;
 	}
 	
@@ -62,7 +61,7 @@ public enum TokenParameter implements TokenDefaultFields {
 
 	@Override
 	public int getPrecedence() {
-		return precedence_;
+		return -1;
 	}	
 
 }

@@ -36,17 +36,16 @@ public class TokenList extends LinkedList<Token> {
 			newHead = new TokenUnlexedText(this.sourceLineUpperCase_, replaced.getStart(), newToken.getStart()-1);
 			this.add(index, newHead);
 			index++;
-		};
+		}
 		this.add(index,newToken);
 		if(newToken.getEnd()<replaced.getEnd()){
 			newTail = new TokenUnlexedText(this.sourceLineUpperCase_, newToken.getEnd()+1, replaced.getEnd());
 			this.add(index+1, newTail);
-		};
+		}
 		return index;
 	}
 	
-	protected 
-	int getNextToken(int index){
+	protected int getNextToken(int index){
 		for(int i=index; i<this.size(); i++){
 			Token t = this.get(i);
 			if(!(t instanceof TokenComment) ){
@@ -58,8 +57,7 @@ public class TokenList extends LinkedList<Token> {
 		return -1;
 	}
 	
-	public 
-	int getNextIndex(){
+	public int getNextIndex(){
 		for(int i=0; i<this.size(); i++){
 			Token tmp = this.get(i);
 			if(tmp.isSignificant()&&(!tmp.isParsed()))
@@ -68,38 +66,35 @@ public class TokenList extends LinkedList<Token> {
 		return this.size();
 	}
 	
-	protected 
-	int getNextInt(int index) throws InterpreterException {
+	protected int getNextInt(int index) throws InterpreterException {
 		int i = index+1;
 		while(i < this.size()){
 			Token t = this.get(i);
 			if((t instanceof TokenComment) || (t instanceof TokenSeparator)){
 				i++;
 			} else
-			if(t instanceof TokenValue){
-				double tmp = ((TokenValue)t).getValue();
-				int result = (int)tmp;
-				if(Math.abs((double)tmp-result)==0){
-					return result;
+				if(t instanceof TokenValue){
+					double tmp = ((TokenValue)t).getValue();
+					int result = (int)tmp;
+					if(Math.abs(tmp - result) == 0.0){
+						return result;
+					} else {
+						throw new InterpreterException("Double instead of integer. Integer requred", t.getStart());
+					}
 				} else {
-					throw new InterpreterException("Double instead of integer. Integer requred", t.getStart());
+					throw new InterpreterException("Integer value ommited", t.getStart());
 				}
-			} else {
-				throw new InterpreterException("Integer value ommited", t.getStart());
-			}
 		}
 		return -1;
 	}
 	
-	public 
-	String getSourceLine(){
+	public String getSourceLine(){
 		return this.sourceLine_;
-	};
+	}
 	
-	public 
-	String getSourceLineUpperCase(){
+	public String getSourceLineUpperCase(){
 		return this.sourceLineUpperCase_;
-	};
+	}
 
     @Override
 	public String toString(){
@@ -111,9 +106,7 @@ public class TokenList extends LinkedList<Token> {
 	}
 
     public void setAllSpan(Spannable s, int pos){
-        Iterator<Token> itr =  this.iterator();
-        while(itr.hasNext())
-            itr.next().setColorSpan(s, pos);
+		for (Token token : this) token.setColorSpan(s, pos);
     }
 
 }
