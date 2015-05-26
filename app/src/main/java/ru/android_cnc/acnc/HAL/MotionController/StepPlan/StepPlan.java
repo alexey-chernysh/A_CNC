@@ -8,40 +8,31 @@ import ru.android_cnc.acnc.HAL.MotionController.CCommandArcLine;
 import ru.android_cnc.acnc.HAL.MotionController.CCommandStraightLine;
 import ru.android_cnc.acnc.HAL.MotionController.MotionControllerCommand;
 import ru.android_cnc.acnc.HAL.MotionController.MotionControllerService;
-import ru.android_cnc.acnc.Interpreter.Exceptions.ExecutionException;
-
-/**
- * Created by Sales on 18.05.2015.
- */
 
 public class StepPlan {
 
-    public ArrayList<QuickStep> plan;
-    public StepDerivatives derivativesX = new StepDerivatives();
-    public StepDerivatives derivativesY = new StepDerivatives();
+    public ArrayList<QuickStep> plan = null;
+    public final StepDerivatives derivativesX = new StepDerivatives();
+    public final StepDerivatives derivativesY = new StepDerivatives();
 
     private final static double Pi = Math.PI;
 
-    public StepPlan(MotionControllerCommand command) throws ExecutionException {
-
-        plan = new ArrayList();
-        ArrayList<StepPlanRecord> planX = null;
-        ArrayList<StepPlanRecord> planY = null;
+    public StepPlan(MotionControllerCommand command) {
 
         if (command instanceof CCommandStraightLine) {
-            planX = buildXSteps4Line((CCommandStraightLine) command);
-            planY = buildYSteps4Line((CCommandStraightLine) command);
+            plan = mergeXnY(buildXSteps4Line((CCommandStraightLine) command),
+                            buildYSteps4Line((CCommandStraightLine) command));
         }
 
         if (command instanceof CCommandArcLine) {
-            planX = buildXSteps4Arc((CCommandArcLine) command);
-            planY = buildYSteps4Arc((CCommandArcLine) command);
+            plan = mergeXnY(buildXSteps4Arc((CCommandArcLine) command),
+                            buildYSteps4Arc((CCommandArcLine) command));
         }
-        plan = mergeXnY(planX, planY);
+
     }
 
     private ArrayList<StepPlanRecord> buildXSteps4Line(CCommandStraightLine command){
-        ArrayList<StepPlanRecord> planX = new ArrayList();
+        ArrayList<StepPlanRecord> planX = new ArrayList<>();
         final double step_x = MotionControllerService.getX_mm_in_step();
         final double length = command.length();
         final double dx = command.getDX();
@@ -64,7 +55,7 @@ public class StepPlan {
     }
 
     private ArrayList<StepPlanRecord> buildYSteps4Line(CCommandStraightLine command){
-        ArrayList<StepPlanRecord> planY = new ArrayList();
+        ArrayList<StepPlanRecord> planY = new ArrayList<>();
         final double step_y = MotionControllerService.getY_mm_in_step();
         final double length = command.length();
         final double dy = command.getDY();
@@ -86,7 +77,7 @@ public class StepPlan {
     }
 
     private ArrayList<StepPlanRecord> buildXSteps4Arc(CCommandArcLine command){
-        ArrayList<StepPlanRecord> planX = new ArrayList();
+        ArrayList<StepPlanRecord> planX = new ArrayList<>();
         final double step_x = MotionControllerService.getX_mm_in_step();
 
         final double length = command.length();
@@ -114,7 +105,7 @@ public class StepPlan {
             if(Math.abs(next_x) <= radius){
 
                 double next_a = Math.acos(next_x / radius);
-                // change arccosinus value according previous angle value
+                // change arcCos value according previous angle value
                 if(a >  Pi)     next_a = - next_a + 2.0*Pi;
                 else
                 if(a < -Pi) next_a =   next_a - 2.0*Pi;
@@ -142,8 +133,7 @@ public class StepPlan {
     }
 
     private ArrayList<StepPlanRecord> buildYSteps4Arc(CCommandArcLine command){
-
-        final double step_y = MotionControllerService.getY_mm_in_step();
+        ArrayList<StepPlanRecord> planY = new ArrayList<>();
 
         final double length = command.length();
         ArcDirection arcDirection = command.getArcDirection();
@@ -151,10 +141,9 @@ public class StepPlan {
         double startAngle = command.getStartRadialAngle();
         double endAngle = command.getEndRadialAngle();
         boolean counterClockWise = (arcDirection == ArcDirection.COUNTERCLOCKWISE);
+        final double step_y = MotionControllerService.getY_mm_in_step();
 
         // generate y steps positions
-        ArrayList<StepPlanRecord> planY = new ArrayList();
-
         double a = startAngle;
         double y = command.getStart().getY() - command.getCenter().getY();
         // define y change for starting motion direction
@@ -171,7 +160,7 @@ public class StepPlan {
             if(Math.abs(next_y) <= radius){
 
                 double next_a = Math.asin(next_y / radius);
-                // change arcsinus value according previous angle value
+                // change arcSin value according previous angle value
                 if(a >  Pi/2)
                     if(a >  3*Pi/2) next_a =   next_a + 2.0*Pi;
                     else            next_a = - next_a + Pi;
@@ -202,8 +191,8 @@ public class StepPlan {
         return planY;
     }
 
-    private static ArrayList<QuickStep> mergeXnY(ArrayList<StepPlanRecord> planX, ArrayList<StepPlanRecord> planY){
-        ArrayList<QuickStep> result = new ArrayList<QuickStep>();
+    private ArrayList<QuickStep> mergeXnY(ArrayList<StepPlanRecord> planX, ArrayList<StepPlanRecord> planY){
+        ArrayList<QuickStep> result = new ArrayList<>();
         // merge x & y arrays
         Iterator<StepPlanRecord> iteratorX = planX.iterator();
         StepPlanRecord nextX = null;
@@ -223,17 +212,20 @@ public class StepPlan {
 
             if (posX < posY) {
                 // x pulse first
+                assert nextX != null;
                 result.add(new QuickStep(nextX.getPosition(), nextX, null));
                 if (iteratorX.hasNext()) nextX = iteratorX.next();
                 else nextX = null;
             } else {
                 if (posX > posY) {
                     // y pulse first
+                    assert nextY != null;
                     result.add(new QuickStep(nextY.getPosition(), null, nextY));
                     if (iteratorY.hasNext()) nextY = iteratorY.next();
                     else nextY = null;
                 } else {
                     // both pulses in sync
+                    assert nextX != null;
                     result.add(new QuickStep(nextX.getPosition(), nextX, nextY));
                     if (iteratorX.hasNext()) nextX = iteratorX.next();
                     else nextX = null;
