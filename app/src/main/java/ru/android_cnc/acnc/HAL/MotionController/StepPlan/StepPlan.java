@@ -134,8 +134,8 @@ public class StepPlan {
         if(counterClockWise) shift = -shift;
 
         planX.add(new StepPlanRecord(0,
-                new Step(false, (shift>0.0)),
-                null));
+                  new Step(false, (shift>=0.0)),
+                  null));
         while(a < endAngle){
             double next_x = x + shift;
             if(Math.abs(next_x) <= radius){
@@ -144,13 +144,13 @@ public class StepPlan {
                 // change arcCos value according previous angle value
                 if(a >  Pi)     next_a = - next_a + 2.0*Pi;
                 else
-                if(a < -Pi) next_a =   next_a - 2.0*Pi;
-                else if(a < 0.0) next_a = - next_a;
+                    if(a < -Pi) next_a =   next_a - 2.0*Pi;
+                    else if(a < 0.0) next_a = - next_a;
                 //
                 double bisection_angle = (next_a + a)/2;
                 planX.add(new StepPlanRecord((bisection_angle - startAngle)*radius,
-                        new Step(true,  (shift>0.0)),
-                        null));
+                          new Step(true,  (shift>=0.0)),
+                          null));
                 derivativesX.addMeasurement((next_a - a) * radius);
                 x = next_x;
                 a = next_a;
@@ -159,11 +159,11 @@ public class StepPlan {
                 shift = -shift;
                 a = Pi * Math.round(a/Pi);
                 planX.add(new StepPlanRecord((a - startAngle)*radius,
-                          new Step(false, (shift>0.0)),
+                          new Step(false, (shift>=0.0)),
                           null));
             }
         }
-        planX.add(new StepPlanRecord(length, new Step(false, (shift>0.0)), null));
+        planX.add(new StepPlanRecord(length, new Step(false, (shift>=0.0)), null));
 
         return planX;
     }
@@ -190,7 +190,7 @@ public class StepPlan {
 
         planY.add(new StepPlanRecord(0,
                   null,
-                  new Step(false, (shift>0.0))));
+                  new Step(false, (shift>=0.0))));
         while(a < endAngle){
             double next_y = y + shift;
             if(Math.abs(next_y) <= radius){
@@ -206,8 +206,8 @@ public class StepPlan {
                 //
                 double bisection_angle = (next_a + a)/2;
                 planY.add(new StepPlanRecord((bisection_angle - startAngle)*radius,
-                        null,
-                        new Step(true,  (shift>0.0))));
+                          null,
+                          new Step(true,  (shift>=0.0))));
                 derivativesY.addMeasurement((next_a - a) * radius);
                 y = next_y;
                 a = next_a;
@@ -216,13 +216,13 @@ public class StepPlan {
                 shift = -shift;
                 a = Pi * Math.round((a + Pi/2)/Pi) - Pi/2;
                 planY.add(new StepPlanRecord((a - startAngle)*radius,
-                        null,
-                        new Step(false, (shift>0.0))));
+                          null,
+                          new Step(false, (shift>=0.0))));
             }
         }
         planY.add(new StepPlanRecord(length,
                   null,
-                  new Step(false, (shift>0.0))));
+                  new Step(false, (shift>=0.0))));
 
         return planY;
     }
@@ -249,20 +249,20 @@ public class StepPlan {
             if (posX < posY) {
                 // x pulse first
                 assert nextX != null;
-                result.add(new QuickStep(nextX.getPosition(), nextX, null));
+                result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()), nextX, null));
                 if (iteratorX.hasNext()) nextX = iteratorX.next();
                 else nextX = null;
             } else {
                 if (posX > posY) {
                     // y pulse first
                     assert nextY != null;
-                    result.add(new QuickStep(nextY.getPosition(), null, nextY));
+                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextY.getPosition()), null, nextY));
                     if (iteratorY.hasNext()) nextY = iteratorY.next();
                     else nextY = null;
                 } else {
                     // both pulses in sync
                     assert nextX != null;
-                    result.add(new QuickStep(nextX.getPosition(), nextX, nextY));
+                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()), nextX, nextY));
                     if (iteratorX.hasNext()) nextX = iteratorX.next();
                     else nextX = null;
                     if (iteratorY.hasNext()) nextY = iteratorY.next();
