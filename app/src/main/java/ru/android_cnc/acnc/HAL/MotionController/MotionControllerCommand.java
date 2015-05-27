@@ -75,8 +75,6 @@ public abstract class MotionControllerCommand extends CanonCommand {
         this.feedRate_ = fr;
     }
 
-
-
     public MotionMode getMode() { return mode_; }
     public boolean isWorkingRun(){ return (this.getMode() == MotionMode.WORK); }
     public boolean isFreeRun(){	return (this.getMode() == MotionMode.FREE);	}
@@ -115,6 +113,12 @@ public abstract class MotionControllerCommand extends CanonCommand {
 
     public double getMotionPhase() {
         return MotionPhase;
+    }
+
+    public double getMotionPhase1() {
+        if(velocityPlan_ != null){
+            return (length()*velocityPlan_.getCurrentPos())/velocityPlan_.longLength;
+        } else return  0.0;
     }
 
     public void setMotionPhase(double mP) {

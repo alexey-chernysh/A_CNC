@@ -9,20 +9,19 @@ import ru.android_cnc.acnc.HAL.MotionController.MotionControllerService;
 import ru.android_cnc.acnc.HAL.MotionController.StepPlan.StepPlan;
 import ru.android_cnc.acnc.Interpreter.Exceptions.ExecutionException;
 
-public class VelocityPlan {
+public class VelocityPlan extends StepPlan {
 
     public static final double velocityTol = 0.01;
 
     public VelocityPlan(MotionControllerCommand command) throws ExecutionException {
+        super(command);
+
         double l = command.length();
         double feedRate = command.getFeedRate();
 
         final double step_x = MotionControllerService.getX_mm_in_step();
         final double step_y = MotionControllerService.getY_mm_in_step();
         final double timeScale = MotionControllerService.getTikInMM();
-
-        StepPlan stepPlan = new StepPlan(command);
-
 
     }
 

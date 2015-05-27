@@ -15,9 +15,13 @@ public class StepPlan {
     public final StepDerivatives derivativesX = new StepDerivatives();
     public final StepDerivatives derivativesY = new StepDerivatives();
 
+    public final long longLength;
+    private long longCurrentPos;
+
     private final static double Pi = Math.PI;
 
     public StepPlan(MotionControllerCommand command) {
+        longLength = (long)(command.length() * MotionControllerService.getTikInMM());
 
         if (command instanceof CCommandStraightLine) {
             plan = mergeXnY(buildXSteps4Line((CCommandStraightLine) command),
@@ -28,7 +32,39 @@ public class StepPlan {
             plan = mergeXnY(buildXSteps4Arc((CCommandArcLine) command),
                             buildYSteps4Arc((CCommandArcLine) command));
         }
+        init();
+    }
 
+    public long getCurrentPos() {
+        return longCurrentPos;
+    }
+
+    private int stepCounter_;
+    private int stepLimit_;
+    private long limit_;
+    private byte out_;
+
+    public void init(){
+        stepLimit_ = plan.size();
+        stepCounter_ = 0;
+        QuickStep nextStep = plan.get(stepCounter_);
+        limit_ = nextStep.time;
+        longCurrentPos = 0;
+        out_ = nextStep.getBitSet();
+    }
+
+    public boolean onTik(long currentTik){
+        longCurrentPos = currentTik;
+        if(currentTik >= limit_){
+            // TODO real code needed for (byte out_) output
+            stepCounter_++;
+            if(stepCounter_ < stepLimit_){
+                QuickStep nextStep = plan.get(stepCounter_);
+                limit_ = nextStep.time;
+                out_ = nextStep.getBitSet();
+                return true;
+            } else return false;
+        } else return true;
     }
 
     private ArrayList<StepPlanRecord> buildXSteps4Line(CCommandStraightLine command){
@@ -123,8 +159,8 @@ public class StepPlan {
                 shift = -shift;
                 a = Pi * Math.round(a/Pi);
                 planX.add(new StepPlanRecord((a - startAngle)*radius,
-                        new Step(false, (shift>0.0)),
-                        null));
+                          new Step(false, (shift>0.0)),
+                          null));
             }
         }
         planX.add(new StepPlanRecord(length, new Step(false, (shift>0.0)), null));
@@ -153,8 +189,8 @@ public class StepPlan {
         if(counterClockWise) shift = -shift;
 
         planY.add(new StepPlanRecord(0,
-                null,
-                new Step(false, (shift>0.0))));
+                  null,
+                  new Step(false, (shift>0.0))));
         while(a < endAngle){
             double next_y = y + shift;
             if(Math.abs(next_y) <= radius){
@@ -185,8 +221,8 @@ public class StepPlan {
             }
         }
         planY.add(new StepPlanRecord(length,
-                null,
-                new Step(false, (shift>0.0))));
+                  null,
+                  new Step(false, (shift>0.0))));
 
         return planY;
     }

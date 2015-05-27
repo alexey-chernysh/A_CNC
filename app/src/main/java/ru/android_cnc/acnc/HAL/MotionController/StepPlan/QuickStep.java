@@ -7,10 +7,10 @@ package ru.android_cnc.acnc.HAL.MotionController.StepPlan;
 public class QuickStep {
 
     public long time;
-    private byte bit_set;
+    private byte bitSet;
 
     public QuickStep(double normalized_length, StepPlanRecord x_step, StepPlanRecord y_step) {
-        this.bit_set = bit_set;
+        this.bitSet = bitSet;
     }
 
     public enum Bit{
@@ -23,4 +23,9 @@ public class QuickStep {
     public void setBit(Bit b, boolean val){
 
     }
+
+    public byte getBitSet() {
+        return bitSet;
+    }
+
 }

@@ -34,9 +34,9 @@ public class FourButtonsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_four_buttons);
 
-        Log.d(LOG_TAG, "Activity created!!!");
+//        Log.d(LOG_TAG, "Activity created!!!");
         toPathPrefix = getApplicationContext().getFilesDir().getPath();
-        Log.d(LOG_TAG, "Application data folder path:" + toPathPrefix);
+//        Log.d(LOG_TAG, "Application data folder path:" + toPathPrefix);
         pref_last_file_value = toPathPrefix
                              + "/"
                              + g_codeFolderName
@@ -47,7 +47,7 @@ public class FourButtonsActivity extends Activity {
 
         //check for first time run
         boolean firstRun = settings.getBoolean(getString(R.string.PREF_FIRST_RUN_TAG), true);
-        Log.d(LOG_TAG, "First run - " + firstRun);
+//        Log.d(LOG_TAG, "First run - " + firstRun);
 //        firstRun = true; // at debug only
         if ( firstRun ) {
             settings.edit().putBoolean(getString(R.string.PREF_FIRST_RUN_TAG), false).commit(); //set flag to false
@@ -101,7 +101,7 @@ public class FourButtonsActivity extends Activity {
         final String toPath = toPathPrefix
                             + "/"
                             + g_codeFolderName;  // application g-code files folder path
-        Log.d(LOG_TAG, "Application data folder path:" + toPath);
+//        Log.d(LOG_TAG, "Application data folder path:" + toPath);
         AssetManager assetManager = getAssets();
         if(copyAssetFolder(assetManager, g_codeFolderName, toPath)){
             Toast.makeText(getApplicationContext(),"Files successfully copied!", Toast.LENGTH_LONG).show();
@@ -112,14 +112,14 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAssetFolder(AssetManager assetManager,
                                            String fromAssetPath, String toPath) {
-        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
+//        Log.d(LOG_TAG, "copyAssetFolder - " + fromAssetPath + " to " + toPath);
         try {
             String[] file_names_list = assetManager.list(fromAssetPath);
             new File(toPath).mkdirs();
             boolean res = true;
             for (String file_name : file_names_list)
                 if (file_name.contains(".")){
-                    Log.d(LOG_TAG, "File - " + file_name);
+//                    Log.d(LOG_TAG, "File - " + file_name);
                     String from = file_name;
                     if(fromAssetPath.length()>0)
                         from = fromAssetPath + "/" + from;
@@ -138,7 +138,7 @@ public class FourButtonsActivity extends Activity {
 
     private static boolean copyAsset(AssetManager assetManager,
                                      String fromAssetPath, String toPath) {
-        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
+//        Log.d(LOG_TAG, "copyAsset - " + fromAssetPath + " to " + toPath);
         try {
             InputStream in = assetManager.open(fromAssetPath);
             int size = in.available();
