@@ -3,7 +3,7 @@ package ru.android_cnc.acnc.HAL.MotionController;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.IBinder;
+import android.os.*;
 import android.util.Log;
 
 import ru.android_cnc.acnc.Geometry.CNCPoint;
@@ -42,10 +42,41 @@ public class MotionControllerService extends Service {
         y_mm_in_step = settings.getFloat(getString(R.string.PREF_MM_IN_STEP_Y),  0.007048f);
     }
 
+    Thread tikThread = null;
+    boolean shouldContinue = true;
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        tikThread = new Thread() {
+            @Override
+            public void run() {
+                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+                try {
+                    while(shouldContinue) {
+                        sleep(1000);
+//                        handler.post(this);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        tikThread.start();
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "Destroyed!");
+
+        try {
+            shouldContinue = false;
+            tikThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         SharedPreferences settings = getSharedPreferences(getString(R.string.PREFS), 0);
         settings.edit().putFloat(getString(R.string.PREF_LAST_POSITION_X), (float) currentPosition.getX()).commit();
@@ -55,6 +86,8 @@ public class MotionControllerService extends Service {
         settings.edit().putFloat(getString(R.string.PREF_MAX_SECOND_DERIVATIVE), (float) maxSecondDerivative).commit();
         settings.edit().putFloat(getString(R.string.PREF_MM_IN_STEP_X), (float) x_mm_in_step).commit();
         settings.edit().putFloat(getString(R.string.PREF_MM_IN_STEP_Y), (float) y_mm_in_step).commit();
+
+        Log.d(LOG_TAG, "Destroyed!");
     }
 
     @Override

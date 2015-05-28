@@ -34,7 +34,7 @@ public abstract class MotionControllerCommand extends CanonCommand {
     public MotionControllerCommand(MotionType mt,
                                    CNCPoint s,
                                    CNCPoint e,
-                                   double vel,
+                                   double fr,
                                    MotionMode m,
                                    CutterRadiusCompensation crc) throws EvolutionException {
         super(CanonCommand.type.MOTION);
@@ -45,9 +45,11 @@ public abstract class MotionControllerCommand extends CanonCommand {
         if(e != null) end_ = e;
         else throw new EvolutionException("Null end point in motion command");
 
-        feedRate_ = vel;
+        feedRate_ = fr;
         mode_ = m;
         offsetMode_ = crc.clone();
+        feedRate_ = fr;
+        velocityPlan_ = new VelocityPlan(this);
     }
 
     public CNCPoint getStart() { return start_; }

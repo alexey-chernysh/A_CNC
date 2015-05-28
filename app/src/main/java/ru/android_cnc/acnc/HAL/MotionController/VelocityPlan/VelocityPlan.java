@@ -13,7 +13,7 @@ public class VelocityPlan extends StepPlan {
 
     public static final double velocityTol = 0.01;
 
-    public VelocityPlan(MotionControllerCommand command) throws ExecutionException {
+    public VelocityPlan(MotionControllerCommand command) {
         super(command);
 
         double l = command.length();
@@ -25,7 +25,7 @@ public class VelocityPlan extends StepPlan {
 
     }
 
-    public static double conform(MotionControllerCommand command1, MotionControllerCommand command2) throws ExecutionException {
+    public static double conform(MotionControllerCommand command1, MotionControllerCommand command2) {
         if(command1 == null){
             // command2 is first motion in sequence
             command2.setVelocityPlan(new VelocityPlan(command2));
