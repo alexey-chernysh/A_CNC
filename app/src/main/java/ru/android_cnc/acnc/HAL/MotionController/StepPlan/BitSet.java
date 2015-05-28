@@ -7,6 +7,9 @@ public enum BitSet {
     DIR_Y(3);
 
     public final byte mask;
+    public boolean is(BitSet check){
+        return (this.mask&check.mask)!=0;
+    }
 
     BitSet(int bitNum){
         mask = (byte)(0b10000000 >>> bitNum);

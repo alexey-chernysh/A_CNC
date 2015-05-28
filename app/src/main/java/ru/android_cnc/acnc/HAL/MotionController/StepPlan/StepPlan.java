@@ -48,7 +48,7 @@ public class StepPlan {
         stepLimit_ = plan.size();
         stepCounter_ = 0;
         QuickStep nextStep = plan.get(stepCounter_);
-        limit_ = nextStep.time;
+        limit_ = nextStep.time_;
         longCurrentPos = 0;
         out_ = nextStep.getBitSet();
     }
@@ -60,7 +60,7 @@ public class StepPlan {
             stepCounter_++;
             if(stepCounter_ < stepLimit_){
                 QuickStep nextStep = plan.get(stepCounter_);
-                limit_ = nextStep.time;
+                limit_ = nextStep.time_;
                 out_ = nextStep.getBitSet();
                 return true;
             } else return false;
@@ -75,17 +75,17 @@ public class StepPlan {
         double angle = command.getStartTangentAngle();
 
         // generate x steps positions
-        planX.add(new StepPlanRecord(0, new Step(false, (dx >= 0.0)), null));
+        planX.add(new StepPlanRecord(0, false, (dx >= 0.0), false, false));
         if (Math.abs(dx) > 0) {
             double dl = Math.abs(step_x/Math.cos(angle));
             double pos = 0;
             while (pos < length) {
-                planX.add(new StepPlanRecord(pos + dl/2, new Step(true, (dx >= 0.0)), null));
+                planX.add(new StepPlanRecord(pos + dl/2, true, (dx >= 0.0), false, false));
                 derivativesX.addMeasurement(dl);
                 pos += dl;
             }
         }
-        planX.add(new StepPlanRecord(length, new Step(false, (dx >= 0.0)), null));
+        planX.add(new StepPlanRecord(length, false, (dx >= 0.0), false, false));
 
         return planX;
     }
@@ -98,17 +98,17 @@ public class StepPlan {
         final double angle = command.getStartTangentAngle();
         // generate y steps positions
 
-        planY.add(new StepPlanRecord(0, null, new Step(false, (dy >= 0.0))));
+        planY.add(new StepPlanRecord(0, false, false, false, (dy >= 0.0)));
         if (Math.abs(dy) > 0) {
             double dl = Math.abs(step_y/Math.sin(angle));
             double pos = 0;
             while (pos < length) {
-                planY.add(new StepPlanRecord(pos + dl/2, null, new Step(true, (dy >= 0.0))));
+                planY.add(new StepPlanRecord(pos + dl/2, false, false, true, (dy >= 0.0)));
                 derivativesY.addMeasurement(dl);
                 pos += dl;
             }
         }
-        planY.add(new StepPlanRecord(length, null, new Step(false, (dy >= 0.0))));
+        planY.add(new StepPlanRecord(length, false, false, false, (dy >= 0.0)));
         return planY;
     }
 
@@ -133,9 +133,7 @@ public class StepPlan {
         else shift = -step_x;
         if(counterClockWise) shift = -shift;
 
-        planX.add(new StepPlanRecord(0,
-                  new Step(false, (shift>=0.0)),
-                  null));
+        planX.add(new StepPlanRecord(0, false, (shift>=0.0), false, false));
         while(a < endAngle){
             double next_x = x + shift;
             if(Math.abs(next_x) <= radius){
@@ -148,9 +146,7 @@ public class StepPlan {
                     else if(a < 0.0) next_a = - next_a;
                 //
                 double bisection_angle = (next_a + a)/2;
-                planX.add(new StepPlanRecord((bisection_angle - startAngle)*radius,
-                          new Step(true,  (shift>=0.0)),
-                          null));
+                planX.add(new StepPlanRecord((bisection_angle - startAngle)*radius, true,  (shift>=0.0), false, false));
                 derivativesX.addMeasurement((next_a - a) * radius);
                 x = next_x;
                 a = next_a;
@@ -158,12 +154,10 @@ public class StepPlan {
                 // insert dir change pulse
                 shift = -shift;
                 a = Pi * Math.round(a/Pi);
-                planX.add(new StepPlanRecord((a - startAngle)*radius,
-                          new Step(false, (shift>=0.0)),
-                          null));
+                planX.add(new StepPlanRecord((a - startAngle)*radius, false, (shift>=0.0), false, false));
             }
         }
-        planX.add(new StepPlanRecord(length, new Step(false, (shift>=0.0)), null));
+        planX.add(new StepPlanRecord(length, false, (shift>=0.0), false, false));
 
         return planX;
     }
@@ -188,9 +182,7 @@ public class StepPlan {
         else shift = step_y;
         if(counterClockWise) shift = -shift;
 
-        planY.add(new StepPlanRecord(0,
-                  null,
-                  new Step(false, (shift>=0.0))));
+        planY.add(new StepPlanRecord(0, false, false, false, (shift>=0.0)));
         while(a < endAngle){
             double next_y = y + shift;
             if(Math.abs(next_y) <= radius){
@@ -205,9 +197,7 @@ public class StepPlan {
                     else            next_a = - next_a - Pi;
                 //
                 double bisection_angle = (next_a + a)/2;
-                planY.add(new StepPlanRecord((bisection_angle - startAngle)*radius,
-                          null,
-                          new Step(true,  (shift>=0.0))));
+                planY.add(new StepPlanRecord((bisection_angle - startAngle)*radius, false, false, true,  (shift>=0.0)));
                 derivativesY.addMeasurement((next_a - a) * radius);
                 y = next_y;
                 a = next_a;
@@ -215,25 +205,25 @@ public class StepPlan {
                 // insert dir change pulse
                 shift = -shift;
                 a = Pi * Math.round((a + Pi/2)/Pi) - Pi/2;
-                planY.add(new StepPlanRecord((a - startAngle)*radius,
-                          null,
-                          new Step(false, (shift>=0.0))));
+                planY.add(new StepPlanRecord((a - startAngle)*radius, false, false, false, (shift>=0.0)));
             }
         }
-        planY.add(new StepPlanRecord(length,
-                  null,
-                  new Step(false, (shift>=0.0))));
+        planY.add(new StepPlanRecord(length, false, false, false, (shift>=0.0)));
 
         return planY;
     }
 
     private ArrayList<QuickStep> mergeXnY(ArrayList<StepPlanRecord> planX, ArrayList<StepPlanRecord> planY){
         ArrayList<QuickStep> result = new ArrayList<>();
-        // merge x & y arrays
+
+        boolean dir_x = false;
+        Byte x_forward  = BitSet.DIR_X.mask;
         Iterator<StepPlanRecord> iteratorX = planX.iterator();
         StepPlanRecord nextX = null;
         if (iteratorX.hasNext()) nextX = iteratorX.next();
 
+        boolean dir_y = false;
+        Byte y_forward  = BitSet.DIR_Y.mask;
         Iterator<StepPlanRecord> iteratorY = planY.iterator();
         StepPlanRecord nextY = null;
         if (iteratorY.hasNext()) nextY = iteratorY.next();
@@ -249,20 +239,30 @@ public class StepPlan {
             if (posX < posY) {
                 // x pulse first
                 assert nextX != null;
-                result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()), nextX, null));
+                result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()),
+                                          nextX.getBitArray(),
+                                          (dir_y) ? y_forward : 0));
+                dir_x = nextX.isDirX();
                 if (iteratorX.hasNext()) nextX = iteratorX.next();
                 else nextX = null;
             } else {
                 if (posX > posY) {
                     // y pulse first
                     assert nextY != null;
-                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextY.getPosition()), null, nextY));
+                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextY.getPosition()),
+                                             (dir_x) ? x_forward : 0,
+                                             nextY.getBitArray()));
+                    dir_y = nextY.isDirY();
                     if (iteratorY.hasNext()) nextY = iteratorY.next();
                     else nextY = null;
                 } else {
                     // both pulses in sync
                     assert nextX != null;
-                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()), nextX, nextY));
+                    result.add(new QuickStep((int)(MotionControllerService.getTikInMM()*nextX.getPosition()),
+                                              nextX.getBitArray(),
+                                              nextY.getBitArray()));
+                    dir_x = nextX.isDirX();
+                    dir_y = nextY.isDirY();
                     if (iteratorX.hasNext()) nextX = iteratorX.next();
                     else nextX = null;
                     if (iteratorY.hasNext()) nextY = iteratorY.next();
