@@ -19,8 +19,4 @@ public interface GeneralDriver {
 	
 	void resume();
 	
-	void rewind();
-	
-	void forewind();
-
 }

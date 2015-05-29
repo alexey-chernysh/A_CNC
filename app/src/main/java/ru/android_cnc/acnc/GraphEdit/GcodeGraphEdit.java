@@ -1,16 +1,18 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.GraphEdit;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by Sales on 25.02.2015.
- */
 public class GcodeGraphEdit extends View {
     Paint paint = new Paint();
     float startX;
@@ -34,7 +36,7 @@ public class GcodeGraphEdit extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:

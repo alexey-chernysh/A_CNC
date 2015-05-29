@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015. Alexey Chernysh? Krasnoyarsk, Russia
+ * Copyright (c) 2015. Alexey Chernysh, Krasnoyarsk, Russia
  * e-mail: ALEXEY DOT CHERNYSH AT GMAIL DOT COM.
  */
 
@@ -11,9 +11,6 @@ import java.io.File;
 
 import ru.android_cnc.acnc.R;
 
-/**
- * Created by Sales on 06.05.2015.
- */
 public class FileItem {
 
     private final static String LOG_TAG = " file item ->";

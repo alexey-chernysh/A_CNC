@@ -35,7 +35,7 @@ public class CutterDriver implements GeneralDriver {
 		commands_ = sourceCommands;
 	}
 
-    Thread executionThread = null;
+    Thread executionThread;
     Handler mHandler = new Handler();
     boolean paused = false;
 
@@ -66,12 +66,6 @@ public class CutterDriver implements GeneralDriver {
 
 	@Override
 	public void pause() {
-        try {
-            executionThread.sleep(Long.MAX_VALUE);
-            paused = true;
-        } catch (InterruptedException e) {
-//            e.printStackTrace();
-        }
     }
 
 	@Override
@@ -89,7 +83,7 @@ public class CutterDriver implements GeneralDriver {
 	}
 
 	@Override
-	public void forewind() {
+	public void forwind() {
 		// TODO Auto-generated method stub
 		
 	}

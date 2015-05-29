@@ -4,9 +4,7 @@
 
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Handler;
 import android.widget.Toast;
 
 import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;

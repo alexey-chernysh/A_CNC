@@ -77,12 +77,8 @@ public class CNCPoint {
         this.x_ += dX;
         this.y_ += dY;
     }
-    public void shift(double dX, double dY, double dZ){
-        this.x_ += dX;
-        this.y_ += dY;
-        this.z_ += dZ;
-    }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public CNCPoint clone(){ return new CNCPoint(this.x_, this.y_, this.z_, this.a_, this.b_, this.c_); }
 
@@ -103,14 +99,14 @@ public class CNCPoint {
             if(line2 instanceof CCommandStraightLine)
                 return getCrossLineNLine((CCommandStraightLine)line1, (CCommandStraightLine)line2);
             if(line2 instanceof CCommandArcLine)
-                return getCrossLineNArc((CCommandStraightLine)line1, (CCommandArcLine)line2, ConnectionType.ENDSTART);
-        };
+                return getCrossLineNArc((CCommandStraightLine)line1, (CCommandArcLine)line2, ConnectionType.END_START);
+        }
         if(line1 instanceof CCommandArcLine) {
             if(line2 instanceof CCommandStraightLine)
-                return getCrossLineNArc((CCommandStraightLine)line2, (CCommandArcLine)line1, ConnectionType.STARTEND);
+                return getCrossLineNArc((CCommandStraightLine)line2, (CCommandArcLine)line1, ConnectionType.START_END);
             if(line2 instanceof CCommandArcLine)
                 return getCrossArcNArc((CCommandArcLine)line1, (CCommandArcLine)line2);
-        };
+        }
         return null;
     }
 
@@ -184,8 +180,8 @@ public class CNCPoint {
                                             CCommandArcLine arc,
                                             ConnectionType type){
         // find connection point of line & circle nearest to end of one & start of another
-        double rx = 0.0;
-        double ry = 0.0;
+        double rx;
+        double ry;
 
         double arcCenterX = arc.getCenter().getX();
         double arcCenterY = arc.getCenter().getY();
@@ -204,7 +200,7 @@ public class CNCPoint {
         if(Math.abs(lineDX)>0){  // line is not vertical
             if(Math.abs(lineDY)>0){ // line is not horizontal
                 // solve line canonical equation y = a*x + b for a & b
-                double a1 = 0.0;
+                double a1;
                 double b1 = (lineStartY*lineEndX - lineEndY*LineStartX)/lineDX;
                 if(LineStartX != 0.0) a1 = (lineStartY - b1)/LineStartX;
                 else  a1 = (lineEndY - b1)/lineEndX;
@@ -237,7 +233,7 @@ public class CNCPoint {
                     double rx2 = arcCenterX - t;
                     solution2 = new CNCPoint(rx2,ry);
                 } else return null;
-            };
+            }
         } else {
             // line is vertical
             // connection is at point with x of line
@@ -255,17 +251,17 @@ public class CNCPoint {
         double dist1;
         double dist2;
         switch(type){
-            case ENDSTART:
+            case END_START:
                 dist1 = distance(line.getEnd(),solution1) + distance(arc.getStart(),solution1);
                 dist2 = distance(line.getEnd(),solution2) + distance(arc.getStart(),solution2);
                 break;
-            case STARTEND:
+            case START_END:
                 dist1 = distance(line.getStart(),solution1) + distance(arc.getEnd(),solution1);
                 dist2 = distance(line.getStart(),solution2) + distance(arc.getEnd(),solution2);
                 break;
             default:
                 return null;
-        };
+        }
         if(dist1<dist2){
             return solution1;
         } else {
@@ -374,8 +370,8 @@ public class CNCPoint {
     }
 
     public enum ConnectionType {
-        ENDSTART,
-        STARTEND
+        END_START,
+        START_END
     }
 
 }

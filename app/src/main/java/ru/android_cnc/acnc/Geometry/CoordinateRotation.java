@@ -1,10 +1,10 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Geometry;
 
 import java.util.Stack;
-
-/**
- * Created by Sales on 26.03.2015.
- */
 
 public class CoordinateRotation {
 

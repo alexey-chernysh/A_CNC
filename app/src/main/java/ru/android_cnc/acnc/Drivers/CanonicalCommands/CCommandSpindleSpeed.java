@@ -1,11 +1,11 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Drivers.CanonicalCommands;
 
 import android.graphics.Canvas;
 
-
-/**
- * Created by Sales on 27.02.2015.
- */
 public class CCommandSpindleSpeed extends CanonCommand {
 
     double speed_;
