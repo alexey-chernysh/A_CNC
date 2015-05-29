@@ -35,11 +35,13 @@
 
         <service
             android:name=".HAL.MotionController.MotionControllerService"
+            android:label="@string/MC_service_label"
             android:enabled="true"
             android:exported="false" >
         </service>
         <service
             android:name=".HAL.TorchHeightController.THCService"
+            android:label="@string/THC_service_label"
             android:exported="false" >
         </service>
     </application>

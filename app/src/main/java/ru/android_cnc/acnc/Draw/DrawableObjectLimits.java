@@ -1,11 +1,11 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Draw;
 
 import ru.android_cnc.acnc.Interpreter.Exceptions.EvolutionException;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
-
-/**
- * Created by Sales on 03.03.2015.
- */
 
 public class DrawableObjectLimits {
 

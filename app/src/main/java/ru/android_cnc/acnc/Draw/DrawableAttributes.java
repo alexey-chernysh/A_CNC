@@ -1,13 +1,13 @@
+/*
+ * @author Alexey Chernysh
+ */
+
 package ru.android_cnc.acnc.Draw;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 
 import ru.android_cnc.acnc.Interpreter.State.CutterRadiusCompensation;
-
-/**
- * Created by Sales on 26.02.2015.
- */
 
 public class DrawableAttributes {
 
