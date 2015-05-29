@@ -76,16 +76,4 @@ public class CutterDriver implements GeneralDriver {
         }
 	}
 
-	@Override
-	public void rewind() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void forwind() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

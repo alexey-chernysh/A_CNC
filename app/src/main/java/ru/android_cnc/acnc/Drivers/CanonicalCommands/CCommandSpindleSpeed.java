@@ -17,11 +17,9 @@ public class CCommandSpindleSpeed extends CanonCommand {
 
     @Override
     public void execute() {
-        // TODO implementation needed
     }
 
     @Override
     public void draw(Canvas canvas) {
-        // TODO change spindle speed on display needed
     }
 }

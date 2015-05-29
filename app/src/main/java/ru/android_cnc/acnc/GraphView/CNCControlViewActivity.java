@@ -1,6 +1,7 @@
 package ru.android_cnc.acnc.GraphView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +20,7 @@ import java.io.InputStream;
 
 import ru.android_cnc.acnc.Drivers.Cutter.CutterDriver;
 import ru.android_cnc.acnc.FourButtonsActivity;
+import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextEditActivity;
 import ru.android_cnc.acnc.Geometry.CNCPoint;
 import ru.android_cnc.acnc.Interpreter.Exceptions.InterpreterException;
 import ru.android_cnc.acnc.Interpreter.ProgramLoader;
@@ -30,7 +32,7 @@ public class CNCControlViewActivity
         CNC2DViewFragment.OnGcodeGraphViewFragmentInteractionListener,
         CNCControlFragment.OnCNCControlFragmentInteractionListener{
 
-    private final static String LOG_TAG = " control view ->";
+//    private final static String LOG_TAG = " control view ->";
 
     private String fileName = null;
     private String sourceText = null;
@@ -58,10 +60,7 @@ public class CNCControlViewActivity
                         .replace(R.id.container_right, new CNCControlFragment())
                         .commit();
             }
-        }else{
-            // TODO serve errors
-        };
-
+        }
     }
 
     private boolean prepare(){
@@ -72,9 +71,9 @@ public class CNCControlViewActivity
             fileName = getSharedPreferences(getString(R.string.PREFS), 0)
                       .getString(getString(R.string.PREF_LAST_FILE_TAG), "");
             this.setTitle(fileName);
-            Log.d(LOG_TAG, "Opening file " + fileName);
+//            Log.d(LOG_TAG, "Opening file " + fileName);
             InputStream in = new FileInputStream(fileName);
-            Log.d(LOG_TAG, "Characters available: " + in.available());
+//            Log.d(LOG_TAG, "Characters available: " + in.available());
             if(in != null){
                 byte[] buffer = new byte[in.available()];
                 in.read(buffer);
@@ -99,7 +98,7 @@ public class CNCControlViewActivity
             }
             catch (InterpreterException ie){
                 allFine = false;
-            };
+            }
         }
 
         return allFine;
@@ -148,7 +147,7 @@ public class CNCControlViewActivity
                 if(driver != null)
                     driver.start(cncView);
 
-        };
+        }
     }
 
     public void onStopButtonClick(View v){
