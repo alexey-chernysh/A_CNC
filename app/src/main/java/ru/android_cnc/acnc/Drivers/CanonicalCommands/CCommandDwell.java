@@ -19,13 +19,9 @@ public class CCommandDwell extends CanonCommand {
 		this.delay_ = d;
 	}
 
-	public double getDelay() {
-		return delay_;
-	}
-
     @Override
     public void execute() {
-/*
+
         switch(HALMashine.getMode()){
             case VIEW:
                 try {
@@ -58,7 +54,6 @@ public class CCommandDwell extends CanonCommand {
                 break;
             default:
         }
-         */
     }
 
     @Override

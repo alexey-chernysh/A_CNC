@@ -1,5 +1,6 @@
 package ru.android_cnc.acnc.GraphView;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,12 +38,15 @@ public class CNCControlViewActivity
     private ProgramLoader programLoader = null;
     private CutterDriver driver = null;
     private View view2D = null;
+
     private Fragment cncViewFrag = null;
+    private static Context context_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cnccontrol_view);
+        CNCControlViewActivity.context_ = getApplicationContext();
 
         if(prepare()){
             if (savedInstanceState == null) {
@@ -164,4 +169,7 @@ public class CNCControlViewActivity
         if(fieldY != null) fieldY.setText(t.toString());
     }
 
+    public static Context getAppContext() {
+        return CNCControlViewActivity.context_;
+    }
 }
