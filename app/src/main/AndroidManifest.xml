@@ -35,15 +35,20 @@
 
         <service
             android:name=".HAL.MotionController.MotionControllerService"
-            android:label="@string/MC_service_label"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false"
+            android:label="@string/MC_service_label" >
         </service>
         <service
             android:name=".HAL.TorchHeightController.THCService"
-            android:label="@string/THC_service_label"
-            android:exported="false" >
+            android:exported="false"
+            android:label="@string/THC_service_label" >
         </service>
+
+        <activity
+            android:name=".DataBase.DataBase"
+            android:label="@string/title_activity_data_base" >
+        </activity>
     </application>
 
 </manifest>

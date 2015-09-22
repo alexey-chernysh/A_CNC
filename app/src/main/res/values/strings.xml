@@ -49,5 +49,6 @@
     <string name="PREF_MM_IN_STEP_Y">mm_in_step_y</string>
     <string name="THC_service_label">THC service</string>
     <string name="MC_service_label">Motion controller service</string>
+    <string name="title_activity_data_base">DataBase</string>
 
 </resources>

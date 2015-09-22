@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import ru.android_cnc.acnc.DataBase.DataBase;
 import ru.android_cnc.acnc.FileSelect.FileSelectActivity;
 import ru.android_cnc.acnc.GcodeTextEdit.GcodeTextEditActivity;
 import ru.android_cnc.acnc.GraphView.CNCControlViewActivity;
@@ -72,7 +73,9 @@ public class FourButtonsActivity extends Activity {
         final Button loadButton = (Button) findViewById(R.id.load_button);
         loadButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            Toast.makeText(getApplicationContext(),"Load button pressed!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(FourButtonsActivity.this, DataBase.class);
+                intent.putExtra(getString(R.string.APP_FOLDER), toPathPrefix);
+                startActivityForResult(intent, 1);
             }
         });
         final Button createButton = (Button) findViewById(R.id.create_button);
