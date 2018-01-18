@@ -35,21 +35,21 @@ public class FourButtonsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_four_buttons);
 
-//        Log.d(LOG_TAG, "Activity created!!!");
+        Log.d(LOG_TAG, "Activity created!!!");
         toPathPrefix = getApplicationContext().getFilesDir().getPath();
-//        Log.d(LOG_TAG, "Application data folder path:" + toPathPrefix);
+        Log.d(LOG_TAG, "Application data folder path:" + toPathPrefix);
         pref_last_file_value = toPathPrefix
                              + "/"
                              + g_codeFolderName
                              + "/"
                              + "plast.cnc";
         SharedPreferences settings = getSharedPreferences(getString(R.string.PREFS), 0);
-//        Log.d(LOG_TAG, "Preferences: " + settings);
+        Log.d(LOG_TAG, "Preferences: " + settings);
 
         //check for first time run
         boolean firstRun = settings.getBoolean(getString(R.string.PREF_FIRST_RUN_TAG), true);
-//        Log.d(LOG_TAG, "First run - " + firstRun);
-//        firstRun = true; // at debug only
+        Log.d(LOG_TAG, "First run - " + firstRun);
+        firstRun = true; // at debug only
         if ( firstRun ) {
             settings.edit().putBoolean(getString(R.string.PREF_FIRST_RUN_TAG), false).commit(); //set flag to false
             settings.edit().putString(getString(R.string.PREF_LAST_FILE_TAG), pref_last_file_value).commit();

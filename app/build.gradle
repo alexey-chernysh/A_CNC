@@ -4,7 +4,6 @@ android {
     signingConfigs {
     }
     compileSdkVersion 21
-    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "ru.android_cnc.acnc"
         minSdkVersion 17
